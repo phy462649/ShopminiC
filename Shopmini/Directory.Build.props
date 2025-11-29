@@ -1,0 +1,15 @@
+﻿<Project>
+  <PropertyGroup>
+    <!-- Đặt version EF Core chung cho tất cả project -->
+    <EFCoreVersion>8.0.4</EFCoreVersion>
+    <PomeloVersion>8.0.2</PomeloVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Đồng bộ tất cả project -->
+    <PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EFCoreVersion)" />
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EFCoreVersion)" />
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(EFCoreVersion)" />
+    <PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="$(PomeloVersion)" />
+  </ItemGroup>
+</Project>
