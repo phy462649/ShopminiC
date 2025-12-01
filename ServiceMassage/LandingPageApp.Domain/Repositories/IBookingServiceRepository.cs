@@ -1,0 +1,9 @@
+﻿using LandingPageApp.Domain.Entities;
+
+
+namespace LandingPageApp.Domain.Repositories
+{
+    public interface IBookingServiceRepository : IGenericRepository<BookingService>
+    {
+    }
+}

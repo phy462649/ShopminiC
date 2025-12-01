@@ -1,0 +1,12 @@
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\bin\Debug\net9.0\LandingPageApp.Domain.deps.json
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\bin\Debug\net9.0\LandingPageApp.Domain.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\bin\Debug\net9.0\LandingPageApp.Domain.pdb
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.AssemblyInfoInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.AssemblyInfo.cs
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.csproj.CoreCompileInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.sourcelink.json
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\refint\LandingPageApp.Domain.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\LandingPageApp.Domain.pdb
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Domain\obj\Debug\net9.0\ref\LandingPageApp.Domain.dll
