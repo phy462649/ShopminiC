@@ -2,6 +2,7 @@
 using LandingPageApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using LandingPageApp.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace LandingPageApp.Infrastructure.Repositories
 {
@@ -14,31 +15,32 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = _context.Set<Payment>();
         }
-        public async Task<Payment?> GetByIdAsync(int paymentId)
+        public async Task<Payment?> GetByIdAsync(int paymentId,CancellationToken cancellation = default)
         {
-            return await _dbSet.FindAsync(paymentId);
+            return await _dbSet.FindAsync(new object?[] { paymentId }, default);
 
         }
-        public async Task AddAsync(Payment payment)
+        public IQueryable<Payment> QueryNoTracking()
         {
-            await _dbSet.AddAsync(payment);
+            return _dbSet.AsNoTracking();
         }
-        public async void Update(Payment payment)
+        public async Task AddAsync(Payment payment,CancellationToken cancellation = default)
         {
-            _dbSet.Update(payment);
+            await _dbSet.AddAsync(payment,cancellation);
         }
-        public async void Delete(Payment payment)
+        public void Update(Payment payment)
+        {
+             _dbSet.Update(payment);
+        }
+        public void Delete(Payment payment)
         {
             _dbSet.Remove(payment);
         }
-        public async Task<List<Payment>> GetAllPaymentsAsync()
+        public async Task<IEnumerable<Payment>> GetAllAsync(CancellationToken cancellation = default)
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }
-        //public async Task<List<Payment>> GetPaymentsByUserIdAsync(Guid userId)
-        //{
-        //    return await _dbSet.Where(p => p.UserId == userId).ToListAsync();
-        //}
+    
         public async Task<int> GetPaymentCountAsync()
         {
             return await _dbSet.CountAsync();
@@ -47,13 +49,13 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public Task<bool> ExistsAsync(System.Linq.Expressions.Expression<Func<Payment, bool>> predicate)
+        public Task<bool> ExistsAsync(Expression<Func<Payment, bool>> predicate, CancellationToken cancellation = default)
         {
-            return _dbSet.AnyAsync(predicate);
+            return _dbSet.AnyAsync(predicate,cancellation);
         }
-        public Task<IEnumerable<Payment>> FindAsync(System.Linq.Expressions.Expression<Func<Payment, bool>> predicate)
+        public async Task<IEnumerable<Payment>> FindAsync(Expression<Func<Payment, bool>> predicate, CancellationToken cancellation = default)
         {
-            return _dbSet.Where(predicate).ToListAsync().ContinueWith(t => (IEnumerable<Payment>)t.Result);
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
 
     }

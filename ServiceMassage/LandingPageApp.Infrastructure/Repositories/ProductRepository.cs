@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using LandingPageApp.Domain.Entities;
 using LandingPageApp.Domain.Repositories;
-
+using System.Linq.Expressions;
 
 namespace Landingpage.Infrastructure.Repositories
 {
@@ -15,37 +15,21 @@ namespace Landingpage.Infrastructure.Repositories
             _context = context;
             _dbSet = dbSet;
         }
-        public async Task<Product?> GetByIdAsync(int productId)
+        public async Task<Product?> GetByIdAsync(int productId, CancellationToken cancellation = default)
         {
-            return await _dbSet.FindAsync(productId);
+            return await _dbSet.FindAsync(new object?[] {productId},cancellation);
         }
-        public async Task AddProductAsync(Product product)
+        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(product);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateProductAsync(Product product)
-        {
-            _dbSet.Update(product);
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteProductAsync(Product product)
-        {
-            _dbSet.Remove(product);
-            await _context.SaveChangesAsync();
-        }
-        public async Task<List<Product>> GetAllProductsAsync()
-        {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }
         public async Task<int> GetProductCountAsync()
         {
             return await _dbSet.CountAsync();
         }
-        public async Task<bool> ProductExistsAsync(long productId)
+        public async Task<bool> ExistsAsync(Expression<Func<Product,bool>> predicate ,CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(p => p.Id == productId);
+            return await _dbSet.AnyAsync(predicate,cancellation);
         }
 
         public async Task<List<Product>> SearchProductsAsync(string searchTerm)
@@ -65,17 +49,18 @@ namespace Landingpage.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<bool> ExistsAsync(System.Linq.Expressions.Expression<System.Func<Product, bool>> predicate)
+        public IQueryable<Product> QueryNoTracking()
+        {
+            return _dbSet.AsNoTracking();
+        }
+        public async Task<bool> ExistsAsync(Expression<System.Func<Product, bool>> predicate)
         {
             return await _dbSet.AnyAsync(predicate);
         }
-        //public Task<Product?> GetByIdAsync(long id)
-        //{
-        //    return _dbSet.FindAsync(id);
-        //}
-        public async Task AddAsync(Product entity)
+   
+        public async Task AddAsync(Product entity,CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity, cancellation);
             return;
         }
         public void Update(Product entity)
@@ -86,9 +71,9 @@ namespace Landingpage.Infrastructure.Repositories
         {
             _dbSet.Remove(entity);
         }
-        public async Task<IEnumerable<Product>> FindAsync(System.Linq.Expressions.Expression<System.Func<Product, bool>> predicate)
+        public async Task<IEnumerable<Product>> FindAsync(Expression<System.Func<Product, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
 
 

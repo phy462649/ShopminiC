@@ -20,13 +20,17 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<BookingService?> GetByIdAsync(int id)
+        public IQueryable<BookingService> QueryNoTracking()
         {
-            return await _dbSet.FindAsync(id);
+            return _dbSet.AsNoTracking();
         }
-        public async Task AddAsync(BookingService entity)
+        public async Task<BookingService?> GetByIdAsync(int id,CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(entity);
+            return await _dbSet.FindAsync(new object?[] {id},cancellation);
+        }
+        public async Task AddAsync(BookingService entity,CancellationToken cancellation = default)
+        {
+            await _dbSet.AddAsync(entity,cancellation);
         }
         public void Update(BookingService entity)
         {
@@ -36,17 +40,18 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             _dbSet.Remove(entity);
         }
-        public async Task<bool> ExistsAsync(Expression<Func<BookingService, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<BookingService, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate,cancellation);
         }
-        public async Task SaveChangesAsync()
+    
+        public async Task<IEnumerable<BookingService>> FindAsync(Expression<Func<BookingService, bool>> predicate,CancellationToken cancellation = default)
         {
-            await _context.SaveChangesAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
-        public async Task<IEnumerable<BookingService>> FindAsync(Expression<Func<BookingService, bool>> predicate)
+        public async Task<IEnumerable<BookingService?>> GetAllAsync(CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }
     }
 }

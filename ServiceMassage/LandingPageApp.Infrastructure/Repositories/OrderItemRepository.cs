@@ -20,13 +20,21 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<OrderItem?> GetByIdAsync(int id)
+        public IQueryable<OrderItem> QueryNoTracking()
         {
-            return await _dbSet.FindAsync(id);
+            return _dbSet.AsNoTracking();
         }
-        public async Task AddAsync(OrderItem entity)
+        public async Task<IEnumerable<OrderItem>> GetAllAsync(CancellationToken  cancellation = default)
         {
-            await _dbSet.AddAsync(entity);
+            return await _dbSet.AsNoTracking().ToListAsync(default);
+        }
+        public async Task<OrderItem?> GetByIdAsync(int id,CancellationToken cancellation = default)
+        {
+            return await _dbSet.FindAsync(new object?[] {id}, cancellation);
+        }
+        public async Task AddAsync(OrderItem entity, CancellationToken cancellation = default)
+        {
+            await _dbSet.AddAsync(entity,cancellation);
         }
         public void Update(OrderItem entity)
         {
@@ -36,13 +44,13 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             _dbSet.Remove(entity);
         }
-        public async Task<bool> ExistsAsync(Expression<Func<OrderItem, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<OrderItem, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate,cancellation);
         }
-        public async Task<IEnumerable<OrderItem>> FindAsync(Expression<Func<OrderItem, bool>> predicate)
+        public async Task<IEnumerable<OrderItem>> FindAsync(Expression<Func<OrderItem, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
     }
 }

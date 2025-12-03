@@ -21,15 +21,19 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-
-        public async Task<Booking?> GetByIdAsync(int id)
+        public IQueryable<Booking> QueryNoTracking()
         {
-            return await _dbSet.FindAsync(id);
+            return _dbSet.AsNoTracking();
         }
 
-        public async Task AddAsync(Booking entity)
+        public async Task<Booking?> GetByIdAsync(int id, CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(entity);
+            return await _dbSet.FindAsync(new object?[] {id}, cancellation);
+        }
+
+        public async Task AddAsync(Booking entity, CancellationToken cancellation = default)
+        {
+            await _dbSet.AddAsync(entity, cancellation);
         }
 
         public void Update(Booking entity)
@@ -42,13 +46,17 @@ namespace LandingPageApp.Infrastructure.Repositories
             _dbSet.Remove(entity);
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<Booking, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<Booking, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate, cancellation);
         }
-        public async Task<IEnumerable<Booking>> FindAsync(Expression<Func<Booking, bool>> predicate)
+        public async Task<IEnumerable<Booking>> FindAsync(Expression<Func<Booking, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
+        }
+        public async Task<IEnumerable<Booking?>> GetAllAsync(CancellationToken cancellation = default)
+        {
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }
     }
 }

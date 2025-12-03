@@ -36,7 +36,6 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\sta
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingP.33BF7B5A.Up2Date
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\refint\LandingPageApp.Api.dll

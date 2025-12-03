@@ -64,6 +64,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.11, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.10.1, )"
             }
           },
           "imports": [
@@ -254,9 +258,6 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application\\LandingPageApp.Application.csproj": {
-                "projectPath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application\\LandingPageApp.Application.csproj"
-              },
               "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Domain\\LandingPageApp.Domain.csproj": {
                 "projectPath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Domain\\LandingPageApp.Domain.csproj"
               }
@@ -292,6 +293,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
               "version": "[10.0.0, )"
             },

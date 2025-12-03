@@ -1,8 +1,16 @@
+using LandingPageApp.Application.Interfaces;
+using LandingPageApp.Infrastructure.Caching;
+using LandingPageApp.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IRedisService, RedisService>();
+
 
 var app = builder.Build();
 
@@ -11,6 +19,20 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+builder.Services.AddDbContext<ServicemassageContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    )
+);
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "LandingPage_"; // tùy ngài ð?t prefix
+});
+
+// Redis service wrap IDistributedCache (ngài ð? có IRedisService, RedisService)
+builder.Services.AddScoped<IRedisService, RedisService>();
 
 app.UseHttpsRedirection();
 

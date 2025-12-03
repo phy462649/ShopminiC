@@ -19,13 +19,21 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<IEnumerable<Order>> GetAllAsync(CancellationToken cancellation = default)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.ToListAsync(cancellation);
         }
-        public async Task AddAsync(Order entity)
+        public IQueryable<Order> QueryNoTracking()
         {
-            await _dbSet.AddAsync(entity);
+            return _dbSet.AsNoTracking();
+        }
+        public async Task<Order?> GetByIdAsync(int id, CancellationToken cancellation = default)
+        {
+            return await _dbSet.FindAsync(new object?[] {id} ,cancellation);
+        }
+        public async Task AddAsync(Order entity, CancellationToken cancellation = default)
+        {
+            await _dbSet.AddAsync(entity , cancellation);
         }
         public void Update(Order entity)
         {
@@ -37,13 +45,13 @@ namespace LandingPageApp.Infrastructure.Repositories
             _dbSet.Remove(entity);
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<Order, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<Order, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate, cancellation);
         }
-        public async Task<IEnumerable<Order>> FindAsync(Expression<Func<Order, bool>> predicate)
+        public async Task<IEnumerable<Order>> FindAsync(Expression<Func<Order, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
     }
 }

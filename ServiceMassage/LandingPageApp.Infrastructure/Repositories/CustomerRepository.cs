@@ -9,41 +9,50 @@ namespace LandingPageApp.Infrastructure.Repositories
     public class CustomerRepository : ICustomerRepository
     {
         private readonly ServicemassageContext servicemassageContext;
-        private readonly DbSet<Customer> dbSet;
+        private readonly DbSet<Customer> _dbSet;
 
         public CustomerRepository(ServicemassageContext context)
         {
             servicemassageContext = context;
-            dbSet = servicemassageContext.Set<Customer>();
+            _dbSet = servicemassageContext.Set<Customer>();
         }
         public IQueryable<Customer> Query()
         {
-            return dbSet.AsQueryable();
+            return _dbSet.AsQueryable();
         }
-        public async Task<Customer?> GetByIdAsync(int id)
+        public IQueryable<Customer> QueryNoTracking()
         {
-            return await dbSet.FindAsync(id);
+            return _dbSet.AsNoTracking();
         }
-        public async Task AddAsync(Customer entity)
+        public async Task<Customer?> GetByIdAsync(int id,CancellationToken cancellationToken = default)
         {
-            await dbSet.AddAsync(entity);
+            return await _dbSet.FindAsync(new object?[] {id} ,cancellationToken );
+        }
+        public async Task AddAsync(Customer entity, CancellationToken cancellationToken = default)
+        {
+            await _dbSet.AddAsync(entity, default);
         }
         public void Update(Customer entity)
         {
-            dbSet.Update(entity);
+            _dbSet.Update(entity);
         }
         public void Delete(Customer entity)
         {
-            dbSet.Remove(entity);
+            _dbSet.Remove(entity);
         }
-        public async Task<bool> ExistsAsync(Expression<Func<Customer, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<Customer, bool>> predicate,CancellationToken cancellation = default)
         {
-            return await dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate,cancellation);
         }
-        public async Task<IEnumerable<Customer>> FindAsync(Expression<Func<Customer, bool>> predicate)
+        public async Task<IEnumerable<Customer>> FindAsync(Expression<Func<Customer, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
+        public async Task<IEnumerable<Customer?>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+        }
+
 
     }
 }

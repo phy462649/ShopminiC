@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d38495a25afefc999baa1029611da2260117ec72")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27bf037bfb4260b3a4a3a977a663367313318c74")]
 [assembly: System.Reflection.AssemblyProductAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

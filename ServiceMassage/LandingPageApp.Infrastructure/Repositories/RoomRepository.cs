@@ -20,13 +20,17 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<Room?> GetByIdAsync(int id)
+        public IQueryable<Room> QueryNoTracking()
         {
-            return await _dbSet.FindAsync(id);
+            return _dbSet.AsNoTracking();
         }
-        public async Task AddAsync(Room entity)
+        public async Task<Room?> GetByIdAsync(int id,CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(entity);
+            return await _dbSet.FindAsync(new object?[] {id}, cancellation);
+        }
+        public async Task AddAsync(Room entity,CancellationToken cancellation = default)
+        {
+            await _dbSet.AddAsync(entity,cancellation);
         }
         public void Update(Room entity)
         {
@@ -36,14 +40,14 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             _dbSet.Remove(entity);
         }
-        public async Task<bool> ExistsAsync(Expression<Func<Room, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<Room, bool>> predicate , CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate ,cancellation);
         }
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+        //public async Task SaveChangesAsync()
+        //{
+        //    await _context.SaveChangesAsync();
+        //}
         public async Task<List<Room>> GetAvailableRoomsAsync(DateTime startDate, DateTime endDate)
         {
             // Example implementation to get available rooms
@@ -59,9 +63,17 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return await _dbSet.CountAsync();
         }
-        public Task<IEnumerable<Room>> FindAsync(Expression<Func<Room, bool>> predicate)
+        public async Task<IEnumerable<Room>> FindAsync(
+            Expression<Func<Room, bool>> predicate,
+            CancellationToken cancellation = default)
         {
-            return Task.FromResult(_dbSet.Where(predicate).AsEnumerable());
+            return await _dbSet
+                .Where(predicate)
+                .ToListAsync(cancellation);
+        }
+        public async Task<IEnumerable<Room>> GetAllAsync(CancellationToken cancellation = default)
+        {
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }
 
     }

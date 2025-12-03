@@ -15,13 +15,13 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = context.Set<Staff>();
         }
-        public async Task<Staff?> GetByIdAsync(int staffId)
+        public async Task<Staff?> GetByIdAsync(int staffId, CancellationToken cancellation = default)
         {
-            return await _dbSet.FindAsync(staffId);
+            return await _dbSet.FindAsync( new object?[] { staffId }, cancellation);
         }
-        public async Task AddAsync(Staff staff)
+        public async Task AddAsync(Staff staff, CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(staff);
+            await _dbSet.AddAsync(staff, cancellation);
         }
         public void Update(Staff staff)
         {
@@ -35,13 +35,21 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<bool> ExistsAsync(Expression<Func<Staff, bool>> predicate)
+        public IQueryable<Staff> QueryNoTracking()
         {
-            return await _dbSet.AnyAsync(predicate);
+            return _dbSet.AsNoTracking();
         }
-        public async Task<IEnumerable<Staff>> FindAsync(Expression<Func<Staff, bool>> predicate)
+        public async Task<IEnumerable<Staff>> GetAllAsync(CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
+        }
+        public async Task<bool> ExistsAsync(Expression<Func<Staff, bool>> predicate , CancellationToken cancellation = default)
+        {
+            return await _dbSet.AnyAsync(predicate,cancellation);
+        }
+        public async Task<IEnumerable<Staff>> FindAsync(Expression<Func<Staff, bool>> predicate,CancellationToken cancellation = default)
+        {
+            return await _dbSet.Where(predicate).ToListAsync(default);
         }
 
     }

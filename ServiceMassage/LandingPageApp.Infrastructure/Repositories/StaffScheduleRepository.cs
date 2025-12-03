@@ -15,13 +15,13 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = context.Set<StaffSchedule>();
         }
-        public async Task<StaffSchedule?> GetByIdAsync(int staffScheduleId)
+        public async Task<StaffSchedule?> GetByIdAsync(int staffScheduleId, CancellationToken cancellation = default)
         {
-            return await _dbSet.FindAsync(staffScheduleId);
+            return await _dbSet.FindAsync(new object?[] { staffScheduleId }, staffScheduleId);
         }
-        public async Task AddAsync(StaffSchedule staffSchedule)
+        public async Task AddAsync(StaffSchedule staffSchedule, CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(staffSchedule);
+            await _dbSet.AddAsync(staffSchedule, cancellation);
         }
         public void Update(StaffSchedule staffSchedule)
         {
@@ -35,13 +35,21 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<bool> ExistsAsync(Expression<Func<StaffSchedule, bool>> predicate)
+        public IQueryable<StaffSchedule> QueryNoTracking()
         {
-            return await _dbSet.AnyAsync(predicate);
+            return _dbSet.AsNoTracking();
         }
-        public async Task<IEnumerable<StaffSchedule>> FindAsync(Expression<Func<StaffSchedule, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<StaffSchedule, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.AnyAsync(predicate, cancellation);
         }
+        public async Task<IEnumerable<StaffSchedule>> FindAsync(Expression<Func<StaffSchedule, bool>> predicate, CancellationToken cancellation = default)
+        {
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
+        }
+        public async Task<IEnumerable<StaffSchedule>> GetAllAsync(CancellationToken cancellation = default)
+        {
+            return await _dbSet.AsNoTracking().ToListAsync(cancellation);
+        }   
     }
 }

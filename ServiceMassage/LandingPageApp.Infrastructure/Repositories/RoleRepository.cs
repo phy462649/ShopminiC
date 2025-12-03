@@ -15,35 +15,43 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = context.Set<Role>();
         }
-        public async Task<Role?> GetByIdAsync(int roleId)
+        public async Task<Role?> GetByIdAsync(int roleId, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(roleId);
+            return await _dbSet.FindAsync(new object?[] { roleId }, cancellationToken);
         }
-        public async Task AddAsync(Role role)
+
+        public async Task AddAsync(Role role, CancellationToken cancellation = default)
         {
-            await _dbSet.AddAsync(role);
+            await _dbSet.AddAsync(role,cancellation);
         }
-        public async void Update(Role role)
+        public void Update(Role role)
         {
             _dbSet.Update(role);
 
         }
-        public async void Delete(Role role)
+        public void Delete(Role role)
         {
             _dbSet.Remove(role);
-            //await _context.SaveChangesAsync();
         }
         public IQueryable<Role> Query()
         {
             return _dbSet.AsQueryable();
         }
-        public async Task<bool> ExistsAsync(Expression<Func<Role, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<Role, bool>> predicate, CancellationToken cancellation = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate, cancellation);
         }
-        public async Task<IEnumerable<Role>> FindAsync(Expression<Func<Role, bool>> predicate)
+        public async Task<IEnumerable<Role>> FindAsync(Expression<Func<Role, bool>> predicate,CancellationToken cancellation = default)
         {
-            return await _dbSet.Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
+        public async Task<IEnumerable<Role?>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+        }
+        public  IQueryable<Role?> QueryNoTracking()
+        {
+            return _dbSet.AsNoTracking();
+        }                              
     }
 }
