@@ -1,14 +1,12 @@
-import HeaderAdmin from "./Component/HeaderAdmin";
-import HeaderHomePage from "./Component/HeaderHomePage";
-import Content from "./Component/ContentAdmin";
-import AdminLayout from "./Component/AdminLayout";
+import AdminLayout from "./Layouts/AdminLayout";
 export default function App() {
   return (
     <div>
       {/* <HeaderAdmin /> */}
       {/* <HeaderHomePage /> */}
       <AdminLayout />
-      {/* <Content /> */}
+      {/* // <Content /> */}
+      {/* <Dashboard /> */}
     </div>
   );
 }
