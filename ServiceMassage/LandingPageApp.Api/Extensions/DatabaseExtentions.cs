@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LandingPageApp.Api.Extensions
 {
-
         public static class DatabaseExtensions
         {
             public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration config)

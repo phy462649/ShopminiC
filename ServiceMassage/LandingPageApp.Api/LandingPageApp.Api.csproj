@@ -7,14 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.11" />
+    <Compile Remove="Controllers\AuthController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-preview.3.24215.4" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.11.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
     <Folder Include="Logging\" />
     <Folder Include="Auth\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Controllers\AuthController.cs" />
   </ItemGroup>
 
   <ItemGroup>

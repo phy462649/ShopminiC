@@ -39,6 +39,19 @@ namespace LandingPageApp.Api.Helper
                 ? new NotFoundObjectResult("Item not found.")
                 : new OkObjectResult("Deleted successfully");
         }
+        public static ActionResult HandleLoginResult<T>(T? result, bool invalidCredentials = false, string? errorMessage = null)
+        {
+            if (result == null)
+            {
+                if (invalidCredentials)
+                    return new UnauthorizedObjectResult(errorMessage ?? "Invalid username or password.");
+                else
+                    return new NotFoundObjectResult(errorMessage ?? "User not found.");
+            }
+
+            return new OkObjectResult(result);
+        }
+
     }
 
 }

@@ -15,9 +15,13 @@ public partial class Customer
 
     public string? Address { get; set; }
 
+    public long? AccountId { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public Account? Account { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 

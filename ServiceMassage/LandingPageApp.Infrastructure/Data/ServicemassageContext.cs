@@ -15,6 +15,7 @@ public partial class ServicemassageContext : DbContext
     }
 
     public virtual DbSet<Booking> Bookings { get; set; }
+    public DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<BookingService> BookingServices { get; set; }
 
@@ -44,7 +45,7 @@ public partial class ServicemassageContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
-        //=> optionsBuilder.UseMySql(configuration.GetConnectionString("DefaultConnection"));
+       
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -211,7 +212,12 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
-        });
+            entity.HasOne(d => d.Account)
+                .WithMany(p => p.Customer)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("customer_ibfk_account");
+             });
 
         modelBuilder.Entity<Order>(entity =>
         {
@@ -499,7 +505,15 @@ public partial class ServicemassageContext : DbContext
                         j.IndexerProperty<long>("StaffId").HasColumnName("staff_id");
                         j.IndexerProperty<long>("RoleId").HasColumnName("role_id");
                     });
-        });
+            entity.Property(e => e.AccountId).HasColumnName("account_id");
+
+            entity.HasOne(d => d.Account)
+                .WithMany(p => p.Staff)
+                .HasForeignKey(d => d.AccountId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("staff_ibfk_account");
+
+                });
 
         modelBuilder.Entity<StaffSchedule>(entity =>
         {
@@ -555,9 +569,27 @@ public partial class ServicemassageContext : DbContext
                 .HasPrecision(32)
                 .HasColumnName("total_sold");
         });
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("account");
+
+            entity.HasIndex(e => e.Username, "uq_account_username").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Username).HasColumnName("username");
+            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+        });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

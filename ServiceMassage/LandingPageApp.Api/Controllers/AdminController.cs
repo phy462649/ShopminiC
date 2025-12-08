@@ -1,26 +1,22 @@
-﻿using LandingPageApp.Application.Interface;
+﻿using LandingPageApp.Application.Interfaces;
+using LandingPageApp.Application.Dtos;
 using LandingPageApp.Domain.Entities;
-using LandingPageApp.Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using LandingPageApp.Api.Helper;
-using LandingPageApp.Application.DTOs;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace LandingPageApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : ControllerBase
     {
-        private readonly IReportService _report;
         private readonly IBookingService _booking;
-        private readonly ICustomerSevice _customer;
-        private readonly IBookingServiceService _bookingervice;
+        private readonly ICustomerService _customer;
+        private readonly IBookingServiceService _bookingService;
         private readonly ICategoryService _category;
         private readonly IOrderService _order;
         private readonly IProductService _product;
@@ -31,17 +27,25 @@ namespace LandingPageApp.Api.Controllers
         private readonly IStaffService _staff;
         private readonly IStaffScheduleService _staffSchedule;
         private readonly IServicesService _services;
-        public AdminController(IReportService report,
-            IBookingService booking, ICustomerSevice customer,
-            IBookingServiceService bookingervice, ICategoryService category,
-            IOrderService order, IProductService product, IRoleSercive role,
-            IOrderItemService orderItem, IRoomService room, IPaymentService payment,
-            IStaffService staff, IStaffScheduleSercive staffSchedule, IServicesService services)
+
+        public AdminController(
+            IBookingService booking,
+            ICustomerService customer,
+            IBookingServiceService bookingService,
+            ICategoryService category,
+            IOrderService order,
+            IProductService product,
+            IRoleService role,
+            IOrderItemService orderItem,
+            IRoomService room,
+            IPaymentService payment,
+            IStaffService staff,
+            IStaffScheduleService staffSchedule,
+            IServicesService services)
         {
-            _report = report;
             _booking = booking;
             _customer = customer;
-            _bookingervice = bookingervice;
+            _bookingService = bookingService;
             _category = category;
             _order = order;
             _product = product;
@@ -53,342 +57,474 @@ namespace LandingPageApp.Api.Controllers
             _staffSchedule = staffSchedule;
             _services = services;
         }
-        [HttpGet("report")]
-        public async Task<ActionResult> GetReport()
-        {
-            var reportData = await _report.GenerateReport();
-            return Ok(reportData);
-        }
-        [HttpGet("bookings/getallbookings")]
+        // Booking Endpoints
+        [HttpGet("bookings")]
         public async Task<ActionResult> GetAllBookings()
         {
-            var data = await _booking.GetAllBookings();
-            return ApiResponseHelper.HandleGetAll(data);
+            var data = await _booking.GetAllAsync();
+            return Ok(data);
         }
-        [HttpGet("customer/getallcustomers")]
+
+        [HttpGet("bookings/{id}")]
+        public async Task<ActionResult> GetBookingById(int id)
+        {
+            var data = await _booking.GetByIdAsync(id);
+            return Ok(data);
+        }
+
+        // Customer Endpoints
+        [HttpGet("customers")]
         public async Task<ActionResult> GetAllCustomers()
         {
-            var customers = await _customer.GetAllCustomers();
-            return ApiResponseHelper.HandleGetAll(customers);
+            var customers = await _customer.GetAllAsync();
+            return Ok(customers);
         }
-        [HttpGet("bookingservice/getallbookingservices")]
+
+        [HttpGet("customers/{id}")]
+        public async Task<ActionResult> GetCustomerById(int id)
+        {
+            var customer = await _customer.GetByIdAsync(id);
+            return Ok(customer);
+        }
+
+        // BookingService Endpoints
+        [HttpGet("booking-services")]
         public async Task<ActionResult> GetAllBookingServices()
         {
-            var bookingServices = await _bookingervice.GetAllBookingServices();
-            return ApiResponseHelper.HandleGetAll(bookingServices);
+            var bookingServices = await _bookingService.GetAllAsync();
+            return Ok(bookingServices);
         }
-        [HttpGet("category/getallcategories")]
+
+        [HttpGet("booking-services/{id}")]
+        public async Task<ActionResult> GetBookingServiceById(int id)
+        {
+            var bookingService = await _bookingService.GetByIdAsync(id);
+            return Ok(bookingService);
+        }
+
+        // Category Endpoints
+        [HttpGet("categories")]
         public async Task<ActionResult> GetAllCategories()
         {
-            var categories = await _category.GetAllCategories();
-            return ApiResponseHelper.HandleGetAll(categories);
+            var categories = await _category.GetAllAsync();
+            return Ok(categories);
         }
-        [HttpGet("order/getallorder")]
+
+        [HttpGet("categories/{id}")]
+        public async Task<ActionResult> GetCategoryById(int id)
+        {
+            var category = await _category.GetByIdAsync(id);
+            return Ok(category);
+        }
+
+        // Order Endpoints
+        [HttpGet("orders")]
         public async Task<ActionResult> GetAllOrders()
         {
-            var orders = await _order.GetAllOrders();
-            return ApiResponseHelper.HandleGetAll(orders);
+            var orders = await _order.GetAllAsync();
+            return Ok(orders);
         }
-        [HttpGet("product/getallproducts")]
+
+        [HttpGet("orders/{id}")]
+        public async Task<ActionResult> GetOrderById(int id)
+        {
+            var order = await _order.GetByIdAsync(id);
+            return Ok(order);
+        }
+
+        // Product Endpoints
+        [HttpGet("products")]
         public async Task<ActionResult> GetAllProducts()
         {
-            var products = await _product.GetAllProducts();
-            return ApiResponseHelper.HandleGetAll(products);
+            var products = await _product.GetAllAsync();
+            return Ok(products);
         }
-        [HttpGet("role/getallroles")]
+
+        [HttpGet("products/{id}")]
+        public async Task<ActionResult> GetProductById(int id)
+        {
+            var product = await _product.GetByIdAsync(id);
+            return Ok(product);
+        }
+
+        // Role Endpoints
+        [HttpGet("roles")]
         public async Task<ActionResult> GetAllRoles()
         {
-            var roles = await _role.GetAllRoles();
-            return ApiResponseHelper.HandleGetAll(roles);
+            var roles = await _role.GetAllAsync();
+            return Ok(roles);
         }
-        [HttpGet("orderitem/getallorderitems")]
+
+        [HttpGet("roles/{id}")]
+        public async Task<ActionResult> GetRoleById(int id)
+        {
+            var role = await _role.GetByIdAsync(id);
+            return Ok(role);
+        }
+
+        // OrderItem Endpoints
+        [HttpGet("order-items")]
         public async Task<ActionResult> GetAllOrderItems()
         {
-            var orderItems = await _orderItem.GetAllOrderItems();
-            return ApiResponseHelper.HandleGetAll(orderItems);
+            var orderItems = await _orderItem.GetAllAsync();
+            return Ok(orderItems);
         }
-        [HttpGet("room/getallrooms")]
+
+        [HttpGet("order-items/{id}")]
+        public async Task<ActionResult> GetOrderItemById(int id)
+        {
+            var orderItem = await _orderItem.GetByIdAsync(id);
+            return Ok(orderItem);
+        }
+
+        // Room Endpoints
+        [HttpGet("rooms")]
         public async Task<ActionResult> GetAllRooms()
         {
-            var rooms = await _room.GetAllRooms();
-            return ApiResponseHelper.HandleGetAll(rooms);
+            var rooms = await _room.GetAllAsync();
+            return Ok(rooms);
         }
-        [HttpGet("payment/getallpayments")]
+
+        [HttpGet("rooms/{id}")]
+        public async Task<ActionResult> GetRoomById(int id)
+        {
+            var room = await _room.GetByIdAsync(id);
+            return Ok(room);
+        }
+
+        // Payment Endpoints
+        [HttpGet("payments")]
         public async Task<ActionResult> GetAllPayments()
         {
-            var payments = await _payment.GetAllPayments();
-            return ApiResponseHelper.HandleGetAll(payments);
+            var payments = await _payment.GetAllAsync();
+            return Ok(payments);
         }
-        [HttpGet("staff/getallstaffs")]
+
+        [HttpGet("payments/{id}")]
+        public async Task<ActionResult> GetPaymentById(int id)
+        {
+            var payment = await _payment.GetByIdAsync(id);
+            return Ok(payment);
+        }
+
+        // Staff Endpoints
+        [HttpGet("staff")]
         public async Task<ActionResult> GetAllStaffs()
         {
-            var staffs = await _staff.GetAllStaffs();
-            return ApiResponseHelper.HandleGetAll(staffs);
+            var staffs = await _staff.GetAllAsync();
+            return Ok(staffs);
         }
-        [HttpGet("staffschedule/getallstaffschedules")]
+
+        [HttpGet("staff/{id}")]
+        public async Task<ActionResult> GetStaffById(int id)
+        {
+            var staff = await _staff.GetByIdAsync(id);
+            return Ok(staff);
+        }
+
+        // StaffSchedule Endpoints
+        [HttpGet("staff-schedules")]
         public async Task<ActionResult> GetAllStaffSchedules()
         {
-            var staffSchedules = await _staffSchedule.GetAllStaffSchedules();
-            return ApiResponseHelper.HandleGetAll(staffSchedules);
+            var staffSchedules = await _staffSchedule.GetAllAsync();
+            return Ok(staffSchedules);
         }
-        [HttpGet("services/getallservices")]
+
+        [HttpGet("staff-schedules/{id}")]
+        public async Task<ActionResult> GetStaffScheduleById(int id)
+        {
+            var staffSchedule = await _staffSchedule.GetByIdAsync(id);
+            return Ok(staffSchedule);
+        }
+
+        // Services Endpoints
+        [HttpGet("services")]
         public async Task<ActionResult> GetAllServices()
         {
-            var services = await _services.GetAllServices();
-            return ApiResponseHelper.HandleGetAll(services);
-        }
-        [HttpPost("bookings/addbooking")]
-        public async Task<ActionResult> AddBooking([FromBody] BookingCreateDTO bookingCreateDTO)
-        {
-            var createdBooking = await _booking.CreateBooking(bookingCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllBookings),
-                                                  new { id = createdBooking.Id },
-                                                  createdBooking);
-        }
-        [HttpPost("customer/addcustomer")]
-        public async Task<ActionResult> AddCustomer([FromBody] Customer customerCreateDTO)
-        {
-            var createdCustomer = await _customer.CreateCustomer(customerCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllCustomers),
-                                                  new { id = createdCustomer.Id },
-                                                  createdCustomer);
-        }
-        [HttpPost("bookingservice/addbookingservice")]
-        public async Task<ActionResult> AddBookingService([FromBody] BookingService bookingServiceCreateDTO)
-        {
-            var createdBookingService = await _bookingervice.CreateBookingService(bookingServiceCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllBookingServices),
-                                                  new { id = createdBookingService.Id },
-                                                  createdBookingService);
-        }
-        [HttpPost("category/addcategory")]
-        public async Task<ActionResult> AddCategory([FromBody] Category categoryCreateDTO)
-        {
-            var createdCategory = await _category.CreateCategory(categoryCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllCategories),
-                                                  new { id = createdCategory.Id },
-                                                  createdCategory);
-        }
-        [HttpPost("order/addorder")]
-        public async Task<ActionResult> AddOrder([FromBody] Order orderCreateDTO)
-        {
-            var createdOrder = await _order.CreateOrder(orderCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllOrders),
-                                                  new { id = createdOrder.Id },
-                                                  createdOrder);
-
-        }
-        [HttpPost("product/addproduct")]
-        public async Task<ActionResult> AddProduct([FromBody] Product productCreateDTO)
-        {
-            var createdProduct = await _product.CreateProduct(productCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllProducts),
-                                                  new { id = createdProduct.Id },
-                                                  createdProduct);
-        }
-        [HttpPost("role/addrole")]
-        public async Task<ActionResult> AddRole([FromBody] Role roleCreateDTO)
-        {
-            var createdRole = await _role.CreateRole(roleCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllRoles),
-                                                  new { id = createdRole.Id },
-                                                  createdRole);
-        }
-        [HttpPost("orderitem/addorderitem")]
-        public async Task<ActionResult> AddOrderItem([FromBody] OrderItem orderItemCreateDTO)
-        {
-            var createdOrderItem = await _orderItem.CreateOrderItem(orderItemCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllOrderItems),
-                                                  new { id = createdOrderItem.Id },
-                                                  createdOrderItem);
-        }
-        [HttpPost("room/addroom")]
-        public async Task<ActionResult> AddRoom([FromBody] Room roomCreateDTO)
-        {
-            var createdRoom = await _room.CreateRoom(roomCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllRooms), new { id = createdRoom.Id }, createdRoom);
-        }
-        [HttpPost("payment/addpayment")]
-        public async Task<ActionResult> AddPayment([FromBody] Payment paymentCreateDTO)
-        {
-            var createdPayment = await _payment.CreatePayment(paymentCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllPayments), new { id = createdPayment.Id }, createdPayment);
-        }
-        [HttpPost("staff/addstaff")]
-        public async Task<ActionResult> AddStaff([FromBody] Staff staffCreateDTO)
-        {
-            var createdStaff = await _staff.CreateStaff(staffCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllStaffs), new { id = createdStaff.Id }, createdStaff);
-        }
-        [HttpPost("staffschedule/addstaffschedule")]
-        public async Task<ActionResult> AddStaffSchedule([FromBody] StaffSchedule staffScheduleCreateDTO)
-        {
-            var createdStaffSchedule = await _staffSchedule.CreateStaffSchedule(staffScheduleCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllStaffSchedules), new { id = createdStaffSchedule.Id }, createdStaffSchedule);
-        }
-        [HttpPost("services/addservice")]
-        public async Task<ActionResult> AddService([FromBody] Service serviceCreateDTO)
-        {
-            var createdService = await _services.CreateService(serviceCreateDTO);
-            return ApiResponseHelper.HandleCreate(nameof(GetAllServices), new { id = createdService.Id }, createdService);
+            var services = await _services.GetAllAsync();
+            return Ok(services);
         }
 
-        [HttpPut("bookings/updatebooking/{id}")]
-        public async Task<ActionResult> UpdateBooking(int id, [FromBody] BookingUpdateDTO bookingUpdateDTO)
+        [HttpGet("services/{id}")]
+        public async Task<ActionResult> GetServiceById(int id)
         {
-            var updatedBooking = await _booking.UpdateBooking(id, bookingUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedBooking, id, "Booking");
+            var service = await _services.GetByIdAsync(id);
+            return Ok(service);
         }
-        [HttpPut("customer/updatecustomer/{id}")]
-        public async Task<ActionResult> UpdateCustomer(int id, [FromBody] Customer customerUpdateDTO)
+        // POST Endpoints
+        [HttpPost("bookings")]
+        public async Task<ActionResult> CreateBooking([FromBody] object createDto)
         {
-            var updatedCustomer = await _customer.UpdateCustomer(id, customerUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedCustomer, id, "Customer");
-        }
-        [HttpPut("bookingservice/updatebookingservice/{id}")]
-        public async Task<ActionResult> UpdateBookingService(int id, [FromBody] BookingService bookingServiceUpdateDTO)
-        {
-            var updatedBookingService = await _bookingervice.UpdateBookingService(id, bookingServiceUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedBookingService, id, "BookingService");
-        }
-        [HttpPut("category/updatecategory/{id}")]
-        public async Task<ActionResult> UpdateCategory(int id, [FromBody] Category categoryUpdateDTO)
-        {
-            var updatedCategory = await _category.UpdateCategory(id, categoryUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedCategory, id, "Category");
-        }
-        [HttpPut("order/updateorder/{id}")]
-        public async Task<ActionResult> UpdateOrder(int id, [FromBody] Order orderUpdateDTO)
-        {
-            var updatedOrder = await _order.UpdateOrder(id, orderUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedOrder, id, "Order");
-        }
-        [HttpPut("product/updateproduct/{id}")]
-        public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product productUpdateDTO)
-        {
-            var updatedProduct = await _product.UpdateProduct(id, productUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedProduct, id, "Product");
-        }
-        [HttpPut("role/updaterole/{id}")]
-        public async Task<ActionResult> UpdateRole(int id, [FromBody] Role roleUpdateDTO)
-        {
-            var updatedRole = await _role.UpdateRole(id, roleUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedRole, id, "Role");
-        }
-        [HttpPut("orderitem/updateorderitem/{id}")]
-        public async Task<ActionResult> UpdateOrderItem(int id, [FromBody] OrderItem orderItemUpdateDTO)
-        {
-            var updatedOrderItem = await _orderItem.UpdateOrderItem(id, orderItemUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedOrderItem, id, "OrderItem");
-        }
-        [HttpPut("room/updateroom/{id}")]
-        public async Task<ActionResult> UpdateRoom(int id, [FromBody] Room roomUpdateDTO)
-        {
-            var updatedRoom = await _room.UpdateRoom(id, roomUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedRoom, id, "Room");
-        }
-        [HttpPut("payment/updatepayment/{id}")]
-        public async Task<ActionResult> UpdatePayment(int id, [FromBody] Payment paymentUpdateDTO)
-        {
-            var updatedPayment = await _payment.UpdatePayment(id, paymentUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedPayment, id, "Payment");
-        }
-        [HttpPut("staff/updatestaff/{id}")]
-        public async Task<ActionResult> UpdateStaff(int id, [FromBody] Staff staffUpdateDTO)
-        {
-            var updatedStaff = await _staff.UpdateStaff(id, staffUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedStaff, id, "Staff");
-        }
-        [HttpPut("staffschedule/updatestaffschedule/{id}")]
-        public async Task<ActionResult> UpdateStaffSchedule(int id, [FromBody] StaffSchedule staffScheduleUpdateDTO)
-        {
-            var updatedStaffSchedule = await _staffSchedule.UpdateStaffSchedule(id, staffScheduleUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedStaffSchedule, id, "StaffSchedule");
-        }
-        [HttpPut("services/updateservice/{id}")]
-        public async Task<ActionResult> UpdateService(int id, [FromBody] Service serviceUpdateDTO)
-        {
-            var updatedService = await _services.UpdateService(id, serviceUpdateDTO);
-            return ApiResponseHelper.HandleUpdate(updatedService, id, "Service");
+            var result = await _booking.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetBookingById), result);
         }
 
-        [HttpDelete("bookings/deletebooking/{id}")]
-        public async Task<ActionResult> DeleteBooking(int id)
+        [HttpPost("customers")]
+        public async Task<ActionResult> CreateCustomer([FromBody] CustomerDTO createDto)
         {
-            var result = await _booking.DeleteBooking(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Booking");
-        }
-        [HttpDelete("customer/deletecustomer/{id}")]
-        public async Task<ActionResult> DeleteCustomer(int id)
-        {
-            var result = await _customer.DeleteCustomer(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Customer");
-        }
-        [HttpDelete("bookingservice/deletebookingservice/{id}")]
-        public async Task<ActionResult> DeleteBookingService(int id)
-        {
-            var result = await _bookingervice.DeleteBookingService(id);
-            return ApiResponseHelper.HandleDelete(result, id, "BookingService");
-        }
-        [HttpDelete("category/deletecategory/{id}")]
-        public async Task<ActionResult> DeleteCategory(int id)
-        {
-            var result = await _category.DeleteCategory(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Category");
-        }
-        [HttpDelete("order/deleteorder/{id}")]
-        public async Task<ActionResult> DeleteOrder(int id)
-        {
-            var result = await _order.DeleteOrder(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Order");
-        }
-        [HttpDelete("product/deleteproduct/{id}")]
-        public async Task<ActionResult> DeleteProduct(int id)
-        {
-            var result = await _product.DeleteProduct(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Product");
-        }
-        [HttpDelete("role/deleterole/{id}")]
-        public async Task<ActionResult> DeleteRole(int id)
-        {
-            var result = await _role.DeleteRole(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Role");
-        }
-        [HttpDelete("orderitem/deleteorderitem/{id}")]
-        public async Task<ActionResult> DeleteOrderItem(int id)
-        {
-            var result = await _orderItem.DeleteOrderItem(id);
-            return ApiResponseHelper.HandleDelete(result, id, "OrderItem");
-        }
-        [HttpDelete("room/deleteroom/{id}")]
-        public async Task<ActionResult> DeleteRoom(int id)
-        {
-            var result = await _room.DeleteRoom(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Room");
-        }
-        [HttpDelete("payment/deletepayment/{id}")]
-        public async Task<ActionResult> DeletePayment(int id)
-        {
-            var result = await _payment.DeletePayment(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Payment");
-        }
-        [HttpDelete("staff/deletestaff/{id}")]
-        public async Task<ActionResult> DeleteStaff(int id)
-        {
-            var result = await _staff.DeleteStaff(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Staff");
-        }
-        [HttpDelete("staffschedule/deletestaffschedule/{id}")]
-        public async Task<ActionResult> DeleteStaffSchedule(int id)
-        {
-            var result = await _staffSchedule.DeleteStaffSchedule(id);
-            return ApiResponseHelper.HandleDelete(result, id, "StaffSchedule");
-        }
-        [HttpDelete("services/deleteservice/{id}")]
-        public async Task<ActionResult> DeleteService(int id)
-        {
-            var result = await _services.DeleteService(id);
-            return ApiResponseHelper.HandleDelete(result, id, "Service");
+            var result = await _customer.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetCustomerById), result);
         }
 
-    }    }
+        [HttpPost("booking-services")]
+        public async Task<ActionResult> CreateBookingService([FromBody] object createDto)
+        {
+            var result = await _bookingService.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetBookingServiceById), result);
+        }
+
+        [HttpPost("categories")]
+        public async Task<ActionResult> CreateCategory([FromBody] object createDto)
+        {
+            var result = await _category.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetCategoryById), result);
+        }
+
+        [HttpPost("orders")]
+        public async Task<ActionResult> CreateOrder([FromBody] object createDto)
+        {
+            var result = await _order.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetOrderById), result);
+        }
+
+        [HttpPost("products")]
+        public async Task<ActionResult> CreateProduct([FromBody] object createDto)
+        {
+            var result = await _product.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetProductById), result);
+        }
+
+        [HttpPost("roles")]
+        public async Task<ActionResult> CreateRole([FromBody] object createDto)
+        {
+            var result = await _role.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetRoleById), result);
+        }
+
+        [HttpPost("order-items")]
+        public async Task<ActionResult> CreateOrderItem([FromBody] object createDto)
+        {
+            var result = await _orderItem.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetOrderItemById), result);
+        }
+
+        [HttpPost("rooms")]
+        public async Task<ActionResult> CreateRoom([FromBody] object createDto)
+        {
+            var result = await _room.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetRoomById), result);
+        }
+
+        [HttpPost("payments")]
+        public async Task<ActionResult> CreatePayment([FromBody] object createDto)
+        {
+            var result = await _payment.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetPaymentById), result);
+        }
+
+        [HttpPost("staff")]
+        public async Task<ActionResult> CreateStaff([FromBody] StaffDTO createDto)
+        {
+            var result = await _staff.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetStaffById), result);
+        }
+
+        [HttpPost("staff-schedules")]
+        public async Task<ActionResult> CreateStaffSchedule([FromBody] object createDto)
+        {
+            var result = await _staffSchedule.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetStaffScheduleById), result);
+        }
+
+        [HttpPost("services")]
+        public async Task<ActionResult> CreateService([FromBody] object createDto)
+        {
+            var result = await _services.CreateAsync(createDto);
+            return CreatedAtAction(nameof(GetServiceById), result);
+        }
+
+        // PUT Endpoints
+        [HttpPut("bookings/{id}")]
+        public async Task<ActionResult> UpdateBooking(long id, [FromBody] object updateDto)
+        {
+            var result = await _booking.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("customers/{id}")]
+        public async Task<ActionResult> UpdateCustomer(long id, [FromBody] CustomerDTO updateDto)
+        {
+            var result = await _customer.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("booking-services/{id}")]
+        public async Task<ActionResult> UpdateBookingService(long id, [FromBody] object updateDto)
+        {
+            var result = await _bookingService.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("categories/{id}")]
+        public async Task<ActionResult> UpdateCategory(long id, [FromBody] object updateDto)
+        {
+            var result = await _category.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("orders/{id}")]
+        public async Task<ActionResult> UpdateOrder(long id, [FromBody] object updateDto)
+        {
+            var result = await _order.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("products/{id}")]
+        public async Task<ActionResult> UpdateProduct(long id, [FromBody] object updateDto)
+        {
+            var result = await _product.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("roles/{id}")]
+        public async Task<ActionResult> UpdateRole(long id, [FromBody] object updateDto)
+        {
+            var result = await _role.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("order-items/{id}")]
+        public async Task<ActionResult> UpdateOrderItem(long id, [FromBody] object updateDto)
+        {
+            var result = await _orderItem.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("rooms/{id}")]
+        public async Task<ActionResult> UpdateRoom(long id, [FromBody] object updateDto)
+        {
+            var result = await _room.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("payments/{id}")]
+        public async Task<ActionResult> UpdatePayment(long id, [FromBody] object updateDto)
+        {
+            var result = await _payment.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("staff/{id}")]
+        public async Task<ActionResult> UpdateStaff(long id, [FromBody] StaffDTO updateDto)
+        {
+            var result = await _staff.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("staff-schedules/{id}")]
+        public async Task<ActionResult> UpdateStaffSchedule(long id, [FromBody] object updateDto)
+        {
+            var result = await _staffSchedule.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        [HttpPut("services/{id}")]
+        public async Task<ActionResult> UpdateService(long id, [FromBody] object updateDto)
+        {
+            var result = await _services.UpdateAsync(id, updateDto);
+            return Ok(result);
+        }
+
+        // DELETE Endpoints
+        [HttpDelete("bookings/{id}")]
+        public async Task<ActionResult> DeleteBooking(long id)
+        {
+            var result = await _booking.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Booking deleted successfully" : "Failed to delete booking" });
+        }
+
+        [HttpDelete("customers/{id}")]
+        public async Task<ActionResult> DeleteCustomer(long id)
+        {
+            var result = await _customer.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Customer deleted successfully" : "Failed to delete customer" });
+        }
+
+        [HttpDelete("booking-services/{id}")]
+        public async Task<ActionResult> DeleteBookingService(long id)
+        {
+            var result = await _bookingService.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Booking service deleted successfully" : "Failed to delete booking service" });
+        }
+
+        [HttpDelete("categories/{id}")]
+        public async Task<ActionResult> DeleteCategory(long id)
+        {
+            var result = await _category.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Category deleted successfully" : "Failed to delete category" });
+        }
+
+        [HttpDelete("orders/{id}")]
+        public async Task<ActionResult> DeleteOrder(long id)
+        {
+            var result = await _order.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Order deleted successfully" : "Failed to delete order" });
+        }
+
+        [HttpDelete("products/{id}")]
+        public async Task<ActionResult> DeleteProduct(long id)
+        {
+            var result = await _product.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Product deleted successfully" : "Failed to delete product" });
+        }
+
+        [HttpDelete("roles/{id}")]
+        public async Task<ActionResult> DeleteRole(long id)
+        {
+            var result = await _role.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Role deleted successfully" : "Failed to delete role" });
+        }
+
+        [HttpDelete("order-items/{id}")]
+        public async Task<ActionResult> DeleteOrderItem(long id)
+        {
+            var result = await _orderItem.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Order item deleted successfully" : "Failed to delete order item" });
+        }
+
+        [HttpDelete("rooms/{id}")]
+        public async Task<ActionResult> DeleteRoom(long id)
+        {
+            var result = await _room.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Room deleted successfully" : "Failed to delete room" });
+        }
+
+        [HttpDelete("payments/{id}")]
+        public async Task<ActionResult> DeletePayment(long id)
+        {
+            var result = await _payment.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Payment deleted successfully" : "Failed to delete payment" });
+        }
+
+        [HttpDelete("staff/{id}")]
+        public async Task<ActionResult> DeleteStaff(long id)
+        {
+            var result = await _staff.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Staff deleted successfully" : "Failed to delete staff" });
+        }
+
+        [HttpDelete("staff-schedules/{id}")]
+        public async Task<ActionResult> DeleteStaffSchedule(long id)
+        {
+            var result = await _staffSchedule.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Staff schedule deleted successfully" : "Failed to delete staff schedule" });
+        }
+
+        [HttpDelete("services/{id}")]
+        public async Task<ActionResult> DeleteService(long id)
+        {
+            var result = await _services.DeleteAsync(id);
+            return Ok(new { success = result, message = result ? "Service deleted successfully" : "Failed to delete service" });
+        }
+    }
+}

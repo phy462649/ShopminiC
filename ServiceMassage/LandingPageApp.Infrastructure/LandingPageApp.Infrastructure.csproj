@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LandingPageApp.Application\LandingPageApp.Application.csproj" />
     <ProjectReference Include="..\LandingPageApp.Domain\LandingPageApp.Domain.csproj" />
   </ItemGroup>
 

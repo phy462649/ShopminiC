@@ -11,10 +11,10 @@ namespace LandingPageApp.Infrastructure.Repositories
         private readonly ServicemassageContext _context;
         private readonly DbSet<ViewTopSellingProduct> _dbSet;
 
-        public ReportRepository(ServicemassageContext context, DbSet<ViewTopSellingProduct> dbSet)
+        public ReportRepository(ServicemassageContext context)
         {
             _context = context;
-            _dbSet = dbSet;
+            _dbSet = context.Set<ViewTopSellingProduct>();
         }
         public async Task<List<ViewTopSellingProduct>> GetAllTopSellingProductsAsync()
         {

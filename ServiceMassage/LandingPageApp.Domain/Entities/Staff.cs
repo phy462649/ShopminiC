@@ -12,6 +12,8 @@ public partial class Staff
     public string? Phone { get; set; }
 
     public string? Email { get; set; }
+    public long? AccountId { get; set; }
+    public Account? Account { get; set; }
 
     public string? Specialty { get; set; }
 

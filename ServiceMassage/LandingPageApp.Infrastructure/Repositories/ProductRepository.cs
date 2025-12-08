@@ -4,16 +4,16 @@ using LandingPageApp.Domain.Entities;
 using LandingPageApp.Domain.Repositories;
 using System.Linq.Expressions;
 
-namespace Landingpage.Infrastructure.Repositories
+namespace LandingPageApp.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
         private readonly ServicemassageContext _context;
         private readonly DbSet<Product> _dbSet;
-        public ProductRepository(ServicemassageContext context, DbSet<Product> dbSet)
+        public ProductRepository(ServicemassageContext context)
         {
             _context = context;
-            _dbSet = dbSet;
+            _dbSet = _context.Set<Product>();
         }
         public async Task<Product?> GetByIdAsync(int productId, CancellationToken cancellation = default)
         {

@@ -7,7 +7,7 @@ using LandingPageApp.Application.Interfaces;
 
 namespace LandingPageApp.Infrastructure.Caching;
 
-public class RedisCacheService : ICacheService
+public class RedisCacheService : ICacheRediservice
 {
     private readonly IDistributedCache _cache;
     private static readonly JsonSerializerOptions _serializerOptions = new()
