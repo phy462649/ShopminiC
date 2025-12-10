@@ -67,7 +67,7 @@
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[9.0.0-preview.3.24215.4, )"
+              "version": "[9.0.0, )"
             },
             "Scalar.AspNetCore": {
               "target": "Package",
@@ -160,7 +160,15 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
             "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.Extensions.Options": {
               "target": "Package",
               "version": "[9.0.0, )"
             },

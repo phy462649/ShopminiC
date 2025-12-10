@@ -1,6 +1,9 @@
-﻿using LandingPageApp.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+using LandingPageApp.Domain.Entities;
+
 namespace LandingPageApp.Infrastructure.Data;
 
 public partial class ServicemassageContext : DbContext
@@ -15,19 +18,18 @@ public partial class ServicemassageContext : DbContext
     }
 
     public virtual DbSet<Booking> Bookings { get; set; }
-    public DbSet<Account> Accounts { get; set; }
 
     public virtual DbSet<BookingService> BookingServices { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
-
-    public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
+
+    public virtual DbSet<Person> People { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -37,15 +39,13 @@ public partial class ServicemassageContext : DbContext
 
     public virtual DbSet<Service> Services { get; set; }
 
-    public virtual DbSet<Staff> Staff { get; set; }
-
     public virtual DbSet<StaffSchedule> StaffSchedules { get; set; }
 
     public virtual DbSet<ViewTopSellingProduct> ViewTopSellingProducts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
-       
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=localhost;database=massageservice;user=root;password=root", ServerVersion.Parse("9.0.1-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,7 +59,7 @@ public partial class ServicemassageContext : DbContext
 
             entity.ToTable("booking");
 
-            entity.HasIndex(e => e.CustomerId, "customer_id");
+            entity.HasIndex(e => e.CustomerId, "booking_person_fk");
 
             entity.HasIndex(e => new { e.RoomId, e.StartTime }, "idx_booking_room_time");
 
@@ -87,26 +87,29 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("'pending'")
                 .HasColumnType("enum('pending','confirmed','completed','cancelled')")
                 .HasColumnName("status");
+            entity.Property(e => e.TotalAmount)
+                .HasPrecision(10, 2)
+                .HasColumnName("total_amount");
             entity.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.Bookings)
+            entity.HasOne(d => d.Customer).WithMany(p => p.BookingCustomers)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("booking_ibfk_1");
+                .HasConstraintName("booking_person_fk");
 
             entity.HasOne(d => d.Room).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.RoomId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("booking_ibfk_3");
+                .HasConstraintName("booking_room_fk");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.Bookings)
+            entity.HasOne(d => d.Staff).WithMany(p => p.BookingStaffs)
                 .HasForeignKey(d => d.StaffId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("booking_ibfk_2");
+                .HasConstraintName("booking_staff_fk");
         });
 
         modelBuilder.Entity<BookingService>(entity =>
@@ -137,12 +140,12 @@ public partial class ServicemassageContext : DbContext
             entity.HasOne(d => d.Booking).WithMany(p => p.BookingServices)
                 .HasForeignKey(d => d.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("booking_service_ibfk_1");
+                .HasConstraintName("booking_service_booking_fk");
 
             entity.HasOne(d => d.Service).WithMany(p => p.BookingServices)
                 .HasForeignKey(d => d.ServiceId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("booking_service_ibfk_2");
+                .HasConstraintName("booking_service_service_fk");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -150,8 +153,6 @@ public partial class ServicemassageContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("category");
-
-            entity.HasIndex(e => e.ParentId, "fk_category_parent");
 
             entity.HasIndex(e => e.Name, "uq_category_name").IsUnique();
 
@@ -166,7 +167,6 @@ public partial class ServicemassageContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(100)
                 .HasColumnName("name");
-            entity.Property(e => e.ParentId).HasColumnName("parent_id");
             entity.Property(e => e.Status)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("status");
@@ -175,49 +175,7 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
-
-            entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
-                .HasForeignKey(d => d.ParentId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("fk_category_parent");
         });
-
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("customer");
-
-            entity.HasIndex(e => e.Email, "email").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Address)
-                .HasMaxLength(255)
-                .HasColumnName("address");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.UpdatedAt)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("updated_at");
-            entity.HasOne(d => d.Account)
-                .WithMany(p => p.Customer)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("customer_ibfk_account");
-             });
 
         modelBuilder.Entity<Order>(entity =>
         {
@@ -225,7 +183,7 @@ public partial class ServicemassageContext : DbContext
 
             entity.ToTable("orders");
 
-            entity.HasIndex(e => new { e.CustomerId, e.OrderTime }, "idx_orders_customer_time");
+            entity.HasIndex(e => new { e.CustomerId, e.OrderTime }, "idx_orders_person_time");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
@@ -240,6 +198,9 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("'pending'")
                 .HasColumnType("enum('pending','confirmed','shipped','completed','cancelled')")
                 .HasColumnName("status");
+            entity.Property(e => e.TotalAmount)
+                .HasPrecision(10, 2)
+                .HasColumnName("total_amount");
             entity.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -249,7 +210,7 @@ public partial class ServicemassageContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("orders_ibfk_1");
+                .HasConstraintName("orders_person_fk");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
@@ -278,12 +239,12 @@ public partial class ServicemassageContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("order_items_ibfk_1");
+                .HasConstraintName("order_items_order_fk");
 
             entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("order_items_ibfk_2");
+                .HasConstraintName("order_items_product_fk");
         });
 
         modelBuilder.Entity<Payment>(entity =>
@@ -292,11 +253,11 @@ public partial class ServicemassageContext : DbContext
 
             entity.ToTable("payment");
 
-            entity.HasIndex(e => new { e.PaymentType, e.BookingId, e.OrderId }, "idx_payment_type_ref");
-
             entity.HasIndex(e => e.BookingId, "payment_fk_booking");
 
             entity.HasIndex(e => e.OrderId, "payment_fk_order");
+
+            entity.HasIndex(e => e.PersonalId, "payment_person_fk");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
@@ -318,7 +279,7 @@ public partial class ServicemassageContext : DbContext
             entity.Property(e => e.PaymentType)
                 .HasColumnType("enum('booking','order')")
                 .HasColumnName("payment_type");
-            entity.Property(e => e.ReferenceId).HasColumnName("reference_id");
+            entity.Property(e => e.PersonalId).HasColumnName("personal_id");
             entity.Property(e => e.Status)
                 .HasDefaultValueSql("'pending'")
                 .HasColumnType("enum('pending','completed','failed')")
@@ -331,11 +292,64 @@ public partial class ServicemassageContext : DbContext
 
             entity.HasOne(d => d.Booking).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.BookingId)
-                .HasConstraintName("payment_fk_booking");
+                .HasConstraintName("payment_booking_fk");
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("payment_fk_order");
+                .HasConstraintName("payment_order_fk");
+
+            entity.HasOne(d => d.Personal).WithMany(p => p.Payments)
+                .HasForeignKey(d => d.PersonalId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("payment_person_fk");
+        });
+
+        modelBuilder.Entity<Person>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("person");
+
+            entity.HasIndex(e => e.RoleId, "person_role_fk");
+
+            entity.HasIndex(e => e.Email, "uq_person_email").IsUnique();
+
+            entity.HasIndex(e => e.Username, "username").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(255)
+                .HasColumnName("address");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .HasColumnName("password_hash");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .HasColumnName("phone");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.Username)
+                .HasMaxLength(100)
+                .HasColumnName("username");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.People)
+                .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("person_role_fk");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -344,9 +358,12 @@ public partial class ServicemassageContext : DbContext
 
             entity.ToTable("product");
 
+            entity.HasIndex(e => e.CategoryId, "idx_product_category");
+
             entity.HasIndex(e => e.Name, "idx_product_name");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
@@ -368,6 +385,11 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_product_category");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -453,68 +475,6 @@ public partial class ServicemassageContext : DbContext
                 .HasColumnName("updated_at");
         });
 
-        modelBuilder.Entity<Staff>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("staff");
-
-            entity.HasIndex(e => e.Email, "email").IsUnique();
-
-            entity.HasIndex(e => e.Specialty, "idx_staff_specialty");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .HasColumnName("email");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(20)
-                .HasColumnName("phone");
-            entity.Property(e => e.Specialty)
-                .HasMaxLength(100)
-                .HasColumnName("specialty");
-            entity.Property(e => e.UpdatedAt)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp")
-                .HasColumnName("updated_at");
-
-            entity.HasMany(d => d.Roles).WithMany(p => p.Staff)
-                .UsingEntity<Dictionary<string, object>>(
-                    "StaffRole",
-                    r => r.HasOne<Role>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("staff_role_ibfk_2"),
-                    l => l.HasOne<Staff>().WithMany()
-                        .HasForeignKey("StaffId")
-                        .HasConstraintName("staff_role_ibfk_1"),
-                    j =>
-                    {
-                        j.HasKey("StaffId", "RoleId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                        j.ToTable("staff_role");
-                        j.HasIndex(new[] { "RoleId" }, "role_id");
-                        j.IndexerProperty<long>("StaffId").HasColumnName("staff_id");
-                        j.IndexerProperty<long>("RoleId").HasColumnName("role_id");
-                    });
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
-
-            entity.HasOne(d => d.Account)
-                .WithMany(p => p.Staff)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("staff_ibfk_account");
-
-                });
-
         modelBuilder.Entity<StaffSchedule>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -537,6 +497,9 @@ public partial class ServicemassageContext : DbContext
             entity.Property(e => e.IsWorking)
                 .HasDefaultValueSql("'1'")
                 .HasColumnName("is_working");
+            entity.Property(e => e.ShiftName)
+                .HasColumnType("enum('morning','afternoon',' evening')")
+                .HasColumnName("shift_name");
             entity.Property(e => e.StaffId).HasColumnName("staff_id");
             entity.Property(e => e.StartTime)
                 .HasColumnType("time")
@@ -549,7 +512,7 @@ public partial class ServicemassageContext : DbContext
 
             entity.HasOne(d => d.Staff).WithMany(p => p.StaffSchedules)
                 .HasForeignKey(d => d.StaffId)
-                .HasConstraintName("fk_staff_schedule_staff");
+                .HasConstraintName("staff_schedule_person_fk");
         });
 
         modelBuilder.Entity<ViewTopSellingProduct>(entity =>
@@ -569,27 +532,9 @@ public partial class ServicemassageContext : DbContext
                 .HasPrecision(32)
                 .HasColumnName("total_sold");
         });
-        modelBuilder.Entity<Account>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("account");
-
-            entity.HasIndex(e => e.Username, "uq_account_username").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Username).HasColumnName("username");
-            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
-            entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at");
-        });
-
-
 
         OnModelCreatingPartial(modelBuilder);
     }
-
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

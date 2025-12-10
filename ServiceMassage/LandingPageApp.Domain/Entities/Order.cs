@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandingPageApp.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace LandingPageApp.Domain.Entities;
@@ -11,13 +12,15 @@ public partial class Order
 
     public DateTime OrderTime { get; set; }
 
-    public string? Status { get; set; }
+    public OrderStatus? Status { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual Customer Customer { get; set; } = null!;
+    public decimal? TotalAmount { get; set; }
+
+    public virtual Person Customer { get; set; } = null!;
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 

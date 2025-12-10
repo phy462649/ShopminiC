@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "xwnKuBovBX0=",
+  "dgSpecHash": "TVPWC6MlxmM=",
   "success": true,
   "projectFilePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Api\\LandingPageApp.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PHY\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
-    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.0-preview.4.24267.6\\microsoft.aspnetcore.authentication.jwtbearer.9.0.0-preview.4.24267.6.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.0\\microsoft.aspnetcore.authentication.jwtbearer.9.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.0\\microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.0\\microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.0\\microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
@@ -24,8 +24,8 @@
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.2.1\\microsoft.identitymodel.abstractions.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.2.1\\microsoft.identitymodel.jsonwebtokens.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.logging\\8.2.1\\microsoft.identitymodel.logging.8.2.1.nupkg.sha512",
-    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.protocols\\7.4.1\\microsoft.identitymodel.protocols.7.4.1.nupkg.sha512",
-    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\7.4.1\\microsoft.identitymodel.protocols.openidconnect.7.4.1.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.protocols\\8.0.1\\microsoft.identitymodel.protocols.8.0.1.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\8.0.1\\microsoft.identitymodel.protocols.openidconnect.8.0.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.2.1\\microsoft.identitymodel.tokens.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\mysqlconnector\\2.4.0\\mysqlconnector.2.4.0.nupkg.sha512",
@@ -42,18 +42,5 @@
     "C:\\Users\\PHY\\.nuget\\packages\\system.io.hashing\\9.0.10\\system.io.hashing.9.0.10.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "message": "LandingPageApp.Api depends on Microsoft.AspNetCore.Authentication.JwtBearer (>= 9.0.0-preview.3.24215.4) but Microsoft.AspNetCore.Authentication.JwtBearer 9.0.0-preview.3.24215.4 was not found. Microsoft.AspNetCore.Authentication.JwtBearer 9.0.0-preview.4.24267.6 was resolved instead.",
-      "projectPath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Api\\LandingPageApp.Api.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Api\\LandingPageApp.Api.csproj",
-      "libraryId": "Microsoft.AspNetCore.Authentication.JwtBearer",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }

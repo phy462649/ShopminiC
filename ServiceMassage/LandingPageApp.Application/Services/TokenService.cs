@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -29,22 +29,28 @@ namespace LandingPageApp.Application.Services
         /// <summary>
         /// Generates an access token with 15-minute expiration
         /// </summary>
-        public string GenerateAccessToken(Account account)
+        public string GenerateAccessToken(Person person)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSecret);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                new Claim(ClaimTypes.Name, account.Username),
-                new Claim("status", account.Status.ToString())
+                new Claim(ClaimTypes.NameIdentifier, person.Id.ToString()),
+                new Claim(ClaimTypes.Name, person.Username),
+                new Claim(ClaimTypes.Role, person.Role?.Name ?? "Customer"),
+                new Claim("Name", person.Name),
+                new Claim("Email", person.Email ?? string.Empty),
+                new Claim("Phone", person.Phone ?? string.Empty),
+                new Claim("Address", person.Address ?? string.Empty)
+
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                //thời gian hết hạn token
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 Issuer = _jwtIssuer,
                 Audience = _jwtAudience,
                 SigningCredentials = new SigningCredentials(
@@ -62,9 +68,9 @@ namespace LandingPageApp.Application.Services
         public string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
-            using (var rng = RandomNumberGenerator.Create())
+            using (var rand = RandomNumberGenerator.Create())
             {
-                rng.GetBytes(randomNumber);
+                rand.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);
             }
         }

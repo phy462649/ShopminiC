@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+420eb49d2c6e3b54454927d33bd0d5198128d5c9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6961125c643481666223e9b1aa181cdd41495105")]
 [assembly: System.Reflection.AssemblyProductAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LandingPageApp.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

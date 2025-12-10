@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,8 @@ namespace LandingPageApp.Application.Dtos
         public string Name { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
-        public string? Specialty { get; set; }
-        public List<string> Roles { get; set; } = new List<string>();
+        public string? Address { get; set; }
+        public string? Position { get; set; }
     }
 }
+

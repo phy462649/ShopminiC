@@ -9,6 +9,9 @@ using LandingPageApp.Infrastructure.Data;
 using LandingPageApp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using LandingPageApp.Domain.Entities;
+using LandingPageApp.Application.Validations;
+using System;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -38,6 +41,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<ICacheRediservice, RedisCacheService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddSingleton<Validation>();
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"];
@@ -72,6 +76,10 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddRepositories();
+builder.Services.Configure<SmtpSettings>(
+    builder.Configuration.GetSection("Smtp"));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Swagger
@@ -82,6 +90,31 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "LandingPageApp API",
         Version = "v1"
+    });
+    
+    // Add JWT Bearer security scheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
     });
 });
 

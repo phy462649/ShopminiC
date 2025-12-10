@@ -48,15 +48,8 @@ public class SecurityService : ISecurityService
 
         if (string.IsNullOrWhiteSpace(hash))
             return false;
-
-        try
-        {
-            return BCrypt.Net.BCrypt.Verify(password, hash);
-        }
-        catch
-        {
-            return false;
-        }
+        return BCrypt.Net.BCrypt.Verify(password, hash);
+      
     }
 
     /// <summary>
@@ -88,17 +81,24 @@ public class SecurityService : ISecurityService
         var attemptsKey = $"{FailedAttemptsKeyPrefix}{normalizedUsername}";
         var lockKey = $"{AccountLockedKeyPrefix}{normalizedUsername}";
 
-        // Get current failed attempts count
-        var currentAttempts = await _cacheService.GetAsync<int?>(attemptsKey) ?? 0;
+        // Get current attempts count
+        var currentAttempts = await _cacheService.GetAsync<int>(attemptsKey);
+
+        // Increment attempts
         currentAttempts++;
 
-        // Set the attempts with 15-minute expiration
-        await _cacheService.SetAsync(attemptsKey, currentAttempts, TimeSpan.FromMinutes(LockoutDurationMinutes));
-
-        // If max attempts exceeded, lock the account
+        // Check if max attempts exceeded
         if (currentAttempts >= MaxFailedAttempts)
         {
+            // Lock the account
             await _cacheService.SetAsync(lockKey, true, TimeSpan.FromMinutes(LockoutDurationMinutes));
+            // Reset attempts counter
+            await _cacheService.RemoveAsync(attemptsKey);
+        }
+        else
+        {
+            // Store updated attempts count with expiration
+            await _cacheService.SetAsync(attemptsKey, currentAttempts, TimeSpan.FromMinutes(LockoutDurationMinutes));
         }
     }
 

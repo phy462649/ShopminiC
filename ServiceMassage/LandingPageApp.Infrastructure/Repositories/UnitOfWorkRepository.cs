@@ -9,7 +9,6 @@ namespace LandingPageApp.Infrastructure.Repositories
     {
         private readonly ServicemassageContext _context;
         private IDbContextTransaction? _transaction;
-        public ICustomerRepository customers { get; }
         public IBookingRepository bookings { get; }
         public IBookingServiceRepository bookingservices { get; }
         public IOrderItemRepository orderItem { get; }
@@ -21,10 +20,8 @@ namespace LandingPageApp.Infrastructure.Repositories
         public IRoomRepository room { get; }
 
         public IServiceRepository services { get; }
-        public IStaffRepository staffs { get; }
         public IStaffScheduleRepository staffSchedules { get; }
         public UnitOfWorkRepository(ServicemassageContext context,
-            ICustomerRepository customerRepository,
             IBookingRepository bookingRepository,
             IBookingServiceRepository bookingServiceRepository,
             IOrderItemRepository orderItemRepository,
@@ -34,12 +31,10 @@ namespace LandingPageApp.Infrastructure.Repositories
             IRoleRepository roleRepository,
             IRoomRepository roomRepository,
             IServiceRepository serviceRepository,
-            IStaffRepository staffRepository,
             IStaffScheduleRepository staffScheduleRepository
             )
         {
             _context = context;
-            customers = customerRepository;
             bookings = bookingRepository;
             bookingservices = bookingServiceRepository;
             orderItem = orderItemRepository;
@@ -49,7 +44,6 @@ namespace LandingPageApp.Infrastructure.Repositories
             roles = roleRepository;
             room = roomRepository;
             services = serviceRepository;
-            staffs = staffRepository;
             staffSchedules = staffScheduleRepository;
         }
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

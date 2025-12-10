@@ -5,7 +5,6 @@ namespace LandingPageApp.Domain.Repositories
 {
     public interface IUnitOfWork
     {
-        ICustomerRepository customers { get; }
         IBookingRepository bookings { get; }
         IBookingServiceRepository bookingservices { get; }
         IOrderItemRepository orderItem { get; }
@@ -15,7 +14,6 @@ namespace LandingPageApp.Domain.Repositories
         IRoleRepository roles { get; }  
         IRoomRepository room { get; }
         IServiceRepository services { get; }    
-        IStaffRepository staffs { get; }
         IStaffScheduleRepository staffSchedules { get; }
 
 

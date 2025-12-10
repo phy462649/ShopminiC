@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandingPageApp.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace LandingPageApp.Domain.Entities;
@@ -24,5 +25,7 @@ public partial class StaffSchedule
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual Staff Staff { get; set; } = null!;
+    public ShiftName? ShiftName { get; set; }
+
+    public virtual Person Staff { get; set; } = null!;
 }

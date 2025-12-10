@@ -4,36 +4,44 @@ using LandingPageApp.Domain.Repositories;
 using BCrypt.Net;
 using LandingPageApp.Domain.Entities;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
+using LandingPageApp.Application.Validations;
 
 namespace LandingPageApp.Application.Services
 {
+
     public class AuthService : IAuthService
     {
         private readonly ICacheRediservice _cacheRediservice;
         private readonly IEmailService _emailService;
-        private readonly IAccountRepository _accountRepository;
         private readonly ISecurityService _securityService;
+        private readonly ITokenService _tokenService;
         private readonly IOtpService _otpService;
+        private readonly IPersonRepository _personRepository;
         private const int MinPasswordLength = 8;
-        private const string EmailRegexPattern = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
+        private readonly Validation _validation;
+
+
 
         public AuthService(
-            IAccountRepository accountRepository, 
             IEmailService emailService, 
             ICacheRediservice cacheRediservice,
             ISecurityService securityService,
             IOtpService otpService,
-            ITokenService tokenService)
+
+            ITokenService tokenService,
+            IPersonRepository personRepository,
+            Validation validation)
         {
-            _accountRepository = accountRepository;
             _emailService = emailService;
             _cacheRediservice = cacheRediservice;
             _securityService = securityService;
             _otpService = otpService;
             _tokenService = tokenService;
+            _personRepository = personRepository;
+            _validation = validation;
         }
 
-        private readonly ITokenService _tokenService;
 
         public async Task<AuthResponse> LoginAsync(LoginDTO loginDto, CancellationToken cancellation = default)
         {
@@ -42,58 +50,33 @@ namespace LandingPageApp.Application.Services
                 throw new ArgumentNullException(nameof(loginDto));
 
             if (string.IsNullOrWhiteSpace(loginDto.Username))
-                throw new ArgumentException("Username cannot be empty", nameof(loginDto.Username));
+                throw new ArgumentException("Username cannot be empty");
 
             if (string.IsNullOrWhiteSpace(loginDto.Password))
-                throw new ArgumentException("Password cannot be empty", nameof(loginDto.Password));
-
-            // Check if account is locked
-            var isLocked = await _securityService.IsAccountLockedAsync(loginDto.Username);
-            if (isLocked)
-                return new AuthResponse { Success = false, Message = "Invalid credentials" };
-
-            // Find account by username
-            var account = await _accountRepository.FindByUsernameAsync(loginDto.Username, cancellation);
-            if (account == null)
+                throw new ArgumentException("Password cannot be empty");
+            
+            var person = await _personRepository.FindByUsernameAsync(loginDto.Username,cancellation);
+            if (person == null)
             {
-                // Record failed attempt
-                await _securityService.RecordFailedLoginAttemptAsync(loginDto.Username);
                 return new AuthResponse { Success = false, Message = "Invalid credentials" };
             }
 
             // Verify password
-            if (!_securityService.VerifyPassword(loginDto.Password, account.PasswordHash))
+            if (!_securityService.VerifyPassword(loginDto.Password, person.PasswordHash))
             {
-                // Record failed attempt
-                await _securityService.RecordFailedLoginAttemptAsync(loginDto.Username);
                 return new AuthResponse { Success = false, Message = "Invalid credentials" };
             }
-
-            // Check account status (must be active/verified)
-            if (!account.Status)
-                return new AuthResponse { Success = false, Message = "Account is not verified. Please verify your email first." };
-
             // Generate tokens
-            var accessToken = _tokenService.GenerateAccessToken(account);
+            var accessToken = _tokenService.GenerateAccessToken(person);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
             // Store refresh token in Redis with 7-day expiration
-            var refreshTokenKey = $"refresh_token:{account.Id}";
-            await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(7));
+            var refreshTokenKey = $"refresh_token:{person.Id}";
+            await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(1));
 
             // Store token -> userId mapping for reverse lookup
             var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
-            await _cacheRediservice.SetAsync(tokenUserIdKey, account.Id.ToString(), TimeSpan.FromDays(7));
-
-            // Update last login timestamp
-            account.UpdatedAt = DateTime.UtcNow;
-            await _accountRepository.UpdateAsync(account, cancellation);
-
-            // Reset failed login attempts
-            await _securityService.ResetFailedLoginAttemptsAsync(loginDto.Username);
-
-            // Get user details
-            var userDto = await _accountRepository.UserDetailDTO(loginDto.Username, cancellation);
+            await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(1));
 
             return new AuthResponse
             {
@@ -104,97 +87,101 @@ namespace LandingPageApp.Application.Services
                 ExpiresIn = DateTime.UtcNow.AddMinutes(15),
                 User = new UserDetailDTO
                 {
-                    Id = userDto.Id,
-                    Username = userDto.Username,
-                    Email = userDto.Email ?? string.Empty,
-                    Status = userDto.Status,
+                    Id = person.Id,
+                    Username = person.Username,
+                    Phone = person.Phone,
+                    Email = person.Email,
+                    Address = person.Address,
+                    Name = person.Name,
                     LastLoginAt = DateTime.UtcNow
                 }
             };
         }
 
-        public async Task<AuthResponse> RegisterAsync(RegisterDTO registerDto, CancellationToken cancellationToken = default)
+        public async Task<object> RegisterAsync(RegisterDTO registerDto, CancellationToken cancellationToken = default)
         {
-            // Validate input
-            if (registerDto == null)
-                throw new ArgumentNullException(nameof(registerDto));
-
-            // Validate username is not empty
-            if (string.IsNullOrWhiteSpace(registerDto.Username))
-                throw new ArgumentException("Username cannot be empty", nameof(registerDto.Username));
-
-            // Validate email format
-            if (string.IsNullOrWhiteSpace(registerDto.Email))
-                throw new ArgumentException("Email cannot be empty", nameof(registerDto.Email));
-
-            if (!IsValidEmail(registerDto.Email))
-                throw new ArgumentException("Email format is invalid", nameof(registerDto.Email));
-
-            // Validate password length
-            if (string.IsNullOrWhiteSpace(registerDto.Password))
-                throw new ArgumentException("Password cannot be empty", nameof(registerDto.Password));
-
-            if (registerDto.Password.Length < MinPasswordLength)
-                throw new ArgumentException($"Password must be at least {MinPasswordLength} characters long", nameof(registerDto.Password));
-
-            // Validate password confirmation match
-            if (registerDto.Password != registerDto.ConfirmPassword)
-                throw new ArgumentException("Password and confirmation password do not match", nameof(registerDto.ConfirmPassword));
-
-            // Check username uniqueness
-            var existingUserByUsername = await _accountRepository.GetByUsernameAsync(registerDto.Username);
-            if (existingUserByUsername != null)
-                throw new InvalidOperationException("Username already exists");
-
-            // Hash password using SecurityService
-            var hashedPassword = _securityService.HashPassword(registerDto.Password);
-
-            // Create Account entity
-            var account = new Account
+            try
             {
-                Username = registerDto.Username,
-                PasswordHash = hashedPassword,
-                Status = false, // Account starts as unverified
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
+                // Validate input
+                if (registerDto == null)
+                    throw new ArgumentNullException(nameof(registerDto));
 
-            // Add account to repository
-            await _accountRepository.AddAsync(account, cancellationToken);
+                if (string.IsNullOrWhiteSpace(registerDto.Name))
+                    throw new ArgumentException("Name cannot be empty", nameof(registerDto.Name));
 
-            // Generate and send verification OTP
-            await _otpService.GenerateAndSendOtpAsync(registerDto.Email, "email-verification");
+                if (string.IsNullOrWhiteSpace(registerDto.Phone))
+                    throw new ArgumentException("Phone cannot be empty", nameof(registerDto.Phone));
+                
+                if (string.IsNullOrWhiteSpace(registerDto.Address))
+                    throw new ArgumentException("Address cannot be empty", nameof(registerDto.Address));
+                // Validate username is not empty
+                if (string.IsNullOrWhiteSpace(registerDto.Username))
+                    throw new ArgumentException("Username cannot be empty", nameof(registerDto.Username));
 
-            // Get user details
-            var userDto = await _accountRepository.UserDetailDTO(account.Username, cancellationToken);
+                // Validate email format
+                if (string.IsNullOrWhiteSpace(registerDto.Email))
+                    throw new ArgumentException("Email cannot be empty", nameof(registerDto.Email));
 
-            return new AuthResponse
-            {
-                Success = true,
-                Message = "Registration successful. Please verify your email with the OTP sent to your email address.",
-                User = new UserDetailDTO
+                if (!_validation.IsValidEmail(registerDto.Email))
+                    throw new ArgumentException("Email format is invalid", nameof(registerDto.Email));
+
+                // Validate password length
+                if (string.IsNullOrWhiteSpace(registerDto.Password))
+                    throw new ArgumentException("Password cannot be empty", nameof(registerDto.Password));
+
+                if (registerDto.Password.Length < MinPasswordLength)
+                    throw new ArgumentException($"Password must be at least {MinPasswordLength} characters long", nameof(registerDto.Password));
+
+                // Validate password confirmation match
+                if (registerDto.Password != registerDto.ConfirmPassword)
+                    throw new ArgumentException("Password and confirmation password do not match");
+
+                // Check username uniqueness
+                var existingUserByUsername = await _personRepository.FindByUsernameAsync(registerDto.Username,cancellationToken);
+                if (existingUserByUsername != null)
+                    throw new InvalidOperationException("Username already exists");
+
+                // Hash password using SecurityService
+                var hashedPassword = _securityService.HashPassword(registerDto.Password);
+
+                // Create Account entity
+                var personal = new Person
                 {
-                    Id = userDto.Id,
-                    Username = userDto.Username,
-                    Email = registerDto.Email
-                }
-            };
+                    Username = registerDto.Username,
+                    PasswordHash = hashedPassword,
+                    Name = registerDto.Name,
+                    Email = registerDto.Email,
+                    Phone = registerDto.Phone,
+                    Address = registerDto.Address,
+                    RoleId = 2, // Default role ID for regular users
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                await _otpService.GenerateAndSendOtpAsync(registerDto.Email, "email-verification");
+
+                return new 
+                {
+                    Success = true,
+                    Message = "Registration successful — proceed to the next step.",
+
+                };
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "Error in RegisterAsync");
+                // Trả message đẹp cho client
+                return new ImformationError
+                {
+                    status = false,
+                    error = ex.Message
+                };
+            }
         }
 
         /// <summary>
         /// Validates email format using regex pattern.
         /// </summary>
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                return Regex.IsMatch(email, EmailRegexPattern, RegexOptions.IgnoreCase);
-            }
-            catch
-            {
-                return false;
-            }
-        }
+       
 
         public async Task<AuthResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
@@ -208,26 +195,22 @@ namespace LandingPageApp.Application.Services
             if (isBlacklisted)
                 return new AuthResponse { Success = false, Message = "Invalid credentials" };
 
-            // Try to extract user ID from the refresh token stored in Redis
-            // We need to search for the token in Redis to find the associated user ID
-            // Since refresh tokens are stored as refresh_token:{userId}, we need a reverse lookup
-            // For now, we'll use a different approach: store token -> userId mapping
             var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
             var userIdStr = await _cacheRediservice.GetAsync<string>(tokenUserIdKey);
 
-            if (string.IsNullOrEmpty(userIdStr) || !long.TryParse(userIdStr, out var userId))
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out var userId))
                 return new AuthResponse { Success = false, Message = "Invalid credentials" };
 
             // Retrieve account from repository
-            var account = await _accountRepository.GetByIdAsync(userId, cancellationToken);
-            if (account == null)
+            var person = await _personRepository.GetByIdAsync(userId, cancellationToken);
+            if (person == null)
                 return new AuthResponse { Success = false, Message = "Invalid credentials" };
 
             // Generate new access token
-            var newAccessToken = _tokenService.GenerateAccessToken(account);
+            var newAccessToken = _tokenService.GenerateAccessToken(person);
 
             // Get user details
-            var userDto = await _accountRepository.UserDetailDTO(account.Username, cancellationToken);
+            //var userDto = await _personRepository.UserDetailDTO(account.Username, cancellationToken);
 
             return new AuthResponse
             {
@@ -238,10 +221,15 @@ namespace LandingPageApp.Application.Services
                 ExpiresIn = DateTime.UtcNow.AddMinutes(15),
                 User = new UserDetailDTO
                 {
-                    Id = userDto.Id,
-                    Username = userDto.Username,
-                    Email = userDto.Email ?? string.Empty,
-                    Status = userDto.Status
+                    Id = person.Id,
+                    Username = person.Username,
+                    Email = person.Email ?? string.Empty,
+                    Phone = person.Phone,
+                    Address = person.Address,
+                    Name = person.Name,
+                    LastLoginAt = DateTime.UtcNow
+
+
                 }
             };
         }
@@ -254,7 +242,7 @@ namespace LandingPageApp.Application.Services
 
             // Add refresh token to blacklist with 7-day expiration (matching token expiration)
             var blacklistKey = $"refresh_token_blacklist:{refreshToken}";
-            await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(7));
+            await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(1));
 
             // Remove the token -> userId mapping
             var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
@@ -269,20 +257,16 @@ namespace LandingPageApp.Application.Services
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Email cannot be empty", nameof(email));
 
-            if (!IsValidEmail(email))
+            if (!_validation.IsValidEmail(email))
                 throw new ArgumentException("Email format is invalid", nameof(email));
 
-            // Find account by email
-            var account = await _accountRepository.FindByEmailAsync(email, cancellationToken);
-            if (account == null)
+            var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+            if (person == null)
             {
-                // Return success even if account not found (security best practice - don't reveal if email exists)
-                return true;
+                return false;
             }
 
-            // Generate and send OTP via OtpService
             await _otpService.GenerateAndSendOtpAsync(email, "password-reset");
-
             return true;
         }
 
@@ -291,8 +275,8 @@ namespace LandingPageApp.Application.Services
             // Validate input
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Email cannot be empty", nameof(email));
-
-            if (!IsValidEmail(email))
+            
+            if (!_validation.IsValidEmail(email))
                 throw new ArgumentException("Email format is invalid", nameof(email));
 
             if (string.IsNullOrWhiteSpace(otp))
@@ -310,32 +294,31 @@ namespace LandingPageApp.Application.Services
             if (!isValidOtp)
                 return new AuthResponse { Success = false, Message = "Invalid or expired OTP" };
 
-            // Find account by email
-            var account = await _accountRepository.FindByEmailAsync(email, cancellationToken);
-            if (account == null)
+            //Find account by email
+            var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+            if (person == null)
                 return new AuthResponse { Success = false, Message = "Account not found" };
 
             // Hash new password using SecurityService
             var hashedPassword = _securityService.HashPassword(newPassword);
 
             // Update account password
-            account.PasswordHash = hashedPassword;
-            account.UpdatedAt = DateTime.UtcNow;
-            await _accountRepository.UpdateAsync(account, cancellationToken);
+            person.PasswordHash = hashedPassword;
+            person.UpdatedAt = DateTime.UtcNow;
+            _personRepository.Update(person);
 
-            // Blacklist all existing refresh tokens for this user
-            var refreshTokenKey = $"refresh_token:{account.Id}";
+            //// Blacklist all existing refresh tokens for this user
+            var refreshTokenKey = $"refresh_token:{person.Id}";
             var storedRefreshToken = await _cacheRediservice.GetAsync<string>(refreshTokenKey);
             if (!string.IsNullOrEmpty(storedRefreshToken))
             {
                 var blacklistKey = $"refresh_token_blacklist:{storedRefreshToken}";
-                await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(7));
-                
+                await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(1));
+
                 var tokenUserIdKey = $"refresh_token_user:{storedRefreshToken}";
                 await _cacheRediservice.RemoveAsync(tokenUserIdKey);
             }
 
-            // Invalidate OTP after successful reset
             await _otpService.InvalidateOtpAsync(email, "password-reset");
 
             return new AuthResponse
@@ -351,7 +334,7 @@ namespace LandingPageApp.Application.Services
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("Email cannot be empty", nameof(email));
 
-            if (!IsValidEmail(email))
+            if (!_validation.IsValidEmail(email))
                 throw new ArgumentException("Email format is invalid", nameof(email));
 
             if (string.IsNullOrWhiteSpace(otp))
@@ -363,14 +346,13 @@ namespace LandingPageApp.Application.Services
                 return false;
 
             // Find account by email
-            var account = await _accountRepository.FindByEmailAsync(email, cancellationToken);
-            if (account == null)
+            var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+
+            if (person == null)
                 return false;
 
-            // Mark account as verified (set Status = true)
-            account.Status = true;
-            account.UpdatedAt = DateTime.UtcNow;
-            await _accountRepository.UpdateAsync(account, cancellationToken);
+
+            _personRepository.Update(person);
 
             // Invalidate OTP after successful verification
             await _otpService.InvalidateOtpAsync(email, "email-verification");
@@ -378,47 +360,40 @@ namespace LandingPageApp.Application.Services
             return true;
         }
 
-        public async Task<UserDetailDTO> GetUserDetailsAsync(long userId, CancellationToken cancellationToken = default)
+        public async Task<UserDetailDTO> GetUserDetailsAsync(int userId, CancellationToken cancellationToken = default)
         {
             // Validate input
             if (userId <= 0)
                 throw new ArgumentException("User ID must be greater than 0", nameof(userId));
 
             // Retrieve account from repository
-            var account = await _accountRepository.GetByIdAsync(userId, cancellationToken);
-            if (account == null)
+            var person = await _personRepository.GetByIdAsync(userId, cancellationToken);
+            if (person == null)
                 throw new InvalidOperationException("User not found");
 
-            // Get detailed user information
-            var userDetail = await _accountRepository.UserDetailDTO(account.Username, cancellationToken);
-            if (userDetail == null)
-                throw new InvalidOperationException("User details not found");
+  
 
             // Map to UserDetailDTO (exclude password hash)
             var userDetailDto = new UserDetailDTO
             {
-                Id = userDetail.Id,
-                Username = userDetail.Username,
-                Email = userDetail.Email ?? string.Empty,
-                Status = userDetail.Status,
-                CreatedAt = userDetail.CreatedAt,
-                LastLoginAt = userDetail.UpdatedAt
+                Id = person.Id,
+                Username = person.Username,
+                Email = person.Email ?? string.Empty,
+                Phone = person.Phone,
+                Address = person.Address,
+                Name = person.Name,
+
             };
 
             return userDetailDto;
         }
 
-        public async Task LogoutAsync()
-        {
-            // Có thể xóa token hoặc refresh token khỏi Redis
-            await Task.CompletedTask;
-        }
 
         public async Task<bool> OtpEmailAsync(string email)
         {
             // Gửi mã OTP email
             var otp = new Random().Next(100000, 999999).ToString();
-            await _emailService.SendMailAsync(email, "OTP Code", $"Your OTP: {otp}");
+            await _emailService.SendEmailAsync(email, "OTP Code", $"Your OTP: {otp}");
             await _cacheRediservice.SetAsync(email, otp, TimeSpan.FromMinutes(5));
             return true;
         }

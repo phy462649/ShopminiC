@@ -717,7 +717,9 @@
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
           "LandingPageApp.Domain": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "9.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0",
+          "Microsoft.Extensions.Options": "10.0.0",
           "Microsoft.IdentityModel.Tokens": "8.2.1",
           "System.IdentityModel.Tokens.Jwt": "8.2.1"
         },

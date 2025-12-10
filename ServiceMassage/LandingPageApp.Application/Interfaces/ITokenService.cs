@@ -10,7 +10,7 @@ namespace LandingPageApp.Application.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(Account account);
+        string GenerateAccessToken(Person account);
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
         bool ValidateToken(string token);

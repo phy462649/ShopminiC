@@ -47,10 +47,8 @@ public class OtpService : IOtpService
         var otpKey = $"{OtpKeyPrefix}{normalizedEmail}:{purpose}";
 
         // Determine expiration based on purpose
-        var expiration = purpose.Equals("registration", StringComparison.OrdinalIgnoreCase) ||
-                        purpose.Equals("email-verification", StringComparison.OrdinalIgnoreCase)
-            ? TimeSpan.FromHours(VerificationOtpExpirationHours)
-            : TimeSpan.FromMinutes(PasswordResetOtpExpirationMinutes);
+        var expiration = TimeSpan.FromMinutes(15);
+
 
         // Invalidate previous OTP if exists
         await _cacheService.RemoveAsync(otpKey);
@@ -61,7 +59,7 @@ public class OtpService : IOtpService
         // Send OTP via email
         var subject = GetEmailSubject(purpose);
         var body = GetEmailBody(otp, purpose);
-        await _emailService.SendMailAsync(email, subject, body);
+        await _emailService.SendEmailAsync(email, subject, body);
 
         return otp;
     }
@@ -179,19 +177,10 @@ public class OtpService : IOtpService
     /// </summary>
     private string GetEmailBody(string otp, string purpose)
     {
-        var expirationText = purpose.Equals("registration", StringComparison.OrdinalIgnoreCase) ||
-                            purpose.Equals("email-verification", StringComparison.OrdinalIgnoreCase)
-            ? "24 hours"
-            : "15 minutes";
+        var expirationText = "15 minutes";
 
-        return purpose.ToLower() switch
-        {
-            "registration" or "email-verification" => 
-                $"Your email verification code is: {otp}\n\nThis code will expire in {expirationText}.\n\nIf you did not request this code, please ignore this email.",
-            "password-reset" => 
-                $"Your password reset code is: {otp}\n\nThis code will expire in {expirationText}.\n\nIf you did not request a password reset, please ignore this email.",
-            _ => 
-                $"Your verification code is: {otp}\n\nThis code will expire in {expirationText}."
-        };
+
+        return $"Your verification code is: {otp}\n\nThis code will expire in {expirationText}.\n\nIf you did not request this code, please ignore this email.";
+
     }
 }

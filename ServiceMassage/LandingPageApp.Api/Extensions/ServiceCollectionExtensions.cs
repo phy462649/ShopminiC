@@ -13,10 +13,8 @@ namespace LandingPageApp.Api.Extensions
         {
             // Đăng ký từng repository
             services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IBookingServiceRepository,BookingServiceRepository>();
             services.AddScoped<ICategoryRepository, CategoryReposiotry>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
@@ -25,17 +23,11 @@ namespace LandingPageApp.Api.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IStaffScheduleRepository, StaffScheduleRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IUnitOfWork, UnitOfWorkRepository>();
-            // Thêm các repository khác tương tự
-            // services.AddScoped<IOtherRepository, OtherRepository>();
-            services.AddScoped<IAuthService, AuthService>(); // <-- đăng ký AuthService
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IOtpService, OtpService>();
-            services.AddScoped<ICacheRediservice, RedisCacheService>();
-            services.AddScoped<ISecurityService, SecurityService>();
-            services.AddScoped<ITokenService, TokenService>();
+    
 
             return services;
         }
