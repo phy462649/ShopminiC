@@ -51,7 +51,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -72,7 +72,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -130,7 +130,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -151,7 +151,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -209,7 +209,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -230,86 +230,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllCustomers",
-    "RelativePath": "api/Admin/customers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateCustomer",
-    "RelativePath": "api/Admin/customers",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "LandingPageApp.Application.Dtos.CustomerDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetCustomerById",
-    "RelativePath": "api/Admin/customers/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateCustomer",
-    "RelativePath": "api/Admin/customers/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int64",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "LandingPageApp.Application.Dtos.CustomerDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteCustomer",
-    "RelativePath": "api/Admin/customers/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -367,7 +288,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -388,7 +309,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -446,7 +367,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -467,7 +388,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -525,7 +446,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -546,7 +467,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -604,7 +525,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -625,7 +546,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -683,7 +604,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -704,7 +625,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -762,7 +683,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -783,7 +704,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -841,7 +762,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -862,33 +783,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllStaffs",
-    "RelativePath": "api/Admin/staff",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateStaff",
-    "RelativePath": "api/Admin/staff",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "LandingPageApp.Application.Dtos.StaffDTO",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -946,7 +841,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
@@ -967,60 +862,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int64",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetStaffById",
-    "RelativePath": "api/Admin/staff/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateStaff",
-    "RelativePath": "api/Admin/staff/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int64",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "LandingPageApp.Application.Dtos.StaffDTO",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteStaff",
-    "RelativePath": "api/Admin/staff/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1107,44 +949,6 @@
           "text/json"
         ],
         "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AuthController",
-    "Method": "GetCurrentUser",
-    "RelativePath": "api/Auth/me",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "LandingPageApp.Application.Dtos.UserDetailDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 401
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 404
       }
     ]
   },

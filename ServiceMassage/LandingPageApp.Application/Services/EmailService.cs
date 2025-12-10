@@ -38,8 +38,11 @@ public class EmailService : IEmailService
         }
         catch (SmtpException ex)
         {
-            // log lỗi ở đây (logger)
-            throw; // hoặc bọc thành custom exception
+            throw new SmtpException(ex.Message);
+            System.Console.WriteLine(ex.Message);
+            throw new SmtpException(ex.Message);
+            System.Console.WriteLine(ex.Message);
+            throw new SmtpException(ex.Message);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LandingPageApp.Application.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace LandingPageApp.Application.Interfaces
         Task<object> CreateAsync(object createDto);
         Task<object> UpdateAsync(long id, object updateDto);
         Task<bool> DeleteAsync(long id);
+        Task<PersonSearchResponse> SearchAsync(PersonSearchRequest request);
     }
 }

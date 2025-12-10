@@ -35,6 +35,7 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Swa
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\System.IO.Hashing.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\System.Linq.Dynamic.Core.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Application.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Domain.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Infrastructure.dll

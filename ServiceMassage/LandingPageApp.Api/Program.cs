@@ -48,7 +48,7 @@ var jwtSecret = builder.Configuration["Jwt:Secret"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
-var key = Encoding.ASCII.GetBytes(jwtSecret);
+var key = Encoding.ASCII.GetBytes(jwtSecret ?? throw new InvalidOperationException("JWT Secret not configured"));
 
 builder.Services.AddAuthentication(options =>
 {

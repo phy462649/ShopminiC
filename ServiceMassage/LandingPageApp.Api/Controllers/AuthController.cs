@@ -115,10 +115,10 @@ namespace LandingPageApp.Api.Controllers
         public async Task<ActionResult<object>> VerifyEmail([FromBody] EmailVerificationRequest verifyRequest)
         {
             var success = await _authService.VerifyEmailAsync(verifyRequest.Email, verifyRequest.Otp);
-            if (!success)
-                return BadRequest(new { success = false, message = "Invalid or expired OTP" });
+            if (!((AuthResponse)success).Status)
+                return BadRequest(success);
 
-            return Ok(new { success = true, message = "Email verified successfully" });
+            return Ok(success);
         }
 
         /// <summary>

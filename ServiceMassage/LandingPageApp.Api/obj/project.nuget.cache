@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TVPWC6MlxmM=",
+  "dgSpecHash": "EoY40NmWJkI=",
   "success": true,
   "projectFilePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Api\\LandingPageApp.Api.csproj",
   "expectedPackageFiles": [
@@ -40,7 +40,8 @@
     "C:\\Users\\PHY\\.nuget\\packages\\system.diagnostics.diagnosticsource\\10.0.0\\system.diagnostics.diagnosticsource.10.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.2.1\\system.identitymodel.tokens.jwt.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\system.io.hashing\\9.0.10\\system.io.hashing.9.0.10.nupkg.sha512",
-    "C:\\Users\\PHY\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512"
+    "C:\\Users\\PHY\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\system.linq.dynamic.core\\1.3.10\\system.linq.dynamic.core.1.3.10.nupkg.sha512"
   ],
   "logs": []
 }
