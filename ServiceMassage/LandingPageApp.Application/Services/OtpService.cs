@@ -33,7 +33,7 @@ public class OtpService : IOtpService
     /// <param name="email">The email address to send OTP to</param>
     /// <param name="purpose">The purpose of OTP (e.g., "registration", "password-reset")</param>
     /// <returns>The generated OTP code</returns>
-    public async Task<string> GenerateAndSendOtpAsync(string email, string purpose)
+    public async Task<string> GenerateOtpAsync(string email, string purpose)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentException("Email cannot be null or empty", nameof(email));
@@ -57,9 +57,9 @@ public class OtpService : IOtpService
         await _cacheService.SetAsync(otpKey, otp, expiration);
 
         // Send OTP via email
-        var subject = GetEmailSubject(purpose);
-        var body = GetEmailBody(otp, purpose);
-        await _emailService.SendEmailAsync(email, subject, body);
+        //var subject = GetEmailSubject(purpose);
+        //var body = GetEmailBody(otp, purpose);
+        //await _emailService.SendEmailAsync(email, subject, body);
 
         return otp;
     }
@@ -162,25 +162,5 @@ public class OtpService : IOtpService
     /// <summary>
     /// Gets the email subject based on OTP purpose.
     /// </summary>
-    private string GetEmailSubject(string purpose)
-    {
-        return purpose.ToLower() switch
-        {
-            "registration" or "email-verification" => "Email Verification Code",
-            "password-reset" => "Password Reset Code",
-            _ => "Verification Code"
-        };
-    }
-
-    /// <summary>
-    /// Gets the email body based on OTP purpose.
-    /// </summary>
-    private string GetEmailBody(string otp, string purpose)
-    {
-        var expirationText = "15 minutes";
-
-
-        return $"Your verification code is: {otp}\n\nThis code will expire in {expirationText}.\n\nIf you did not request this code, please ignore this email.";
-
-    }
+  
 }

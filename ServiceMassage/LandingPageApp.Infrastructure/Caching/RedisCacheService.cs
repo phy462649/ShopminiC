@@ -4,6 +4,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using LandingPageApp.Application.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LandingPageApp.Infrastructure.Caching;
 
@@ -46,5 +48,28 @@ public class RedisCacheService : ICacheRediservice
     public async Task RemoveAsync(string key)
     {
         await _cache.RemoveAsync(key);
+    }
+    public async Task AddToSetAsync(string key, string value, TimeSpan? expiry = null)
+    {
+        var set = await GetAsync<List<string>>(key) ?? new List<string>();
+        if (!set.Contains(value))
+            set.Add(value);
+
+        await SetAsync(key, set, expiry);
+    }
+
+    public async Task RemoveFromSetAsync(string key, string value)
+    {
+        var set = await GetAsync<List<string>>(key);
+        if (set == null) return;
+
+        set.Remove(value);
+        await SetAsync(key, set);
+    }
+
+    public async Task<IEnumerable<string>> SetMembersAsync(string key)
+    {
+        var set = await GetAsync<List<string>>(key);
+        return set ?? Enumerable.Empty<string>();
     }
 }

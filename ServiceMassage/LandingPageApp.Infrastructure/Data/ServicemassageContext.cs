@@ -337,6 +337,11 @@ public partial class ServicemassageContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("phone");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.StatusVerify)
+                 .HasColumnType("bit(1)")
+                 .HasDefaultValue(false);
+            entity.Property(e => e.OTP)
+                  .HasColumnType("varchar(7)");
             entity.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

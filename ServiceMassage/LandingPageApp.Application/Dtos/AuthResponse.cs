@@ -13,6 +13,6 @@ namespace LandingPageApp.Application.Dtos
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public UserDetailDTO User { get; set; }
-        public DateTime ExpiresIn { get; set; }
+        public int ExpiresIn { get; set; }
     }
 }

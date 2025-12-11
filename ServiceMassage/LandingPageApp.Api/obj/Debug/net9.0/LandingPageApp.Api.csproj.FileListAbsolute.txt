@@ -65,3 +65,4 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\ref
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.pdb
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.genruntimeconfig.cache
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\ref\LandingPageApp.Api.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

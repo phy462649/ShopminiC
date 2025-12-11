@@ -5,19 +5,16 @@ namespace LandingPageApp.Domain.Repositories
 {
     public interface IUnitOfWork
     {
-        IBookingRepository bookings { get; }
-        IBookingServiceRepository bookingservices { get; }
-        IOrderItemRepository orderItem { get; }
-        IOrderRepository orders { get; }
-        IPaymentRepository payments { get; }
-        IProductRepository products { get; }
-        IRoleRepository roles { get; }  
-        IRoomRepository room { get; }
-        IServiceRepository services { get; }    
-        IStaffScheduleRepository staffSchedules { get; }
-
-
-
+        public IBookingRepository bookings { get; }
+        public IBookingServiceRepository bookingservices { get; }
+        public IOrderItemRepository orderItem { get; }
+        public IOrderRepository orders { get; }
+        public IPaymentRepository payments { get; }
+        public IProductRepository products { get; }
+        public IRoleRepository roles { get; }  
+        public IRoomRepository room { get; }
+        public IServiceRepository services { get; }    
+        public IStaffScheduleRepository staffSchedules { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellation = default);
         Task BeginTransactionAsync(CancellationToken cancellation = default);

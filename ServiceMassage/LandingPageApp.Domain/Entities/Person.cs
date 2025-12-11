@@ -20,6 +20,9 @@ public partial class Person
     public string PasswordHash { get; set; } = null!;
 
     public long RoleId { get; set; }
+    public bool StatusVerify { get; set; } = false;
+
+    public string? OTP { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

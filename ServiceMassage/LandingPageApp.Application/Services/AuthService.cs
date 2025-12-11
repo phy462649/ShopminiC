@@ -1,17 +1,18 @@
-﻿using LandingPageApp.Application.Dtos;
+﻿using BCrypt.Net;
+using LandingPageApp.Application.Dtos;
 using LandingPageApp.Application.Interfaces;
-using LandingPageApp.Domain.Repositories;
-using BCrypt.Net;
-using LandingPageApp.Domain.Entities;
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
 using LandingPageApp.Application.Validations;
+using LandingPageApp.Domain.Entities;
+using LandingPageApp.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace LandingPageApp.Application.Services
 {
 
     public class AuthService : IAuthService
     {
+        private readonly IUnitOfWork _uow;
         private readonly ICacheRediservice _cacheRediservice;
         private readonly IEmailService _emailService;
         private readonly ISecurityService _securityService;
@@ -19,19 +20,19 @@ namespace LandingPageApp.Application.Services
         private readonly IOtpService _otpService;
         private readonly IPersonRepository _personRepository;
         private const int MinPasswordLength = 8;
-        private readonly Validation _validation;
+        //private readonly EmailValidator _validation;
 
 
 
         public AuthService(
-            IEmailService emailService, 
+            IEmailService emailService,
             ICacheRediservice cacheRediservice,
             ISecurityService securityService,
             IOtpService otpService,
-
+            IUnitOfWork unitofwork,
             ITokenService tokenService,
-            IPersonRepository personRepository,
-            Validation validation)
+            IPersonRepository personRepository
+)
         {
             _emailService = emailService;
             _cacheRediservice = cacheRediservice;
@@ -39,26 +40,31 @@ namespace LandingPageApp.Application.Services
             _otpService = otpService;
             _tokenService = tokenService;
             _personRepository = personRepository;
-            _validation = validation;
+            _uow = unitofwork;
         }
 
 
         public async Task<AuthResponse> LoginAsync(LoginDTO loginDto, CancellationToken cancellation = default)
         {
             // Validate input
-            if (loginDto == null)
-                throw new ArgumentNullException(nameof(loginDto));
+            InputValidator.NotNull(loginDto, nameof(loginDto));
+            InputValidator.NotEmpty(loginDto.Username, "Username");
+            InputValidator.NotNull(loginDto.Username, "Username");
+            InputValidator.NotNull(loginDto.Password, "Password");
+            InputValidator.NotEmpty(loginDto.Password, "Password");
+            var deviceId = string.IsNullOrWhiteSpace(loginDto.DeviceToken)
+                                 ? "default"
+                                 : loginDto.DeviceToken;
 
-            if (string.IsNullOrWhiteSpace(loginDto.Username))
-                throw new ArgumentException("Username cannot be empty");
-
-            if (string.IsNullOrWhiteSpace(loginDto.Password))
-                throw new ArgumentException("Password cannot be empty");
-            
-            var person = await _personRepository.FindByUsernameAsync(loginDto.Username,cancellation);
+            var person = await _personRepository.FindByUsernameAsync(loginDto.Username, cancellation);
+         
             if (person == null)
             {
                 return new AuthResponse { Status = false, Message = "Invalid credentials" };
+            }
+            if (!person.StatusVerify)
+            {
+                return new AuthResponse { Status = false, Message = "Please verify your email before logging in." };
             }
 
             // Verify password
@@ -66,17 +72,23 @@ namespace LandingPageApp.Application.Services
             {
                 return new AuthResponse { Status = false, Message = "Invalid credentials" };
             }
+
+            
+
             // Generate tokens
             var accessToken = _tokenService.GenerateAccessToken(person);
             var refreshToken = _tokenService.GenerateRefreshToken();
+            //var deviceId = loginDto.DeviceToken ?? "default";
 
             // Store refresh token in Redis with 7-day expiration
-            var refreshTokenKey = $"refresh_token:{person.Id}";
-            await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(1));
+            var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
+            await _cacheRediservice.RemoveAsync(refreshTokenKey);
+            await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(7));
+
 
             // Store token -> userId mapping for reverse lookup
-            var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
-            await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(1));
+            var tokenUserIdKey = $"refresh_token_user:{refreshToken}:{deviceId}";
+            await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(7));
 
             return new AuthResponse
             {
@@ -84,7 +96,7 @@ namespace LandingPageApp.Application.Services
                 Message = "Login successful",
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
-                ExpiresIn = DateTime.UtcNow.AddMinutes(15),
+                ExpiresIn = 900,
                 User = new UserDetailDTO
                 {
                     Id = person.Id,
@@ -93,57 +105,49 @@ namespace LandingPageApp.Application.Services
                     Email = person.Email,
                     Address = person.Address,
                     Name = person.Name,
-                    LastLoginAt = DateTime.UtcNow
+
                 }
             };
         }
 
-        public async Task<object> RegisterAsync(RegisterDTO registerDto, CancellationToken cancellationToken = default)
+        public async Task<AuthResponse> RegisterAsync(RegisterDTO registerDto, CancellationToken cancellationToken = default)
         {
+            await _uow.BeginTransactionAsync(cancellationToken);
             try
             {
-                // Validate input
-                if (registerDto == null)
-                    throw new ArgumentNullException(nameof(registerDto));
-
-                if (string.IsNullOrWhiteSpace(registerDto.Name))
-                    throw new ArgumentException("Name cannot be empty", nameof(registerDto.Name));
-
-                if (string.IsNullOrWhiteSpace(registerDto.Phone))
-                    throw new ArgumentException("Phone cannot be empty", nameof(registerDto.Phone));
                 
-                if (string.IsNullOrWhiteSpace(registerDto.Address))
-                    throw new ArgumentException("Address cannot be empty", nameof(registerDto.Address));
-                // Validate username is not empty
-                if (string.IsNullOrWhiteSpace(registerDto.Username))
-                    throw new ArgumentException("Username cannot be empty", nameof(registerDto.Username));
+                InputValidator.NotNull(registerDto, nameof(registerDto));
+                InputValidator.NotEmpty(registerDto.Username, "Username");
+                InputValidator.NotEmpty(registerDto.Email, "Email");
+                InputValidator.NotEmpty(registerDto.Address, "Address");
+                InputValidator.NotEmpty(registerDto.Password, "Password");
+                InputValidator.NotEmpty(registerDto.ConfirmPassword, "ConfirmPassword");
+                InputValidator.NotEmpty(registerDto.Phone, "Phone");
+                InputValidator.NotEmpty(registerDto.Name, "Name");
+                InputValidator.NotNull(registerDto.Username, "Username");
+                InputValidator.NotNull(registerDto.Email, "Email");
+                InputValidator.NotNull(registerDto.Password, "Password");
+                InputValidator.NotNull(registerDto.ConfirmPassword, "ConfirmPassword");
+                InputValidator.NotNull(registerDto.Phone, "Phone");
+                InputValidator.NotNull(registerDto.Name, "Name");
+                InputValidator.NotNull(registerDto.Address, "Address");
 
-                // Validate email format
-                if (string.IsNullOrWhiteSpace(registerDto.Email))
-                    throw new ArgumentException("Email cannot be empty", nameof(registerDto.Email));
-
-                if (!_validation.IsValidEmail(registerDto.Email))
-                    throw new ArgumentException("Email format is invalid", nameof(registerDto.Email));
-
-                // Validate password length
-                if (string.IsNullOrWhiteSpace(registerDto.Password))
-                    throw new ArgumentException("Password cannot be empty", nameof(registerDto.Password));
-
-                if (registerDto.Password.Length < MinPasswordLength)
-                    throw new ArgumentException($"Password must be at least {MinPasswordLength} characters long", nameof(registerDto.Password));
+                EmailValidator.Validate(registerDto.Email);
+                PasswordValidator.Validate(registerDto.Password);
 
                 // Validate password confirmation match
                 if (registerDto.Password != registerDto.ConfirmPassword)
                     throw new ArgumentException("Password and confirmation password do not match");
 
-                // Check username uniqueness
-                var existingUserByUsername = await _personRepository.FindByUsernameAsync(registerDto.Username,cancellationToken);
-                if (existingUserByUsername != null)
+                if (await _personRepository.Query().AnyAsync(p => p.Email == registerDto.Email, cancellationToken))
+                    throw new InvalidOperationException("Email already exists");
+
+                if (await _personRepository.FindByUsernameAsync(registerDto.Username, cancellationToken) != null)
                     throw new InvalidOperationException("Username already exists");
 
                 // Hash password using SecurityService
                 var hashedPassword = _securityService.HashPassword(registerDto.Password);
-
+                var Otp = await _otpService.GenerateOtpAsync(registerDto.Email, "email-verification");
                 // Create Account entity
                 var personal = new Person
                 {
@@ -153,41 +157,57 @@ namespace LandingPageApp.Application.Services
                     Email = registerDto.Email,
                     Phone = registerDto.Phone,
                     Address = registerDto.Address,
+                    OTP = Otp,
+                    StatusVerify = false,
                     RoleId = 2, // Default role ID for regular users
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
-                await _otpService.GenerateAndSendOtpAsync(registerDto.Email, "email-verification");
+                await _personRepository.AddAsync(personal, cancellationToken);
+                await _uow.SaveChangesAsync(cancellationToken);
+                await _uow.CommitTransactionAsync(cancellationToken);
 
-                return new  AuthResponse
+                try
+                {
+                    var subject = _emailService.GetEmailSubject("email-verification");
+                    var body = _emailService.GetEmailBody(Otp, "email-verification");
+
+                    await _emailService.SendEmailAsync(registerDto.Email, subject, body);
+                }
+                catch
+                {
+                    return new AuthResponse
+                    {
+                        Status = true,
+                        Message = "Registration successful, but OTP email failed to send. Please retry sending OTP."
+                    };
+                }
+
+                return new AuthResponse
                 {
                     Status = true,
-                    Message = "Registration successful — proceed to the next step.",
-
+                    Message = "Registration successful — check your email for OTP."
                 };
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Error in RegisterAsync");
-                // Trả message đẹp cho client
-                return new ImformationError
+                await _uow.RollbackTransactionAsync(cancellationToken);
+
+                return new AuthResponse
                 {
-                    status = false,
-                    error = ex.Message
+                    Status = false,
+                    Message = ex.Message
                 };
             }
         }
 
-        /// <summary>
-        /// Validates email format using regex pattern.
-        /// </summary>
-       
-
-        public async Task<AuthResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+        public async Task<AuthResponse> RefreshTokenAsync(string refreshToken,string DeviceToken, CancellationToken cancellationToken = default)
         {
             // Validate input
-            if (string.IsNullOrWhiteSpace(refreshToken))
-                throw new ArgumentException("Refresh token cannot be empty", nameof(refreshToken));
+           InputValidator.NotEmpty(refreshToken, "RefreshToken");
+            var deviceId = string.IsNullOrWhiteSpace(DeviceToken)
+                                 ? "default"
+                                 : DeviceToken;
 
             // Check if refresh token is in blacklist
             var blacklistKey = $"refresh_token_blacklist:{refreshToken}";
@@ -195,30 +215,53 @@ namespace LandingPageApp.Application.Services
             if (isBlacklisted)
                 return new AuthResponse { Status = false, Message = "Invalid credentials" };
 
-            var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
+            var tokenUserIdKey = $"refresh_token_user:{refreshToken}:{deviceId}";
             var userIdStr = await _cacheRediservice.GetAsync<string>(tokenUserIdKey);
 
             if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out var userId))
-                return new AuthResponse { Status = false, Message = "Invalid credentials" };
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = "Invalid credentials"
+                };
+            }
 
-            // Retrieve account from repository
+            // 4. Cross-check refresh token thực tế trong Redis:
+            // refresh_token:{userId}:{deviceId}
+            var refreshTokenKey = $"refresh_token:{userId}:{deviceId}";
+            var storedRefreshToken = await _cacheRediservice.GetAsync<string>(refreshTokenKey);
+
+            if (string.IsNullOrEmpty(storedRefreshToken) || storedRefreshToken != refreshToken)
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = "Invalid credentials"
+                };
+            }
+
+            // 5. Lấy user profile từ database
             var person = await _personRepository.GetByIdAsync(userId, cancellationToken);
             if (person == null)
-                return new AuthResponse { Status = false, Message = "Invalid credentials" };
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = "Invalid credentials"
+                };
+            }
 
-            // Generate new access token
+            // 6. Tạo access token mới
             var newAccessToken = _tokenService.GenerateAccessToken(person);
-
-            // Get user details
-            //var userDto = await _personRepository.UserDetailDTO(account.Username, cancellationToken);
 
             return new AuthResponse
             {
                 Status = true,
                 Message = "Token refreshed successfully",
                 AccessToken = newAccessToken,
-                RefreshToken = refreshToken,
-                ExpiresIn = DateTime.UtcNow.AddMinutes(15),
+                RefreshToken = refreshToken, // giữ nguyên
+                ExpiresIn = 900, // 15 phút
                 User = new UserDetailDTO
                 {
                     Id = person.Id,
@@ -226,101 +269,100 @@ namespace LandingPageApp.Application.Services
                     Email = person.Email ?? string.Empty,
                     Phone = person.Phone,
                     Address = person.Address,
-                    Name = person.Name,
-                    LastLoginAt = DateTime.UtcNow
-
-
+                    Name = person.Name
                 }
             };
         }
 
-        public async Task<object> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
             try
             {
-            // Validate input
-                if (string.IsNullOrWhiteSpace(refreshToken))
-                    throw new ArgumentException("Refresh token cannot be empty", nameof(refreshToken));
+                // Validate input
+                InputValidator.NotEmpty(refreshToken, "RefreshToken");
+                InputValidator.NotNull(_cacheRediservice, nameof(_cacheRediservice));
 
                 // Add refresh token to blacklist with 7-day expiration (matching token expiration)
                 var blacklistKey = $"refresh_token_blacklist:{refreshToken}";
-                await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(1));
+                await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(7));
 
                 // Remove the token -> userId mapping
                 var tokenUserIdKey = $"refresh_token_user:{refreshToken}";
                 await _cacheRediservice.RemoveAsync(tokenUserIdKey);
 
-                return new ImformationError
+                return new ApiResponse
                 {
-                    status = true,
-                    error = "Logout successful"
+                    Status = true,
+                    Message = "Logout successful"
                 };
             }
             catch (Exception ex)
             {
-                return new ImformationError
+                return new ApiResponse
                 {
-                    status = false,
-                    error = ex.Message
+                    Status = false,
+                    Message = ex.Message
                 };
             }
         }
 
-        public async Task<object> RequestPasswordResetAsync(string email, CancellationToken cancellationToken = default)
+        public async Task<ApiResponse> RequestPasswordResetAsync(string email, CancellationToken cancellationToken = default)
         {
-            try{
+            try
+            {
                 // Validate input
-                if (string.IsNullOrWhiteSpace(email))
-                    throw new ArgumentException("Email cannot be empty", nameof(email));
-
-                if (!_validation.IsValidEmail(email))
-                    throw new ArgumentException("Email format is invalid", nameof(email));
+                EmailValidator.Validate(email);
 
                 var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
                 if (person == null)
                 {
-                    return new ImformationError
+                    return new ApiResponse
                     {
-                        status = false,
-                        error = "Account not found"
+                        Status = false,
+                        Message = "Account not found"
                     };
                 }
 
-                await _otpService.GenerateAndSendOtpAsync(email, "password-reset");
-                return new ImformationError
+                try
                 {
-                    status = true,
-                    error = "Password reset email sent successfully"
+                    var Otp = await _otpService.GenerateOtpAsync(email, "password-reset");
+                    var suject = _emailService.GetEmailSubject("password-reset");
+                    var body = _emailService.GetEmailBody(Otp, "password-reset");
+                    await _emailService.SendEmailAsync(email, suject, body);
+
+                }
+                catch
+                {
+                    return new ApiResponse
+                    {
+                        Status = false,
+                        Message = "Password reset OTP could not be sent. Please retry."
+                    };
+                }
+                return new ApiResponse
+                {
+                    Status = true,
+                    Message = "Password reset OTP sent successfully"
                 };
+
             }
             catch (Exception ex)
             {
-                return new ImformationError
+                return new ApiResponse
                 {
-                    status = false,
-                    error = ex.Message
+                    Status = false,
+                    Message = ex.Message
                 };
             }
         }
 
-        public async Task<AuthResponse> ResetPasswordAsync(string email, string otp, string newPassword, CancellationToken cancellationToken = default)
+        public async Task<AuthResponse> ResetPasswordAsync(string email, string otp, string newPassword,string deviceId, CancellationToken cancellationToken = default)
         {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("Email cannot be empty", nameof(email));
+      
             
-            if (!_validation.IsValidEmail(email))
-                throw new ArgumentException("Email format is invalid", nameof(email));
-
-            if (string.IsNullOrWhiteSpace(otp))
-                throw new ArgumentException("OTP cannot be empty", nameof(otp));
-
-            if (string.IsNullOrWhiteSpace(newPassword))
-                throw new ArgumentException("New password cannot be empty", nameof(newPassword));
-
-            // Validate new password length
-            if (newPassword.Length < MinPasswordLength)
-                throw new ArgumentException($"Password must be at least {MinPasswordLength} characters long", nameof(newPassword));
+            EmailValidator.Validate(email);
+            OtpValidator.Validate(otp);
+            PasswordValidator.Validate(newPassword);
 
             // Validate OTP
             var isValidOtp = await _otpService.ValidateOtpAsync(email, otp, "password-reset");
@@ -340,17 +382,31 @@ namespace LandingPageApp.Application.Services
             person.UpdatedAt = DateTime.UtcNow;
             _personRepository.Update(person);
 
-            //// Blacklist all existing refresh tokens for this user
-            var refreshTokenKey = $"refresh_token:{person.Id}";
-            var storedRefreshToken = await _cacheRediservice.GetAsync<string>(refreshTokenKey);
-            if (!string.IsNullOrEmpty(storedRefreshToken))
-            {
-                var blacklistKey = $"refresh_token_blacklist:{storedRefreshToken}";
-                await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(1));
+            var deviceSetKey = $"user_devices:{person.Id}";
+            var deviceIds = await _cacheRediservice.SetMembersAsync(deviceSetKey); // get all deviceIds
 
-                var tokenUserIdKey = $"refresh_token_user:{storedRefreshToken}";
-                await _cacheRediservice.RemoveAsync(tokenUserIdKey);
+            foreach (var device in deviceIds)
+            {
+                var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
+                var storedToken = await _cacheRediservice.GetAsync<string>(refreshTokenKey);
+
+                if (!string.IsNullOrEmpty(storedToken))
+                {
+                    // Add token to blacklist
+                    var blacklistKey = $"refresh_token_blacklist:{storedToken}";
+                    await _cacheRediservice.SetAsync(blacklistKey, true, TimeSpan.FromDays(7));
+
+                    // Remove token -> user mapping
+                    var tokenUserIdKey = $"refresh_token_user:{storedToken}:{deviceId}";
+                    await _cacheRediservice.RemoveAsync(tokenUserIdKey);
+
+                    // Remove token key
+                    await _cacheRediservice.RemoveAsync(refreshTokenKey);
+                }
             }
+
+            // Remove device list
+            await _cacheRediservice.RemoveAsync(deviceSetKey);
 
             await _otpService.InvalidateOtpAsync(email, "password-reset");
 
@@ -361,38 +417,44 @@ namespace LandingPageApp.Application.Services
             };
         }
 
-        public async Task<object> VerifyEmailAsync(string email, string otp, CancellationToken cancellationToken = default)
+        public async Task<AuthResponse> VerifyEmailAsync(string email, string otp, CancellationToken cancellationToken = default)
         {
-            // Validate input
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("Email cannot be empty", nameof(email));
+            _uow.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                EmailValidator.Validate(email);
 
-            if (!_validation.IsValidEmail(email))
-                throw new ArgumentException("Email format is invalid", nameof(email));
+                OtpValidator.Validate(otp);
 
-            if (string.IsNullOrWhiteSpace(otp))
-                throw new ArgumentException("OTP cannot be empty", nameof(otp));
+                // Validate OTP using OtpService
+                var isValidOtp = await _otpService.ValidateOtpAsync(email, otp, "email-verification");
+                if (!isValidOtp)
+                    return new AuthResponse { Status = false, Message = "Invalid or expired OTP" };
 
-            // Validate OTP using OtpService
-            var isValidOtp = await _otpService.ValidateOtpAsync(email, otp, "email-verification");
-            if (!isValidOtp)
-                return new AuthResponse { Status = false, Message = "Invalid or expired OTP" };
+                // Find account by email
+                var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
 
-            // Find account by email
-            var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+                if (person == null)
+                    return new AuthResponse { Status = false, Message = "Account not found" };
 
-            if (person == null)
-                return new AuthResponse { Status = false, Message = "Account not found" };
+                person.StatusVerify = true;
+                person.UpdatedAt = DateTime.UtcNow;
+                _personRepository.Update(person);
+                await _uow.SaveChangesAsync(cancellationToken);
+                await _uow.CommitTransactionAsync(cancellationToken);
 
 
-            _personRepository.Update(person);
+                // Invalidate OTP after successful verification
+                await _otpService.InvalidateOtpAsync(email, "email-verification");
 
-            // Invalidate OTP after successful verification
-            await _otpService.InvalidateOtpAsync(email, "email-verification");
-
-            return new AuthResponse { Status = true, Message = "Email verified successfully" };
+                return new AuthResponse { Status = true, Message = "Email verified successfully" };
+            }
+            catch (Exception ex)
+            {
+                await _uow.RollbackTransactionAsync(cancellationToken);
+                return new AuthResponse { Status = false, Message = ex.Message };
+            }
         }
-
         public async Task<UserDetailDTO> GetUserDetailsAsync(int userId, CancellationToken cancellationToken = default)
         {
             // Validate input
@@ -403,8 +465,6 @@ namespace LandingPageApp.Application.Services
             var person = await _personRepository.GetByIdAsync(userId, cancellationToken);
             if (person == null)
                 throw new InvalidOperationException("User not found");
-
-  
 
             // Map to UserDetailDTO (exclude password hash)
             var userDetailDto = new UserDetailDTO
@@ -422,27 +482,27 @@ namespace LandingPageApp.Application.Services
         }
 
 
-        public async Task<object> OtpEmailAsync(string email)
-        {
-            try{
-            // Gửi mã OTP email
-                var otp = new Random().Next(100000, 999999).ToString();
-                await _emailService.SendEmailAsync(email, "OTP Code", $"Your OTP: {otp}");
-                await _cacheRediservice.SetAsync(email, otp, TimeSpan.FromMinutes(5));
-                return new ImformationError
-                {
-                    status = true,
-                    error = "OTP sent successfully"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ImformationError
-                {
-                    status = false,
-                    error = ex.Message
-                };
-            }
-        }
+        //public async Task<ApiResponse> OtpEmailAsync(string email)
+        //{
+        //    try
+        //    {
+        //        var otp = new Random().Next(100000, 999999).ToString();
+        //        await _emailService.SendEmailAsync(email, "OTP Code", $"Your OTP: {otp}");
+        //        await _cacheRediservice.SetAsync(email, otp, TimeSpan.FromMinutes(5));
+        //        return new ApiResponse
+        //        {
+        //            Status = true,
+        //            Message = "OTP sent successfully"
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ApiResponse
+        //        {
+        //            Status = false,
+        //            Message = ex.Message
+        //        };
+        //    }
+        //}
     }
 }

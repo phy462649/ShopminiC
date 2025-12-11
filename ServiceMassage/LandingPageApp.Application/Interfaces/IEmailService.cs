@@ -9,5 +9,8 @@ namespace LandingPageApp.Application.Interfaces
     public interface IEmailService
     {
         Task SendEmailAsync(string to, string subject, string bodyHtml);
+        string GetEmailSubject(string purpose);
+        string GetEmailBody(string otp, string purpose);
+    
     }
 }

@@ -15,7 +15,9 @@ public class EmailService : IEmailService
 
     public async Task SendEmailAsync(string to, string subject, string bodyHtml)
     {
-        bool isHtml = true;
+        try
+        {
+            bool isHtml = true;
         using var client = new SmtpClient(_smtp.Host, _smtp.Port)
         {
             EnableSsl = _smtp.EnableSsl,
@@ -32,18 +34,32 @@ public class EmailService : IEmailService
 
         mail.To.Add(to);
 
-        try
-        {
+       
             await client.SendMailAsync(mail);
         }
-        catch (SmtpException ex)
+        catch (Exception ex)
         {
-            throw new SmtpException(ex.Message);
-            System.Console.WriteLine(ex.Message);
-            throw new SmtpException(ex.Message);
-            System.Console.WriteLine(ex.Message);
-            throw new SmtpException(ex.Message);
+            Console.WriteLine(ex.Message);
         }
+    }
+    public string GetEmailSubject(string purpose)
+    {
+        return purpose.ToLower() switch
+        {
+            "registration" or "email-verification" => "Email Verification Code",
+            "password-reset" => "Password Reset Code",
+            _ => "Verification Code"
+        };
+    }
+
+    /// <summary>
+    /// Gets the email body based on OTP purpose.
+    /// </summary>
+    public string GetEmailBody(string otp, string purpose)
+    {
+        var expirationText = "15 minutes";
+        return $"Your verification code is: {otp}\n\nThis code will expire in {expirationText}.\n\nIf you did not request this code, please ignore this email.";
+
     }
 
     //public async Task SendEmailWithAttachmentAsync(string to, string subject, string bodyHtml, Stream attachmentStream, string fileName, bool isHtml = true)

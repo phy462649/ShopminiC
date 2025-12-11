@@ -41,7 +41,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<ICacheRediservice, RedisCacheService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddSingleton<Validation>();
+//builder.Services.AddSingleton<EmailValidator>();
 
 // JWT Authentication
 var jwtSecret = builder.Configuration["Jwt:Secret"];

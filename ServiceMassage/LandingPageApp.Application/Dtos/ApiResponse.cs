@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace LandingPageApp.Application.Dtos
 {
-    public class ImformationError
+    public class ApiResponse
     {
-        public bool status{ set; get; }
-        public string error { set; get; }
+        public bool Status{ set; get; }
+        public string Message { set; get; }
+        public object Data { set; get; }
+
     }
 }
