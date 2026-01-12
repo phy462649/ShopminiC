@@ -395,6 +395,8 @@ public partial class ServicemassageContext : DbContext
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_product_category");
+            entity.Property(e => e.UrlImage)
+                .HasColumnName("url_image");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -478,6 +480,9 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
+
+            entity.Property(e => e.UrlImage)
+                .HasColumnName("url_image");
         });
 
         modelBuilder.Entity<StaffSchedule>(entity =>

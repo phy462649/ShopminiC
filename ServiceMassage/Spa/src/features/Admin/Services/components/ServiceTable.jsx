@@ -3,39 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { message } from "antd";
 import ServiceForm from "./ServiceForm";
-
-const initialServices = [
-  {
-    id: 1,
-    name: "Gội đầu thư giãn",
-    description: "Thư giãn 30 phút, massage đầu",
-    duration_minutes: 30,
-    price: 150000,
-    created_at: "2024-01-01T10:00:00",
-    updated_at: "2024-01-01T10:00:00",
-  },
-  {
-    id: 2,
-    name: "Cắt tóc nam",
-    description: "Tư vấn tạo kiểu, cắt và vuốt sáp",
-    duration_minutes: 40,
-    price: 120000,
-    created_at: "2024-01-05T09:00:00",
-    updated_at: "2024-01-05T09:00:00",
-  },
-];
-
-const fetchServices = async () => initialServices;
+import {
+  useServices,
+  useCreateService,
+  useUpdateService,
+  useDeleteService
+} from "../../../../../Hooks/useServices";
 
 export default function ServiceTable() {
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["services"],
-    queryFn: fetchServices,
-  });
+  const { data = [], isLoading, isError } = useServices();
+  const createMutation = useCreateService();
+  const updateMutation = useUpdateService();
+  const deleteMutation = useDeleteService();
 
   const [list, setList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -44,7 +23,7 @@ export default function ServiceTable() {
   const [editing, setEditing] = useState(null);
 
   useEffect(() => {
-    setList(data);
+    if (data) setList(data);
   }, [data]);
 
   const filtered = q
@@ -53,35 +32,35 @@ export default function ServiceTable() {
 
   const handleSave = (input) => {
     if (editing) {
-      setList((prev) =>
-        prev.map((s) =>
-          s.id === editing.id
-            ? { ...s, ...input, updated_at: new Date().toISOString() }
-            : s
-        )
-      );
+      updateMutation.mutate({
+        id: editing.id,
+        data: input
+      }, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditing(null);
+        }
+      });
     } else {
-      setList((prev) => [
-        ...prev,
-        {
-          ...input,
-          id: prev.length ? Math.max(...prev.map((s) => s.id)) + 1 : 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-      ]);
+      createMutation.mutate(input, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditing(null);
+        }
+      });
     }
-
-    setEditing(null);
-    setFormOpen(false);
   };
 
   const handleDelete = () => {
     if (!selectedId) return message.error("Chọn dịch vụ để xoá");
 
-    setList((prev) => prev.filter((s) => s.id !== selectedId));
-    setSelectedId(null);
-    message.success("Đã xoá dịch vụ!");
+    if (window.confirm("Bạn có chắc chắn muốn xóa dịch vụ này?")) {
+      deleteMutation.mutate(selectedId, {
+        onSuccess: () => {
+          setSelectedId(null);
+        }
+      });
+    }
   };
 
   if (isLoading) return <p className="p-4">Đang tải...</p>;
@@ -148,31 +127,38 @@ export default function ServiceTable() {
           </thead>
 
           <tbody>
-            {filtered.map((s) => (
-              <tr
-                key={s.id}
-                onClick={() => setSelectedId(s.id)}
-                className={`cursor-pointer hover:bg-gray-50 ${
-                  selectedId === s.id ? "bg-pink-100" : ""
-                }`}
-              >
-                <td className="p-2 border text-center">{s.id}</td>
-                <td className="p-2 border">{s.name}</td>
-                <td className="p-2 border">{s.description || "-"}</td>
-                <td className="p-2 border text-center">
-                  {s.duration_minutes} phút
-                </td>
-                <td className="p-2 border text-center">
-                  {s.price.toLocaleString()} đ
-                </td>
-                <td className="p-2 border text-center">
-                  {new Date(s.created_at).toLocaleDateString("vi-VN")}
-                </td>
-                <td className="p-2 border text-center">
-                  {new Date(s.updated_at).toLocaleDateString("vi-VN")}
+            {(filtered && filtered.length > 0) ? (
+              filtered.map((s) => (
+                <tr
+                  key={s.id}
+                  onClick={() => setSelectedId(s.id)}
+                  className={`cursor-pointer hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""
+                    }`}
+                >
+                  <td className="p-2 border text-center">{s.id}</td>
+                  <td className="p-2 border">{s.name}</td>
+                  <td className="p-2 border">{s.description || "-"}</td>
+                  <td className="p-2 border text-center">
+                    {s.duration_minutes} phút
+                  </td>
+                  <td className="p-2 border text-center">
+                    {s.price.toLocaleString()} đ
+                  </td>
+                  <td className="p-2 border text-center">
+                    {new Date(s.created_at).toLocaleDateString("vi-VN")}
+                  </td>
+                  <td className="p-2 border text-center">
+                    {new Date(s.updated_at).toLocaleDateString("vi-VN")}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="p-4 text-center text-gray-500">
+                  Không có dữ liệu
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

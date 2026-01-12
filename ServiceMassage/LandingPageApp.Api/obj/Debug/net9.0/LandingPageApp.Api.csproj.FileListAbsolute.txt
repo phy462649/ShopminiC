@@ -1,3 +1,12 @@
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.csproj.AssemblyReference.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.AssemblyInfoInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.AssemblyInfo.cs
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.csproj.CoreCompileInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.sourcelink.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\appsettings.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Api.staticwebassets.endpoints.json
@@ -6,7 +15,13 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Lan
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Api.runtimeconfig.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Api.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Api.pdb
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\HealthChecks.MySql.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\HealthChecks.Redis.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\AutoMapper.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\BCrypt.Net-Next.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\CloudinaryDotNet.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\FluentValidation.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -25,6 +40,7 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Mic
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\MySqlConnector.dll
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Scalar.AspNetCore.dll
@@ -42,15 +58,6 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\Lan
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Application.pdb
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Domain.pdb
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\bin\Debug\net9.0\LandingPageApp.Infrastructure.pdb
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.csproj.AssemblyReference.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\rpswa.dswa.cache.json
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.AssemblyInfoInputs.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.AssemblyInfo.cs
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.csproj.CoreCompileInputs.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.sourcelink.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
@@ -65,4 +72,3 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\ref
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.pdb
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\LandingPageApp.Api.genruntimeconfig.cache
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\ref\LandingPageApp.Api.dll
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Api\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

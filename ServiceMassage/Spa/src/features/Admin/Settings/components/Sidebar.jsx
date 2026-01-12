@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../Auth/UseAuth";
+
 export default function Sidebar({ items, active, onSelect }) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
   return (
-    <aside className="fixed inset-y-0 left-0 w-72 bg-white border-r border-gray-200 shadow-xl flex flex-col">
+    <aside className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl flex flex-col">
       {/* Logo */}
       {items.find((item) => item.isLogo) && (
         <div className="h-24 flex items-center justify-center mb-6 animate-slideIn">
@@ -16,7 +22,7 @@ export default function Sidebar({ items, active, onSelect }) {
       <nav className="flex-1 space-y-1.5 px-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
         {items.map((item) => {
           if (item.isLogo) return null;
-
+          
           const isActive = active === item.id;
 
           return (
@@ -59,6 +65,10 @@ export default function Sidebar({ items, active, onSelect }) {
                      hover:bg-red-600 active:bg-red-700 shadow-md
                      hover:shadow-lg active:scale-98 transition-all duration-200
                      flex items-center justify-center gap-2"
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
         >
           <svg
             className="w-5 h-5"

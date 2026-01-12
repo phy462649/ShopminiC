@@ -15,7 +15,7 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = _context.Set<Payment>();
         }
-        public async Task<Payment?> GetByIdAsync(int paymentId,CancellationToken cancellation = default)
+        public async Task<Payment?> GetByIdAsync(long paymentId,CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] { paymentId }, default);
 

@@ -2,47 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { message } from "antd";
 import BookingForm from "./BookingForm";
-
-const initialBookings = [
-  {
-    id: 1,
-    customer_id: 10,
-    staff_id: 3,
-    room_id: 5,
-    start_time: "2024-02-10T10:00:00",
-    end_time: "2024-02-10T11:00:00",
-    status: "pending",
-    created_at: "2024-02-01T10:00:00",
-  },
-  {
-    id: 2,
-    customer_id: 12,
-    staff_id: 4,
-    room_id: 2,
-    start_time: "2024-02-11T14:00:00",
-    end_time: "2024-02-11T15:00:00",
-    status: "confirmed",
-    created_at: "2024-02-02T11:00:00",
-  },
-  {
-    id: 3,
-    customer_id: 15,
-    staff_id: 2,
-    room_id: 1,
-    start_time: "2024-02-12T09:00:00",
-    end_time: null,
-    status: "cancelled",
-    created_at: "2024-02-03T12:00:00",
-  },
-];
-
-const fetchBookings = async () => initialBookings;
+import { 
+  useBookings, 
+  useCreateBooking, 
+  useUpdateBooking, 
+  useDeleteBooking 
+} from "../../../../../Hooks/useBookings";
 
 export default function BookingTable() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["bookings"],
-    queryFn: fetchBookings,
-  });
+  const { data, isLoading, isError } = useBookings();
+  const createBookingMutation = useCreateBooking();
+  const updateBookingMutation = useUpdateBooking();
+  const deleteBookingMutation = useDeleteBooking();
 
   const [bookingList, setBookingList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -59,6 +30,9 @@ export default function BookingTable() {
   };
 
   useEffect(() => {
+    // When data from API changes, update local list (or just renders directly from data if pagination not needed locally)
+    // For now, keep local state sync pattern if filtering happens locally, 
+    // but ideally we should render 'data' directly.
     if (data) setBookingList(data);
   }, [data]);
 
@@ -80,9 +54,13 @@ export default function BookingTable() {
   const handleDelete = () => {
     if (!selectedId) return message.error("Chọn booking để xoá");
 
-    setBookingList((prev) => prev.filter((b) => b.id !== selectedId));
-    setSelectedId(null);
-    message.success("Đã xoá booking!");
+    if (window.confirm("Bạn có chắc chắn muốn xóa booking này?")) {
+      deleteBookingMutation.mutate(selectedId, {
+        onSuccess: () => {
+          setSelectedId(null);
+        }
+      });
+    }
   };
 
   const handleCloseForm = () => setFormOpen(false);
@@ -90,25 +68,24 @@ export default function BookingTable() {
   const handleSave = (newBooking) => {
     if (editingBooking) {
       // update
-      setBookingList((prev) =>
-        prev.map((b) =>
-          b.id === editingBooking.id ? { ...b, ...newBooking } : b
-        )
-      );
+      updateBookingMutation.mutate({ 
+        id: editingBooking.id, 
+        data: newBooking 
+      }, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditingBooking(null);
+        }
+      });
     } else {
       // add new
-      setBookingList((prev) => [
-        ...prev,
-        {
-          ...newBooking,
-          id: prev.length ? Math.max(...prev.map((b) => b.id)) + 1 : 1,
-          created_at: new Date().toISOString(),
-        },
-      ]);
+      createBookingMutation.mutate(newBooking, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditingBooking(null);
+        }
+      });
     }
-
-    setFormOpen(false);
-    setEditingBooking(null);
   };
 
   if (isLoading) return <p className="p-4">Đang tải...</p>;
@@ -179,29 +156,37 @@ export default function BookingTable() {
           </thead>
 
           <tbody>
-            {bookingList.map((b) => (
-              <tr
-                key={b.id}
-                className={`cursor-pointer hover:bg-gray-50 ${
-                  selectedId === b.id ? "bg-pink-100" : ""
-                }`}
-                onClick={() => setSelectedId(b.id)}
-              >
-                <td className="p-2 border text-center">{b.id}</td>
-                <td className="p-2 border text-center">{b.customer_id}</td>
-                <td className="p-2 border text-center">{b.staff_id}</td>
-                <td className="p-2 border text-center">{b.room_id}</td>
-                <td className="p-2 border text-center">
-                  {new Date(b.start_time).toLocaleString("vi-VN")}
+            {(bookingList && bookingList.length > 0) ? (
+              bookingList.map((b) => (
+                <tr
+                  key={b.id}
+                  className={`cursor-pointer hover:bg-gray-50 ${
+                    selectedId === b.id ? "bg-pink-100" : ""
+                  }`}
+                  onClick={() => setSelectedId(b.id)}
+                >
+                  <td className="p-2 border text-center">{b.id}</td>
+                  <td className="p-2 border text-center">{b.customer_id}</td>
+                  <td className="p-2 border text-center">{b.staff_id}</td>
+                  <td className="p-2 border text-center">{b.room_id}</td>
+                  <td className="p-2 border text-center">
+                    {new Date(b.start_time).toLocaleString("vi-VN")}
+                  </td>
+                  <td className="p-2 border text-center">
+                    {b.end_time
+                      ? new Date(b.end_time).toLocaleString("vi-VN")
+                      : "-"}
+                  </td>
+                  <td className="p-2 border text-center">{b.status}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="p-4 text-center text-gray-500">
+                  Không có dữ liệu
                 </td>
-                <td className="p-2 border text-center">
-                  {b.end_time
-                    ? new Date(b.end_time).toLocaleString("vi-VN")
-                    : "-"}
-                </td>
-                <td className="p-2 border text-center">{b.status}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

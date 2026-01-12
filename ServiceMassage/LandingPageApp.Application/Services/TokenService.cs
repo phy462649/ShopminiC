@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using LandingPageApp.Application.Interfaces;
 using LandingPageApp.Domain.Entities;
+using Microsoft.Extensions.Logging;
+
 
 namespace LandingPageApp.Application.Services
 {
@@ -32,25 +34,27 @@ namespace LandingPageApp.Application.Services
         public string GenerateAccessToken(Person person)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+            Console.WriteLine(person);
             var key = Encoding.ASCII.GetBytes(_jwtSecret);
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, person.Id.ToString()),
                 new Claim(ClaimTypes.Name, person.Username),
-                new Claim(ClaimTypes.Role, person.Role?.Name ?? "Customer"),
+                // Use "role" claim for ASP.NET Core authorization
+                new Claim("role", person.Role.Name ),
                 new Claim("Name", person.Name),
                 new Claim("Email", person.Email ?? string.Empty),
                 new Claim("Phone", person.Phone ?? string.Empty),
                 new Claim("Address", person.Address ?? string.Empty)
 
             };
+            Console.WriteLine(claims);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                //thời gian hết hạn token
-                Expires = DateTime.UtcNow.AddMinutes(5),
+
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 Issuer = _jwtIssuer,
                 Audience = _jwtAudience,
                 SigningCredentials = new SigningCredentials(
@@ -80,6 +84,7 @@ namespace LandingPageApp.Application.Services
         /// </summary>
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
+            Console.WriteLine(token);
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false,
@@ -107,8 +112,8 @@ namespace LandingPageApp.Application.Services
         /// </summary>
         public bool ValidateToken(string token)
         {
-            try
-            {
+         
+            try{
                 var tokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
@@ -122,6 +127,7 @@ namespace LandingPageApp.Application.Services
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+                Console.WriteLine(token);
 
                 if (!(securityToken is JwtSecurityToken jwtSecurityToken) ||
                     !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
@@ -132,10 +138,27 @@ namespace LandingPageApp.Application.Services
 
                 return true;
             }
-            catch
+            catch (SecurityTokenExpiredException)
             {
+                Console.WriteLine("Token expired");
                 return false;
             }
+            catch (SecurityTokenInvalidSignatureException)
+            {
+                Console.WriteLine("Invalid signature");
+                return false;
+            }
+            catch (SecurityTokenInvalidIssuerException)
+            {
+                Console.WriteLine("Invalid issuer");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token validation error: {ex.Message}");
+                return false;
+            }
+
         }
     }
 }

@@ -28,7 +28,7 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return await _dbSet.AsNoTracking().ToListAsync(default);
         }
-        public async Task<OrderItem?> GetByIdAsync(int id,CancellationToken cancellation = default)
+        public async Task<OrderItem?> GetByIdAsync(long id,CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] {id}, cancellation);
         }

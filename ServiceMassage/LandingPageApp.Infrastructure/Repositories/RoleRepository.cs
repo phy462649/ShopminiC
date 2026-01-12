@@ -15,7 +15,7 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = context.Set<Role>();
         }
-        public async Task<Role?> GetByIdAsync(int roleId, CancellationToken cancellationToken = default)
+        public async Task<Role?> GetByIdAsync(long roleId, CancellationToken cancellationToken = default)
         {
             return await _dbSet.FindAsync(new object?[] { roleId }, cancellationToken);
         }
@@ -26,7 +26,7 @@ namespace LandingPageApp.Infrastructure.Repositories
         }
         public void Update(Role role)
         {
-            _dbSet.Update(role);
+            _context.Entry(role).State = EntityState.Modified;
 
         }
         public void Delete(Role role)
@@ -45,13 +45,24 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
-        public async Task<IEnumerable<Role?>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Role>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
         }
-        public  IQueryable<Role?> QueryNoTracking()
+        public  IQueryable<Role> QueryNoTracking()
         {
             return _dbSet.AsNoTracking();
-        }                              
+        }
+        public async Task<int> SaveChangesAsync(CancellationToken cancellation = default)
+        {
+            return await _context.SaveChangesAsync(cancellation);
+        }
+        public async Task<bool> HasAnyPersonAsync(long roleId, CancellationToken ct)
+        {
+            return await _context.People
+                .AsNoTracking()
+                .AnyAsync(p => p.RoleId == roleId, ct);
+        }
+
     }
 }

@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "hi1tT7UaipE=",
+  "dgSpecHash": "JIJ+UPrK7D4=",
   "success": true,
   "projectFilePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application\\LandingPageApp.Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\PHY\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.0\\microsoft.entityframeworkcore.9.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.0\\microsoft.entityframeworkcore.abstractions.9.0.0.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.0\\microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
@@ -22,20 +24,7 @@
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.logging\\8.2.1\\microsoft.identitymodel.logging.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.2.1\\microsoft.identitymodel.tokens.8.2.1.nupkg.sha512",
     "C:\\Users\\PHY\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.2.1\\system.identitymodel.tokens.jwt.8.2.1.nupkg.sha512",
-    "C:\\Users\\PHY\\.nuget\\packages\\system.linq.dynamic.core\\1.3.10\\system.linq.dynamic.core.1.3.10.nupkg.sha512"
+    "C:\\Users\\PHY\\.nuget\\packages\\system.linq.dynamic.core\\1.7.1\\system.linq.dynamic.core.1.7.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Linq.Dynamic.Core' 1.3.10 has a known high severity vulnerability, https://github.com/advisories/GHSA-4cv2-4hjh-77rx",
-      "projectPath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application\\LandingPageApp.Application.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application\\LandingPageApp.Application.csproj",
-      "libraryId": "System.Linq.Dynamic.Core",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }

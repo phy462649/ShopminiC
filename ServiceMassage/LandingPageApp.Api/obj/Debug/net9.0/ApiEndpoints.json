@@ -1,92 +1,23 @@
 [
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllBookingServices",
-    "RelativePath": "api/Admin/booking-services",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateBookingService",
-    "RelativePath": "api/Admin/booking-services",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetBookingServiceById",
-    "RelativePath": "api/Admin/booking-services/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateBookingService",
-    "RelativePath": "api/Admin/booking-services/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteBookingService",
-    "RelativePath": "api/Admin/booking-services/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
     "Method": "GetAllBookings",
     "RelativePath": "api/Admin/bookings",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -97,12 +28,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateBookingDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -114,11 +55,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -130,16 +81,26 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateBookingDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -151,7 +112,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -165,7 +126,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.CategoryDTO, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -176,12 +147,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateCategoryDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -193,11 +174,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -209,16 +200,26 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateCategoryDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -230,86 +231,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllOrderItems",
-    "RelativePath": "api/Admin/order-items",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateOrderItem",
-    "RelativePath": "api/Admin/order-items",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetOrderItemById",
-    "RelativePath": "api/Admin/order-items/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateOrderItem",
-    "RelativePath": "api/Admin/order-items/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteOrderItem",
-    "RelativePath": "api/Admin/order-items/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -323,7 +245,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.OrderDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -334,12 +266,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateOrderDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -351,32 +293,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateOrder",
-    "RelativePath": "api/Admin/orders/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
+    "ReturnTypes": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
-    ],
-    "ReturnTypes": []
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -388,11 +319,42 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
+    "Method": "UpdateOrderStatus",
+    "RelativePath": "api/Admin/orders/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateOrderStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -402,7 +364,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PaymentDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -413,12 +385,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreatePaymentDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -430,32 +412,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdatePayment",
-    "RelativePath": "api/Admin/payments/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
+    "ReturnTypes": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
-    ],
-    "ReturnTypes": []
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -467,7 +438,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -475,81 +446,43 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllProducts",
-    "RelativePath": "api/Admin/products",
+    "Method": "UpdatePaymentStatus",
+    "RelativePath": "api/Admin/payments/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdatePaymentStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
+    "Method": "GetAllPerson",
+    "RelativePath": "api/Admin/personal",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateProduct",
-    "RelativePath": "api/Admin/products",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetProductById",
-    "RelativePath": "api/Admin/products/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateProduct",
-    "RelativePath": "api/Admin/products/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteProduct",
-    "RelativePath": "api/Admin/products/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -560,7 +493,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.RoleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -571,12 +514,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateRoleDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -588,11 +541,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -604,16 +567,26 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateRoleDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -625,165 +598,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllRooms",
-    "RelativePath": "api/Admin/rooms",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateRoom",
-    "RelativePath": "api/Admin/rooms",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetRoomById",
-    "RelativePath": "api/Admin/rooms/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateRoom",
-    "RelativePath": "api/Admin/rooms/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteRoom",
-    "RelativePath": "api/Admin/rooms/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetAllServices",
-    "RelativePath": "api/Admin/services",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "CreateService",
-    "RelativePath": "api/Admin/services",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "createDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "GetServiceById",
-    "RelativePath": "api/Admin/services/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "UpdateService",
-    "RelativePath": "api/Admin/services/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
-    "Method": "DeleteService",
-    "RelativePath": "api/Admin/services/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -797,7 +612,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -808,12 +633,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateStaffScheduleDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -825,11 +660,21 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -841,16 +686,26 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateStaffScheduleDto",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
@@ -862,11 +717,63 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
+    "Method": "CreateBulkStaffSchedule",
+    "RelativePath": "api/Admin/staff-schedules/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateBulkStaffScheduleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.AdminController",
+    "Method": "GetStaffScheduleByStaffId",
+    "RelativePath": "api/Admin/staff-schedules/staff/{staffId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "staffId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.AuthController",
@@ -964,6 +871,11 @@
         "Name": "refreshToken",
         "Type": "System.String",
         "IsRequired": true
+      },
+      {
+        "Name": "device",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -1157,7 +1069,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
-    "Method": "GetAllBookings",
+    "Method": "GetAll",
     "RelativePath": "api/Booking",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1165,30 +1077,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
-    "Method": "CreateBooking",
+    "Method": "Create",
     "RelativePath": "api/Booking",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateBookingDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1204,7 +1124,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
-    "Method": "GetBookingById",
+    "Method": "GetById",
     "RelativePath": "api/Booking/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1212,14 +1132,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1235,7 +1159,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
-    "Method": "UpdateBooking",
+    "Method": "Update",
     "RelativePath": "api/Booking/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1243,19 +1167,23 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateBookingDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1265,13 +1193,13 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
-    "Method": "DeleteBooking",
+    "Method": "Delete",
     "RelativePath": "api/Booking/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1279,7 +1207,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1287,6 +1215,46 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Booking/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateBookingStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.BookingDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1296,13 +1264,137 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
+    "Method": "CheckRoomAvailable",
+    "RelativePath": "api/Booking/check-room-available",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roomId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "startTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
+    "Method": "CheckStaffAvailable",
+    "RelativePath": "api/Booking/check-staff-available",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "staffId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "startTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
+    "Method": "GetByCustomerId",
+    "RelativePath": "api/Booking/customer/{customerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "customerId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingController",
+    "Method": "GetByStaffId",
+    "RelativePath": "api/Booking/staff/{staffId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "staffId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
-    "Method": "GetAllBookingServices",
+    "Method": "GetAll",
     "RelativePath": "api/BookingService",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1310,30 +1402,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingServiceItemDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
-    "Method": "CreateBookingService",
+    "Method": "Create",
     "RelativePath": "api/BookingService",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateBookingServiceItemDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.BookingServiceItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1349,7 +1449,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
-    "Method": "GetBookingServiceById",
+    "Method": "GetById",
     "RelativePath": "api/BookingService/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1357,14 +1457,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.BookingServiceItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1380,43 +1484,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
-    "Method": "UpdateBookingService",
-    "RelativePath": "api/BookingService/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
-    "Method": "DeleteBookingService",
+    "Method": "Delete",
     "RelativePath": "api/BookingService/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1424,7 +1492,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1432,7 +1500,7 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -1441,13 +1509,39 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.BookingServiceController",
+    "Method": "GetByBookingId",
+    "RelativePath": "api/BookingService/booking/{bookingId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.BookingServiceItemDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.CategoryController",
-    "Method": "GetAllCategories",
+    "Method": "GetAll",
     "RelativePath": "api/Category",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1455,30 +1549,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.CategoryDTO, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.CategoryController",
-    "Method": "CreateCategory",
+    "Method": "Create",
     "RelativePath": "api/Category",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateCategoryDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1494,7 +1596,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.CategoryController",
-    "Method": "GetCategoryById",
+    "Method": "GetById",
     "RelativePath": "api/Category/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1502,14 +1604,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1525,7 +1631,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.CategoryController",
-    "Method": "UpdateCategory",
+    "Method": "Update",
     "RelativePath": "api/Category/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1533,19 +1639,23 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateCategoryDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.CategoryDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1555,13 +1665,13 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.CategoryController",
-    "Method": "DeleteCategory",
+    "Method": "Delete",
     "RelativePath": "api/Category/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1569,7 +1679,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1577,7 +1687,7 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -1586,13 +1696,13 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
-    "Method": "GetAllOrders",
+    "Method": "GetAll",
     "RelativePath": "api/Order",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1600,30 +1710,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.OrderDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
-    "Method": "CreateOrder",
+    "Method": "Create",
     "RelativePath": "api/Order",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateOrderDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1639,7 +1757,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
-    "Method": "GetOrderById",
+    "Method": "GetById",
     "RelativePath": "api/Order/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1647,14 +1765,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1670,43 +1792,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
-    "Method": "UpdateOrder",
-    "RelativePath": "api/Order/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
-    "Method": "DeleteOrder",
+    "Method": "Delete",
     "RelativePath": "api/Order/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1714,7 +1800,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1722,6 +1808,46 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Order/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateOrderStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.OrderDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1731,13 +1857,39 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.OrderController",
+    "Method": "GetByCustomerId",
+    "RelativePath": "api/Order/customer/{customerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "customerId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.OrderDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
-    "Method": "GetAllOrderItems",
+    "Method": "GetAll",
     "RelativePath": "api/OrderItem",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1745,30 +1897,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.OrderItemDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
-    "Method": "CreateOrderItem",
+    "Method": "Create",
     "RelativePath": "api/OrderItem",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateOrderItemDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.OrderItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1784,7 +1944,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
-    "Method": "GetOrderItemById",
+    "Method": "GetById",
     "RelativePath": "api/OrderItem/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1792,14 +1952,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.OrderItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1815,7 +1979,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
-    "Method": "UpdateOrderItem",
+    "Method": "Update",
     "RelativePath": "api/OrderItem/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -1823,20 +1987,33 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateOrderItemDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.OrderItemDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -1851,7 +2028,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
-    "Method": "DeleteOrderItem",
+    "Method": "Delete",
     "RelativePath": "api/OrderItem/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -1859,7 +2036,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -1867,7 +2044,7 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -1876,13 +2053,39 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.OrderItemController",
+    "Method": "GetByOrderId",
+    "RelativePath": "api/OrderItem/order/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.OrderItemDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
-    "Method": "GetAllPayments",
+    "Method": "GetAll",
     "RelativePath": "api/Payment",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1890,30 +2093,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PaymentDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
-    "Method": "CreatePayment",
+    "Method": "Create",
     "RelativePath": "api/Payment",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreatePaymentDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -1929,7 +2140,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
-    "Method": "GetPaymentById",
+    "Method": "GetById",
     "RelativePath": "api/Payment/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1937,14 +2148,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -1960,43 +2175,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
-    "Method": "UpdatePayment",
-    "RelativePath": "api/Payment/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "updateDto",
-        "Type": "System.Object",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
-    "Method": "DeletePayment",
+    "Method": "Delete",
     "RelativePath": "api/Payment/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2004,7 +2183,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2012,6 +2191,46 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Payment/{id}/status",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdatePaymentStatusDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.PaymentDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2021,13 +2240,65 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
+    "Method": "GetByBookingId",
+    "RelativePath": "api/Payment/booking/{bookingId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bookingId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PaymentDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.PaymentController",
+    "Method": "GetByOrderId",
+    "RelativePath": "api/Payment/order/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PaymentDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "GetAllPersons",
+    "Method": "GetAll",
     "RelativePath": "api/Person",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2035,30 +2306,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PersonDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "CreatePerson",
+    "Method": "Create",
     "RelativePath": "api/Person",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreatePersonDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.PersonDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2074,7 +2353,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "GetPersonById",
+    "Method": "GetById",
     "RelativePath": "api/Person/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2082,14 +2361,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.PersonDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2105,7 +2388,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "UpdatePerson",
+    "Method": "Update",
     "RelativePath": "api/Person/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -2113,20 +2396,33 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdatePersonDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.PersonDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2141,7 +2437,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "DeletePerson",
+    "Method": "Delete",
     "RelativePath": "api/Person/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2149,7 +2445,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2157,7 +2453,16 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2172,7 +2477,68 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
-    "Method": "SearchPersons",
+    "Method": "GetDetailById",
+    "RelativePath": "api/Person/{id}/detail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.PersonDetailDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
+    "Method": "GetByRole",
+    "RelativePath": "api/Person/role/{roleId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.PersonDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.PersonController",
+    "Method": "Search",
     "RelativePath": "api/Person/search",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2262,7 +2628,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
-    "Method": "GetAllProducts",
+    "Method": "GetAll",
     "RelativePath": "api/Product",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2270,30 +2636,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.ProductDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
-    "Method": "CreateProduct",
+    "Method": "Create",
     "RelativePath": "api/Product",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateProductDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ProductDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2309,7 +2683,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
-    "Method": "GetProductById",
+    "Method": "GetById",
     "RelativePath": "api/Product/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2317,14 +2691,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ProductDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2340,7 +2718,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
-    "Method": "UpdateProduct",
+    "Method": "Update",
     "RelativePath": "api/Product/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -2348,20 +2726,33 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateProductDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ProductDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2376,7 +2767,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
-    "Method": "DeleteProduct",
+    "Method": "Delete",
     "RelativePath": "api/Product/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2384,7 +2775,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2392,7 +2783,16 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2406,8 +2806,83 @@
     ]
   },
   {
+    "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
+    "Method": "UpdateStock",
+    "RelativePath": "api/Product/{id}/stock",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateProductStockDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.ProductDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.ProductController",
+    "Method": "GetByCategory",
+    "RelativePath": "api/Product/category/{categoryId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.ProductDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "LandingPageApp.Api.Controllers.RoleController",
-    "Method": "GetAllRoles",
+    "Method": "GetAll",
     "RelativePath": "api/Role",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2415,30 +2890,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.RoleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoleController",
-    "Method": "CreateRole",
+    "Method": "Create",
     "RelativePath": "api/Role",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateRoleDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2454,7 +2937,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoleController",
-    "Method": "GetRoleById",
+    "Method": "GetById",
     "RelativePath": "api/Role/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2468,8 +2951,12 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2485,7 +2972,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoleController",
-    "Method": "UpdateRole",
+    "Method": "Update",
     "RelativePath": "api/Role/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -2497,16 +2984,29 @@
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateRoleDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2521,7 +3021,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoleController",
-    "Method": "DeleteRole",
+    "Method": "Delete",
     "RelativePath": "api/Role/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2537,7 +3037,16 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2552,7 +3061,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
-    "Method": "GetAllRooms",
+    "Method": "GetAll",
     "RelativePath": "api/Room",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2560,30 +3069,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.RoomDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
-    "Method": "CreateRoom",
+    "Method": "Create",
     "RelativePath": "api/Room",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateRoomDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoomDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2599,7 +3116,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
-    "Method": "GetRoomById",
+    "Method": "GetById",
     "RelativePath": "api/Room/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2607,14 +3124,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoomDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2630,7 +3151,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
-    "Method": "UpdateRoom",
+    "Method": "Update",
     "RelativePath": "api/Room/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -2638,20 +3159,33 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateRoomDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.RoomDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2666,7 +3200,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
-    "Method": "DeleteRoom",
+    "Method": "Delete",
     "RelativePath": "api/Room/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2674,7 +3208,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2682,7 +3216,16 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2696,8 +3239,49 @@
     ]
   },
   {
+    "ContainingType": "LandingPageApp.Api.Controllers.RoomController",
+    "Method": "CheckAvailability",
+    "RelativePath": "api/Room/{id}/availability",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "startTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endTime",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "excludeBookingId",
+        "Type": "System.Nullable\u00601[[System.Int64, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Object",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "LandingPageApp.Api.Controllers.ServicesController",
-    "Method": "GetAllServices",
+    "Method": "GetAll",
     "RelativePath": "api/Services",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2705,30 +3289,38 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.ServiceDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ServicesController",
-    "Method": "CreateService",
+    "Method": "Create",
     "RelativePath": "api/Services",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateServiceDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ServiceDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2744,7 +3336,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ServicesController",
-    "Method": "GetServiceById",
+    "Method": "GetById",
     "RelativePath": "api/Services/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -2752,14 +3344,18 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ServiceDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2775,7 +3371,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ServicesController",
-    "Method": "UpdateService",
+    "Method": "Update",
     "RelativePath": "api/Services/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -2783,20 +3379,33 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateServiceDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.ServiceDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2811,7 +3420,7 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.ServicesController",
-    "Method": "DeleteService",
+    "Method": "Delete",
     "RelativePath": "api/Services/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -2819,7 +3428,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2827,7 +3436,16 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2842,38 +3460,46 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
-    "Method": "GetAllStaffSchedules",
-    "RelativePath": "api/StaffSchedule",
+    "Method": "GetAll",
+    "RelativePath": "api/staff-schedule",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
-    "Method": "CreateStaffSchedule",
-    "RelativePath": "api/StaffSchedule",
+    "Method": "Create",
+    "RelativePath": "api/staff-schedule",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateStaffScheduleDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 201
       },
       {
@@ -2889,22 +3515,26 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
-    "Method": "GetStaffScheduleById",
-    "RelativePath": "api/StaffSchedule/{id}",
+    "Method": "GetById",
+    "RelativePath": "api/staff-schedule/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       },
       {
@@ -2920,20 +3550,55 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
-    "Method": "UpdateStaffSchedule",
-    "RelativePath": "api/StaffSchedule/{id}",
+    "Method": "Update",
+    "RelativePath": "api/staff-schedule/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Int64",
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "System.Object",
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.UpdateStaffScheduleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.StaffScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
+    "Method": "Delete",
+    "RelativePath": "api/staff-schedule/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2941,7 +3606,42 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
+    "Method": "CreateBulk",
+    "RelativePath": "api/staff-schedule/bulk",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "LandingPageApp.Application.Dtos.CreateBulkStaffScheduleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 201
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2956,15 +3656,41 @@
   },
   {
     "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
-    "Method": "DeleteStaffSchedule",
-    "RelativePath": "api/StaffSchedule/{id}",
+    "Method": "GetByStaffId",
+    "RelativePath": "api/staff-schedule/staff/{staffId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "staffId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[LandingPageApp.Application.Dtos.StaffScheduleDto, LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
+    "Method": "DeleteByStaffId",
+    "RelativePath": "api/staff-schedule/staff/{staffId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Name": "staffId",
+        "Type": "System.Int64",
         "IsRequired": true
       }
     ],
@@ -2972,7 +3698,7 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
-        "StatusCode": 200
+        "StatusCode": 204
       },
       {
         "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
@@ -2981,7 +3707,33 @@
           "application/json",
           "text/json"
         ],
-        "StatusCode": 400
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "LandingPageApp.Api.Controllers.StaffScheduleController",
+    "Method": "GetWeeklySchedule",
+    "RelativePath": "api/staff-schedule/staff/{staffId}/weekly",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "staffId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "LandingPageApp.Application.Dtos.StaffWeeklyScheduleDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   }

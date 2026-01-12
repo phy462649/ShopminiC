@@ -24,7 +24,7 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return _dbSet.AsNoTracking();
         }
-        public async Task<Room?> GetByIdAsync(int id,CancellationToken cancellation = default)
+        public async Task<Room?> GetByIdAsync(long id,CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] {id}, cancellation);
         }

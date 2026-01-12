@@ -1,14 +1,14 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using LandingPageApp.Application.Dtos;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-    }
+    Task<IEnumerable<ProductDto>> GetAllAsync(CancellationToken ct = default);
+    Task<ProductDto?> GetByIdAsync(long id, CancellationToken ct = default);
+    Task<IEnumerable<ProductDto>> GetByCategoryAsync(long categoryId, CancellationToken ct = default);
+    Task<ProductDto> CreateAsync(CreateProductDto dto, CancellationToken ct = default);
+    Task<ProductDto> UpdateAsync(long id, UpdateProductDto dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+    Task<ProductDto> UpdateStockAsync(long id, int quantity, CancellationToken ct = default);
 }

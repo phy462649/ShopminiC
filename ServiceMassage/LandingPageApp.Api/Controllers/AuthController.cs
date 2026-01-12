@@ -1,9 +1,7 @@
 ﻿using LandingPageApp.Application.Dtos;
 using LandingPageApp.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LandingPageApp.Api.Controllers
 {
@@ -78,7 +76,7 @@ namespace LandingPageApp.Api.Controllers
         /// <summary>
         /// Request password reset by sending OTP to email.
         /// </summary>
-        /// <param name="email">Email address for password reset</param>
+        /// <param name="email">gửi mail quên mật khẩu</param>
         /// <returns>Success response</returns>
         [HttpPost("request-password-reset")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -92,21 +90,21 @@ namespace LandingPageApp.Api.Controllers
         /// <summary>
         /// Reset password using OTP and new password.
         /// </summary>
-        /// <param name="resetRequest">Email, OTP, and new password</param>
+        /// <param name="resetRequest">quên mật khẩu</param>
         /// <returns>AuthResponse with success message</returns>
         [HttpPost("reset-password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<AuthResponse>> ResetPassword([FromBody] PasswordResetRequest resetRequest,string device)
+        public async Task<ActionResult<AuthResponse>> ResetPassword([FromBody] PasswordResetRequest resetRequest)
         {
-            var result = await _authService.ResetPasswordAsync(resetRequest.Email, resetRequest.Otp, resetRequest.NewPassword,device);
+            var result = await _authService.ResetPasswordAsync(resetRequest.Email, resetRequest.Otp, resetRequest.NewPassword,resetRequest.NewPasswordVerify);
             return Ok(result);
         }
         /// <summary>
         /// Verify email address using OTP.
         /// </summary>
-        /// <param name="verifyRequest">Email and OTP for verification</param>
+        /// <param name="verifyRequest"> xác nhận đăng kí tài khoản </param>
         /// <returns>Success response</returns>
         [HttpPost("verify-email")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -121,10 +119,5 @@ namespace LandingPageApp.Api.Controllers
             return Ok(success);
         }
 
-        /// <summary>
-        /// Get current user details.
-        /// </summary>
-        /// <returns>UserDetailDTO with user information</returns>
-   
     }
 }

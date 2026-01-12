@@ -18,7 +18,7 @@ namespace LandingPageApp.Domain.Repositories
         /// Trả về null nếu không tìm thấy.
         /// Dùng FindAsync để tận dụng EF Core tracking và cache.
         /// </summary>
-        Task<T?> GetByIdAsync(int id, CancellationToken cancellation = default);
+        Task<T?> GetByIdAsync(long id, CancellationToken cancellation = default);
         Task AddAsync(T entity, CancellationToken cancellation = default);
         void Update(T entity);
         void Delete(T entity);

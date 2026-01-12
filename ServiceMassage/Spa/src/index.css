@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Reset margin cho ul elements */
+ul {
+  margin-bottom: 0;
+}
 /* Animation keyframes */
 @keyframes slideIn {
   from {

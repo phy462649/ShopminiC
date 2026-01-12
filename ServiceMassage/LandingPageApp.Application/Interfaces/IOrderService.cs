@@ -1,14 +1,13 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using LandingPageApp.Application.Dtos;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface IOrderService
 {
-    public interface IOrderService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-    }
+    Task<IEnumerable<OrderDto>> GetAllAsync(CancellationToken ct = default);
+    Task<OrderDto?> GetByIdAsync(long id, CancellationToken ct = default);
+    Task<IEnumerable<OrderDto>> GetByCustomerIdAsync(long customerId, CancellationToken ct = default);
+    Task<OrderDto> CreateAsync(CreateOrderDto dto, CancellationToken ct = default);
+    Task<OrderDto> UpdateStatusAsync(long id, UpdateOrderStatusDto dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(long id, CancellationToken ct = default);
 }

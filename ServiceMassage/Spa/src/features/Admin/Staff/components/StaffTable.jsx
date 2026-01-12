@@ -1,49 +1,13 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
-
-// Fake API (JSX version)
-const fetchStaff = async () => {
-  return [
-    {
-      id: 1,
-      name: "Nguyễn Văn A",
-      phone: "0987000001",
-      email: "a@example.com",
-      specialty: "Massage",
-      created_at: "2024-01-01T10:00:00",
-      updated_at: "2024-01-05T10:00:00",
-    },
-    {
-      id: 2,
-      name: "Lê Thị B",
-      phone: "0987000002",
-      email: "b@example.com",
-      specialty: "Skin care",
-      created_at: "2024-02-02T10:00:00",
-      updated_at: "2024-02-03T10:00:00",
-    },
-    {
-      id: 3,
-      name: "Trần Văn C",
-      phone: "0987000003",
-      email: "c@example.com",
-      specialty: "Nails",
-      created_at: "2024-03-02T10:00:00",
-      updated_at: "2024-03-03T10:00:00",
-    },
-  ];
-};
+import { useStaff } from "../../../../../Hooks/useStaff";
 
 export default function StaffTable() {
   const {
     data = [],
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ["staff"],
-    queryFn: fetchStaff,
-  });
+  } = useStaff();
 
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -52,20 +16,20 @@ export default function StaffTable() {
     const q = search.toLowerCase();
     return (
       s.name.toLowerCase().includes(q) ||
-      (s.email || "").toLowerCase().includes(q) ||
-      (s.specialty || "").toLowerCase().includes(q)
+      (s.email || "").toLowerCase().includes(q)
     );
   });
 
   const handleDelete = () => {
     if (!selectedId) return message.error("Chọn nhân viên để xoá");
-    message.success("Xóa giả lập (mock)");
+    message.warning("Chức năng xóa nhân viên cần thực hiện trong trang Quản lý Người dùng");
   };
 
-  const handleAdd = () => message.info("Thêm (mock)");
+  const handleAdd = () => message.info("Vui lòng thêm nhân viên ở trang Quản lý Người dùng và gán quyền Staff");
+
   const handleEdit = () => {
     if (!selectedId) return message.warning("Chọn nhân viên để sửa");
-    message.info("Sửa (mock)");
+    message.info("Vui lòng sửa thông tin ở trang Quản lý Người dùng");
   };
 
   if (isLoading) return <p className="p-4">Đang tải...</p>;
@@ -88,22 +52,25 @@ export default function StaffTable() {
         </div>
 
         <button
-          className="px-4 py-2 text-white bg-green-600 rounded-md"
+          className="px-4 py-2 text-white bg-green-600 rounded-md opacity-50 cursor-not-allowed"
           onClick={handleAdd}
+          title="Thực hiện ở trang Người dùng"
         >
           Thêm
         </button>
 
         <button
-          className="px-4 py-2 text-white bg-yellow-500 rounded-md"
+          className="px-4 py-2 text-white bg-yellow-500 rounded-md opacity-50 cursor-not-allowed"
           onClick={handleEdit}
+          title="Thực hiện ở trang Người dùng"
         >
           Sửa
         </button>
 
         <button
-          className="px-4 py-2 text-white bg-red-500 rounded-md"
+          className="px-4 py-2 text-white bg-red-500 rounded-md opacity-50 cursor-not-allowed"
           onClick={handleDelete}
+          title="Thực hiện ở trang Người dùng"
         >
           Xoá
         </button>
@@ -119,7 +86,6 @@ export default function StaffTable() {
                 "Tên",
                 "Điện thoại",
                 "Email",
-                "Chuyên môn",
                 "Tạo lúc",
                 "Cập nhật",
               ].map((h) => (
@@ -131,36 +97,42 @@ export default function StaffTable() {
           </thead>
 
           <tbody>
-            {filtered.map((s) => (
-              <tr
-                key={s.id}
-                tabIndex={0}
-                aria-selected={selectedId === s.id}
-                onClick={() => setSelectedId(s.id)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") setSelectedId(s.id);
-                }}
-                className={`cursor-pointer hover:bg-gray-50 ${
-                  selectedId === s.id ? "bg-pink-100" : ""
-                }`}
-              >
-                <td className="p-2 border">{s.id}</td>
-                <td className="p-2 border">{s.name}</td>
-                <td className="p-2 border">{s.phone || "-"}</td>
-                <td className="p-2 border">{s.email || "-"}</td>
-                <td className="p-2 border">{s.specialty || "-"}</td>
-                <td className="p-2 border">
-                  {s.created_at
-                    ? new Date(s.created_at).toLocaleString("vi-VN")
-                    : "-"}
-                </td>
-                <td className="p-2 border">
-                  {s.updated_at
-                    ? new Date(s.updated_at).toLocaleString("vi-VN")
-                    : "-"}
+            {(filtered && filtered.length > 0) ? (
+              filtered.map((s) => (
+                <tr
+                  key={s.id}
+                  tabIndex={0}
+                  aria-selected={selectedId === s.id}
+                  onClick={() => setSelectedId(s.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") setSelectedId(s.id);
+                  }}
+                  className={`cursor-pointer hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""
+                    }`}
+                >
+                  <td className="p-2 border">{s.id}</td>
+                  <td className="p-2 border">{s.name}</td>
+                  <td className="p-2 border">{s.phone || "-"}</td>
+                  <td className="p-2 border">{s.email || "-"}</td>
+                  <td className="p-2 border">
+                    {s.createdAt
+                      ? new Date(s.createdAt).toLocaleString("vi-VN")
+                      : "-"}
+                  </td>
+                  <td className="p-2 border">
+                    {s.updatedAt
+                      ? new Date(s.updatedAt).toLocaleString("vi-VN")
+                      : "-"}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="p-4 text-center text-gray-500">
+                  Không có nhân viên nào
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -15,7 +15,7 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = context.Set<StaffSchedule>();
         }
-        public async Task<StaffSchedule?> GetByIdAsync(int staffScheduleId, CancellationToken cancellation = default)
+        public async Task<StaffSchedule?> GetByIdAsync(long staffScheduleId, CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] { staffScheduleId }, staffScheduleId);
         }

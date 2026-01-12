@@ -1,12 +1,5 @@
-import AdminLayout from "./Layouts/AdminLayout";
+import Router from "./Route/index";
+
 export default function App() {
-  return (
-    <div>
-      {/* <HeaderAdmin /> */}
-      {/* <HeaderHomePage /> */}
-      <AdminLayout />
-      {/* // <Content /> */}
-      {/* <Dashboard /> */}
-    </div>
-  );
+  return <Router />;
 }

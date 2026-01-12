@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "u37DWSrOCA8=",
+  "dgSpecHash": "jE+PkncQClI=",
   "success": true,
   "projectFilePath": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Domain\\LandingPageApp.Domain.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\PHY\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512"
+    "C:\\Users\\PHY\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\PHY\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512"
   ],
   "logs": []
 }

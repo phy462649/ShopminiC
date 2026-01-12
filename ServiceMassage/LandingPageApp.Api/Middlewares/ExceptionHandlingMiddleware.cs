@@ -41,7 +41,7 @@ namespace LandingPageApp.Api.Middlewares
 
             var response = new ErrorResponse
             {
-                Success = false,
+                Status = false,
                 Message = exception.Message
             };
 
@@ -70,10 +70,20 @@ namespace LandingPageApp.Api.Middlewares
                     response.ErrorCode = "CONFLICT";
                     break;
 
+                case NotFoundException notFoundEx:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    response.ErrorCode = "NOT_FOUND";
+                    break;
+
+                case BusinessException businessEx:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    response.ErrorCode = "BUSINESS_ERROR";
+                    break;
+
                 case RateLimitException rateLimitEx:
                     context.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
                     response.ErrorCode = "RATE_LIMIT_EXCEEDED";
-                    context.Response.Headers.Add("Retry-After", rateLimitEx.RetryAfterSeconds.ToString());
+                    context.Response.Headers["Retry-After"] = rateLimitEx.RetryAfterSeconds.ToString();
                     break;
 
                 case InvalidOperationException:

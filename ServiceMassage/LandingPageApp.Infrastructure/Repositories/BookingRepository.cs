@@ -26,7 +26,7 @@ namespace LandingPageApp.Infrastructure.Repositories
             return _dbSet.AsNoTracking();
         }
 
-        public async Task<Booking?> GetByIdAsync(int id, CancellationToken cancellation = default)
+        public async Task<Booking?> GetByIdAsync(long id, CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] {id}, cancellation);
         }
@@ -54,7 +54,7 @@ namespace LandingPageApp.Infrastructure.Repositories
         {
             return await _dbSet.Where(predicate).ToListAsync(cancellation);
         }
-        public async Task<IEnumerable<Booking?>> GetAllAsync(CancellationToken cancellation = default)
+        public async Task<IEnumerable<Booking>> GetAllAsync(CancellationToken cancellation = default)
         {
             return await _dbSet.AsNoTracking().ToListAsync(cancellation);
         }

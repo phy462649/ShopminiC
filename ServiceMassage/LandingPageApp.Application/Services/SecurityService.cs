@@ -48,8 +48,10 @@ public class SecurityService : ISecurityService
 
         if (string.IsNullOrWhiteSpace(hash))
             return false;
+        //return ;
         return BCrypt.Net.BCrypt.Verify(password, hash);
-      
+  
+
     }
 
     /// <summary>

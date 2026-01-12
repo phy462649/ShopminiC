@@ -1,14 +1,12 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using LandingPageApp.Application.Dtos;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface IBookingServiceService
 {
-    public interface IBookingServiceService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-    }
+    Task<IEnumerable<BookingServiceItemDto>> GetAllAsync(CancellationToken ct = default);
+    Task<BookingServiceItemDto?> GetByIdAsync(long id, CancellationToken ct = default);
+    Task<IEnumerable<BookingServiceItemDto>> GetByBookingIdAsync(long bookingId, CancellationToken ct = default);
+    Task<BookingServiceItemDto> CreateAsync(CreateBookingServiceItemDto dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(long id, CancellationToken ct = default);
 }

@@ -1,14 +1,13 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using LandingPageApp.Application.Dtos;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface ICategoryService
 {
-    public interface ICategoryService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-    }
+    Task<IEnumerable<CategoryDTO>> GetAllAsync(CancellationToken ct = default);
+    Task<CategoryDTO?> GetByIdAsync(long id, CancellationToken ct = default);
+    Task<CategoryDTO> CreateAsync(CreateCategoryDto dto, CancellationToken ct = default);
+    Task<CategoryDTO> UpdateAsync(long id, UpdateCategoryDto dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct = default);
 }

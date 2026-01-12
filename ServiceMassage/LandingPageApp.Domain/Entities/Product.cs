@@ -17,6 +17,8 @@ public partial class Product
 
     public long CategoryId { get; set; }
 
+    public string? UrlImage { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

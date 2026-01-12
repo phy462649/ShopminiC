@@ -1,0 +1,6 @@
+{
+  "LandingPageApp.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Api",
+  "LandingPageApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Application",
+  "LandingPageApp.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Domain",
+  "LandingPageApp.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\PHY\\CV\\ShopminiC\\ServiceMassage\\LandingPageApp.Infrastructure"
+}

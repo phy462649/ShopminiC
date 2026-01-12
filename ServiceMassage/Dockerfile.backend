@@ -1,0 +1,27 @@
+# Backend Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy csproj files and restore
+COPY LandingPageApp.Domain/*.csproj ./LandingPageApp.Domain/
+COPY LandingPageApp.Application/*.csproj ./LandingPageApp.Application/
+COPY LandingPageApp.Infrastructure/*.csproj ./LandingPageApp.Infrastructure/
+COPY LandingPageApp.Api/*.csproj ./LandingPageApp.Api/
+RUN dotnet restore LandingPageApp.Api/LandingPageApp.Api.csproj
+
+# Copy source code and build
+COPY . .
+RUN dotnet publish LandingPageApp.Api/LandingPageApp.Api.csproj -c Release -o /app/publish --no-restore
+
+# Runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health/live || exit 1
+
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENTRYPOINT ["dotnet", "LandingPageApp.Api.dll"]

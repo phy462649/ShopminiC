@@ -13,7 +13,7 @@ namespace LandingPageApp.Api.Extensions
         {
             // Đăng ký từng repository
             services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddScoped<IBookingServiceRepository,BookingServiceRepository>();
+            services.AddScoped<IBookingServiceRepository, BookingServiceRepository>();
             services.AddScoped<ICategoryRepository, CategoryReposiotry>();
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
@@ -25,9 +25,21 @@ namespace LandingPageApp.Api.Extensions
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<IStaffScheduleRepository, StaffScheduleRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
-            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IUnitOfWork, UnitOfWorkRepository>();
-    
+
+            // Đăng ký các Application Services
+            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IBookingServiceService, BookingServiceService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IStaffScheduleService, StaffScheduleService>();
+            services.AddScoped<IServicesService, ServicesService>();
 
             return services;
         }

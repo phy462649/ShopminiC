@@ -15,7 +15,7 @@ namespace LandingPageApp.Infrastructure.Repositories
             _context = context;
             _dbSet = _context.Set<Product>();
         }
-        public async Task<Product?> GetByIdAsync(int productId, CancellationToken cancellation = default)
+        public async Task<Product?> GetByIdAsync(long productId, CancellationToken cancellation = default)
         {
             return await _dbSet.FindAsync(new object?[] {productId},cancellation);
         }
@@ -34,7 +34,7 @@ namespace LandingPageApp.Infrastructure.Repositories
 
         public async Task<List<Product>> SearchProductsAsync(string searchTerm)
         {
-            return await _dbSet.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm)).ToListAsync();
+            return await _dbSet.Where(p => p.Name.Contains(searchTerm) || (p.Description != null && p.Description.Contains(searchTerm))).ToListAsync();
         }
 
         public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
@@ -74,6 +74,10 @@ namespace LandingPageApp.Infrastructure.Repositories
         public async Task<IEnumerable<Product>> FindAsync(Expression<System.Func<Product, bool>> predicate, CancellationToken cancellation = default)
         {
             return await _dbSet.Where(predicate).ToListAsync(cancellation);
+        }
+        public async Task<int> SaveChange(Product entity,CancellationToken cancellationToken)
+            {
+            return await _context.SaveChangesAsync(cancellationToken);
         }
 
 

@@ -4,3 +4,66 @@ GET {{LandingPageApp.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# Test Login API
+POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "password": "phamhoangy84@gmail.com",
+  "deviceToken": "256ce561-f260-4094-9920-d88a06f02243"
+}
+
+###
+
+# Test Login with different credentials
+POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin123456",
+  "deviceToken": "test-device-token"
+}
+
+###
+
+# Register test user
+POST {{LandingPageApp.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "phamhoangy84@gmail.com",
+  "password": "TestPassword123",
+  "confirmPassword": "TestPassword123",
+  "name": "John Doe",
+  "phone": "0123456789",
+  "address": "Test Address"
+}
+
+###
+
+# Verify email after registration (use OTP from email)
+POST {{LandingPageApp.Api_HostAddress}}/api/auth/verify-email
+Content-Type: application/json
+
+{
+  "email": "phamhoangy84@gmail.com",
+  "otp": "123456"
+}
+
+###
+
+# Login after email verification
+POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "password": "TestPassword123",
+  "deviceToken": "256ce561-f260-4094-9920-d88a06f02243"
+}
+
+###

@@ -67,7 +67,7 @@ export default function PaymentTable() {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Danh sách thanh toán</h2>
+      {/* <h2 className="text-xl font-semibold mb-4">Danh sách thanh toán</h2> */}
 
       <div className="overflow-x-auto">
         <table className="min-w-full border text-sm">

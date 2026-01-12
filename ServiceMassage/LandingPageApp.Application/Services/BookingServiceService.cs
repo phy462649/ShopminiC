@@ -1,45 +1,87 @@
+using AutoMapper;
+using LandingPageApp.Application.Dtos;
+using LandingPageApp.Application.Exceptions;
 using LandingPageApp.Application.Interfaces;
 using LandingPageApp.Domain.Repositories;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using BookingServiceEntity = LandingPageApp.Domain.Entities.BookingService;
 
-namespace LandingPageApp.Application.Services
+namespace LandingPageApp.Application.Services;
+
+public class BookingServiceService : IBookingServiceService
 {
-    public class BookingServiceService : IBookingServiceService
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly ILogger<BookingServiceService> _logger;
+
+    public BookingServiceService(
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        ILogger<BookingServiceService> logger)
     {
-        private readonly IBookingServiceRepository _repository;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _logger = logger;
+    }
 
-        public BookingServiceService(IBookingServiceRepository repository)
-        {
-            _repository = repository;
-        }
+    public async Task<IEnumerable<BookingServiceItemDto>> GetAllAsync(CancellationToken ct = default)
+    {
+        var items = await _unitOfWork.bookingservices.Query()
+            .Include(bs => bs.Service)
+            .ToListAsync(ct);
+        return _mapper.Map<IEnumerable<BookingServiceItemDto>>(items);
+    }
 
-        public async Task<IEnumerable<object>> GetAllAsync()
-        {
-            return await _repository.GetAllAsync();
-        }
+    public async Task<BookingServiceItemDto?> GetByIdAsync(long id, CancellationToken ct = default)
+    {
+        var item = await _unitOfWork.bookingservices.Query()
+            .Include(bs => bs.Service)
+            .FirstOrDefaultAsync(bs => bs.Id == id, ct);
+        return item is null ? null : _mapper.Map<BookingServiceItemDto>(item);
+    }
 
-        public async Task<object> GetByIdAsync(int id)
-        {
-            return await _repository.GetByIdAsync(id);
-        }
+    public async Task<IEnumerable<BookingServiceItemDto>> GetByBookingIdAsync(long bookingId, CancellationToken ct = default)
+    {
+        var items = await _unitOfWork.bookingservices.Query()
+            .Include(bs => bs.Service)
+            .Where(bs => bs.BookingId == bookingId)
+            .ToListAsync(ct);
+        return _mapper.Map<IEnumerable<BookingServiceItemDto>>(items);
+    }
 
-        public async Task<object> CreateAsync(object createDto)
-        {
-            // Implementation will depend on the actual DTO structure
-            return await Task.FromResult(createDto);
-        }
+    public async Task<BookingServiceItemDto> CreateAsync(CreateBookingServiceItemDto dto, CancellationToken ct = default)
+    {
+        var service = await _unitOfWork.services.GetByIdAsync(dto.ServiceId, ct)
+            ?? throw new NotFoundException($"Không tìm thấy dịch vụ với Id: {dto.ServiceId}");
 
-        public async Task<object> UpdateAsync(long id, object updateDto)
+        var bookingService = new BookingServiceEntity
         {
-            // Implementation will depend on the actual DTO structure
-            return await Task.FromResult(updateDto);
-        }
+            ServiceId = dto.ServiceId,
+            Quantity = dto.Quantity,
+            Price = service.Price
+        };
 
-        public async Task<bool> DeleteAsync(long id)
-        {
-            // Implementation will depend on the repository
-            return await Task.FromResult(true);
-        }
+        await _unitOfWork.bookingservices.AddAsync(bookingService, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Created booking service for service {ServiceId}", dto.ServiceId);
+
+        return await GetByIdAsync(bookingService.Id, ct) ?? _mapper.Map<BookingServiceItemDto>(bookingService);
+    }
+
+    public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
+    {
+        var bookingService = await _unitOfWork.bookingservices.GetByIdAsync(id, ct);
+
+        if (bookingService is null)
+            return false;
+
+        _unitOfWork.bookingservices.Delete(bookingService);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        _logger.LogInformation("Deleted booking service {Id}", id);
+
+        return true;
     }
 }

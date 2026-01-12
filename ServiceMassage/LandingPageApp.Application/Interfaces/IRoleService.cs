@@ -1,14 +1,13 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using LandingPageApp.Application.Dtos;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface IRoleService
 {
-    public interface IRoleService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-    }
+    Task<IEnumerable<RoleDto>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<RoleDto?> GetByIdAsync(long id, CancellationToken cancellationToken = default);
+    Task<RoleDto> CreateAsync(CreateRoleDto dto, CancellationToken cancellationToken = default);
+    Task<RoleDto> UpdateAsync(long id, UpdateRoleDto dto, CancellationToken cancellationToken = default);
+    Task<bool> DeleteAsync(long id, CancellationToken cancellationToken = default);
+    Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default);
 }

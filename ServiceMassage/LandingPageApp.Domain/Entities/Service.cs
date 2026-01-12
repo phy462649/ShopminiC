@@ -15,6 +15,8 @@ public partial class Service
 
     public decimal Price { get; set; }
 
+    public string? UrlImage { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

@@ -12,6 +12,7 @@ namespace LandingPageApp.Domain.Enums
         Card,
         Bank_transfer,
         Momo,
-        Zalopay
+        Zalopay,
+        VNPay
     }
 }

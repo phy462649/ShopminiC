@@ -9,7 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace LandingPageApp.Application.Services
 {
-
+    /// <summary>
+    /// Service xử lý các chức năng xác thực người dùng.
+    /// Bao gồm: đăng nhập, đăng ký, quên mật khẩu, đặt lại mật khẩu, xác thực email và quản lý token.
+    /// </summary>
     public class AuthService : IAuthService
     {
         private readonly IUnitOfWork _uow;
@@ -23,7 +26,16 @@ namespace LandingPageApp.Application.Services
         //private readonly EmailValidator _validation;
 
 
-
+        /// <summary>
+        /// Khởi tạo một instance mới của <see cref="AuthService"/>.
+        /// </summary>
+        /// <param name="emailService">Service gửi email.</param>
+        /// <param name="cacheRediservice">Service cache Redis.</param>
+        /// <param name="securityService">Service bảo mật (hash/verify password).</param>
+        /// <param name="otpService">Service quản lý OTP.</param>
+        /// <param name="unitofwork">Unit of Work để quản lý transaction.</param>
+        /// <param name="tokenService">Service tạo và quản lý token.</param>
+        /// <param name="personRepository">Repository quản lý dữ liệu người dùng.</param>
         public AuthService(
             IEmailService emailService,
             ICacheRediservice cacheRediservice,
@@ -43,73 +55,108 @@ namespace LandingPageApp.Application.Services
             _uow = unitofwork;
         }
 
-
+        /// <summary>
+        /// Xử lý đăng nhập người dùng.
+        /// Xác thực thông tin đăng nhập, kiểm tra trạng thái xác thực email,
+        /// tạo access token và refresh token nếu thành công.
+        /// </summary>
+        /// <param name="loginDto">Thông tin đăng nhập bao gồm username, password và device token.</param>
+        /// <param name="cancellation">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="AuthResponse"/> chứa:
+        /// - Status: true nếu đăng nhập thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// - AccessToken: JWT access token (nếu thành công).
+        /// - RefreshToken: Refresh token để làm mới access token (nếu thành công).
+        /// - ExpiresIn: Thời gian hết hạn của access token (giây).
+        /// - User: Thông tin chi tiết người dùng (nếu thành công).
+        /// </returns>
         public async Task<AuthResponse> LoginAsync(LoginDTO loginDto, CancellationToken cancellation = default)
         {
-            // Validate input
-            InputValidator.NotNull(loginDto, nameof(loginDto));
-            InputValidator.NotEmpty(loginDto.Username, "Username");
-            InputValidator.NotNull(loginDto.Username, "Username");
-            InputValidator.NotNull(loginDto.Password, "Password");
-            InputValidator.NotEmpty(loginDto.Password, "Password");
-            var deviceId = string.IsNullOrWhiteSpace(loginDto.DeviceToken)
-                                 ? "default"
-                                 : loginDto.DeviceToken;
-
-            var person = await _personRepository.FindByUsernameAsync(loginDto.Username, cancellation);
-         
-            if (person == null)
+            try
             {
-                return new AuthResponse { Status = false, Message = "Invalid credentials" };
-            }
-            if (!person.StatusVerify)
-            {
-                return new AuthResponse { Status = false, Message = "Please verify your email before logging in." };
-            }
+                // Validate input
+                InputValidator.NotNull(loginDto, nameof(loginDto));
+                InputValidator.NotEmpty(loginDto.Username, "Username");
+                InputValidator.NotNull(loginDto.Username, "Username");
+                InputValidator.NotNull(loginDto.Password, "Password");
+                InputValidator.NotEmpty(loginDto.Password, "Password");
+                var deviceId = string.IsNullOrWhiteSpace(loginDto.DeviceToken)
+                                     ? "default"
+                                     : loginDto.DeviceToken;
 
-            // Verify password
-            if (!_securityService.VerifyPassword(loginDto.Password, person.PasswordHash))
-            {
-                return new AuthResponse { Status = false, Message = "Invalid credentials" };
-            }
-
-            
-
-            // Generate tokens
-            var accessToken = _tokenService.GenerateAccessToken(person);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-            //var deviceId = loginDto.DeviceToken ?? "default";
-
-            // Store refresh token in Redis with 7-day expiration
-            var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
-            await _cacheRediservice.RemoveAsync(refreshTokenKey);
-            await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(7));
-
-
-            // Store token -> userId mapping for reverse lookup
-            var tokenUserIdKey = $"refresh_token_user:{refreshToken}:{deviceId}";
-            await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(7));
-
-            return new AuthResponse
-            {
-                Status = true,
-                Message = "Login successful",
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                ExpiresIn = 900,
-                User = new UserDetailDTO
+                var person = await _personRepository.FindByUsernameAsync(loginDto.Username, cancellation);
+             
+                if (person == null)
                 {
-                    Id = person.Id,
-                    Username = person.Username,
-                    Phone = person.Phone,
-                    Email = person.Email,
-                    Address = person.Address,
-                    Name = person.Name,
-
+                    return new AuthResponse { Status = false, Message = "Invalid credentials" };
                 }
-            };
+                if (!person.StatusVerify)
+                {
+                    return new AuthResponse { Status = false, Message = "Please verify your email before logging in." };
+                }
+
+                // Verify password
+                if (!_securityService.VerifyPassword(loginDto.Password, person.PasswordHash))
+                {
+                    return new AuthResponse { Status = false, Message = "Invalid credentials" };
+                }
+                //person.Role = _personRepository.GetRoleNameById(person.RoleId,cancellation);
+                // Generate tokens
+                var accessToken = _tokenService.GenerateAccessToken(person);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+                //var deviceId = loginDto.DeviceToken ?? "default";
+
+                // Store refresh token in Redis with 7-day expiration
+                var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
+                await _cacheRediservice.RemoveAsync(refreshTokenKey);
+                await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(7));
+
+
+                // Store token -> userId mapping for reverse lookup
+                var tokenUserIdKey = $"refresh_token_user:{refreshToken}:{deviceId}";
+                await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(7));
+
+                return new AuthResponse
+                {
+                    Status = true,
+                    Message = "Login successful",
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    ExpiresIn = 900,
+                    User = new UserDetailDTO
+                    {
+                        Id = person.Id,
+                        Username = person.Username,
+                        Phone = person.Phone ?? string.Empty,
+                        Email = person.Email ?? string.Empty,
+                        Address = person.Address ?? string.Empty,
+                        Name = person.Name,
+
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = $"Login failed: {ex.Message}"
+                };
+            }
         }
 
+        /// <summary>
+        /// Xử lý đăng ký tài khoản người dùng mới.
+        /// Tạo tài khoản với thông tin được cung cấp, gửi OTP xác thực email.
+        /// </summary>
+        /// <param name="registerDto">Thông tin đăng ký bao gồm username, email, password, phone, name, address.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="AuthResponse"/> chứa:
+        /// - Status: true nếu đăng ký thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả (yêu cầu kiểm tra email để lấy OTP nếu thành công).
+        /// </returns>
         public async Task<AuthResponse> RegisterAsync(RegisterDTO registerDto, CancellationToken cancellationToken = default)
         {
             await _uow.BeginTransactionAsync(cancellationToken);
@@ -201,6 +248,22 @@ namespace LandingPageApp.Application.Services
             }
         }
 
+        /// <summary>
+        /// Làm mới access token bằng refresh token.
+        /// Kiểm tra tính hợp lệ của refresh token và tạo access token mới.
+        /// </summary>
+        /// <param name="refreshToken">Refresh token hiện tại của người dùng.</param>
+        /// <param name="DeviceToken">Mã định danh thiết bị của người dùng.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="AuthResponse"/> chứa:
+        /// - Status: true nếu làm mới thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// - AccessToken: JWT access token mới (nếu thành công).
+        /// - RefreshToken: Refresh token (giữ nguyên).
+        /// - ExpiresIn: Thời gian hết hạn của access token mới (giây).
+        /// - User: Thông tin chi tiết người dùng (nếu thành công).
+        /// </returns>
         public async Task<AuthResponse> RefreshTokenAsync(string refreshToken,string DeviceToken, CancellationToken cancellationToken = default)
         {
             // Validate input
@@ -267,13 +330,24 @@ namespace LandingPageApp.Application.Services
                     Id = person.Id,
                     Username = person.Username,
                     Email = person.Email ?? string.Empty,
-                    Phone = person.Phone,
-                    Address = person.Address,
+                    Phone = person.Phone ?? string.Empty,
+                    Address = person.Address ?? string.Empty,
                     Name = person.Name
                 }
             };
         }
 
+        /// <summary>
+        /// Xử lý đăng xuất người dùng.
+        /// Thêm refresh token vào blacklist và xóa mapping token-user trong cache.
+        /// </summary>
+        /// <param name="refreshToken">Refresh token cần vô hiệu hóa.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="ApiResponse"/> chứa:
+        /// - Status: true nếu đăng xuất thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// </returns>
         public async Task<ApiResponse> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
             try
@@ -306,6 +380,17 @@ namespace LandingPageApp.Application.Services
             }
         }
 
+        /// <summary>
+        /// Yêu cầu đặt lại mật khẩu.
+        /// Gửi OTP đến email người dùng để xác thực yêu cầu đặt lại mật khẩu.
+        /// </summary>
+        /// <param name="email">Địa chỉ email của tài khoản cần đặt lại mật khẩu.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="ApiResponse"/> chứa:
+        /// - Status: true nếu gửi OTP thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// </returns>
         public async Task<ApiResponse> RequestPasswordResetAsync(string email, CancellationToken cancellationToken = default)
         {
             try
@@ -356,14 +441,33 @@ namespace LandingPageApp.Application.Services
             }
         }
 
-        public async Task<AuthResponse> ResetPasswordAsync(string email, string otp, string newPassword,string deviceId, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Đặt lại mật khẩu người dùng.
+        /// Xác thực OTP và cập nhật mật khẩu mới, đồng thời vô hiệu hóa tất cả refresh token của người dùng.
+        /// </summary>
+        /// <param name="email">Địa chỉ email của tài khoản.</param>
+        /// <param name="otp">Mã OTP xác thực.</param>
+        /// <param name="newPassword">Mật khẩu mới.</param>
+        /// <param name="newPasswordVerify">Xác nhận mật khẩu mới.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="AuthResponse"/> chứa:
+        /// - Status: true nếu đặt lại mật khẩu thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// </returns>
+        public async Task<AuthResponse> ResetPasswordAsync(string email, string otp, string newPassword,string newPasswordVerify, CancellationToken cancellationToken = default)
         {
       
             
             EmailValidator.Validate(email);
             OtpValidator.Validate(otp);
             PasswordValidator.Validate(newPassword);
+            PasswordValidator.Validate(newPasswordVerify);
 
+            if(!newPassword.Equals(newPasswordVerify))
+            {
+                return new AuthResponse { Status = false, Message = "Password and PasswordConfirm don't match" };
+            }    
             // Validate OTP
             var isValidOtp = await _otpService.ValidateOtpAsync(email, otp, "password-reset");
             if (!isValidOtp)
@@ -382,10 +486,11 @@ namespace LandingPageApp.Application.Services
             person.UpdatedAt = DateTime.UtcNow;
             _personRepository.Update(person);
 
+            // Invalidate all refresh tokens for this user (logout from all devices)
             var deviceSetKey = $"user_devices:{person.Id}";
-            var deviceIds = await _cacheRediservice.SetMembersAsync(deviceSetKey); // get all deviceIds
+            var deviceIds = await _cacheRediservice.SetMembersAsync(deviceSetKey);
 
-            foreach (var device in deviceIds)
+            foreach (var deviceId in deviceIds)
             {
                 var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
                 var storedToken = await _cacheRediservice.GetAsync<string>(refreshTokenKey);
@@ -408,6 +513,7 @@ namespace LandingPageApp.Application.Services
             // Remove device list
             await _cacheRediservice.RemoveAsync(deviceSetKey);
 
+            await _uow.SaveChangesAsync(cancellationToken);
             await _otpService.InvalidateOtpAsync(email, "password-reset");
 
             return new AuthResponse
@@ -417,9 +523,21 @@ namespace LandingPageApp.Application.Services
             };
         }
 
+        /// <summary>
+        /// Xác thực địa chỉ email của người dùng.
+        /// Kiểm tra OTP và cập nhật trạng thái xác thực email của tài khoản.
+        /// </summary>
+        /// <param name="email">Địa chỉ email cần xác thực.</param>
+        /// <param name="otp">Mã OTP xác thực.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="AuthResponse"/> chứa:
+        /// - Status: true nếu xác thực email thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// </returns>
         public async Task<AuthResponse> VerifyEmailAsync(string email, string otp, CancellationToken cancellationToken = default)
         {
-            _uow.BeginTransactionAsync(cancellationToken);
+            await  _uow.BeginTransactionAsync(cancellationToken);
             try
             {
                 EmailValidator.Validate(email);
@@ -455,6 +573,86 @@ namespace LandingPageApp.Application.Services
                 return new AuthResponse { Status = false, Message = ex.Message };
             }
         }
+
+        /// <summary>
+        /// Gửi lại OTP xác thực email.
+        /// Tạo OTP mới và gửi đến email của người dùng chưa xác thực.
+        /// </summary>
+        /// <param name="email">Địa chỉ email cần gửi lại OTP.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="ApiResponse"/> chứa:
+        /// - Status: true nếu gửi OTP thành công, false nếu thất bại.
+        /// - Message: Thông báo kết quả.
+        /// </returns>
+        public async Task<ApiResponse> ResendVerificationOtpAsync(string email, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                EmailValidator.Validate(email);
+
+                var person = await _personRepository.Query().FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+                if (person == null)
+                {
+                    return new ApiResponse
+                    {
+                        Status = false,
+                        Message = "Account not found"
+                    };
+                }
+
+                if (person.StatusVerify)
+                {
+                    return new ApiResponse
+                    {
+                        Status = false,
+                        Message = "Email already verified"
+                    };
+                }
+
+                try
+                {
+                    var otp = await _otpService.GenerateOtpAsync(email, "email-verification");
+                    var subject = _emailService.GetEmailSubject("email-verification");
+                    var body = _emailService.GetEmailBody(otp, "email-verification");
+                    await _emailService.SendEmailAsync(email, subject, body);
+                }
+                catch
+                {
+                    return new ApiResponse
+                    {
+                        Status = false,
+                        Message = "Verification OTP could not be sent. Please retry."
+                    };
+                }
+
+                return new ApiResponse
+                {
+                    Status = true,
+                    Message = "Verification OTP sent successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Status = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Lấy thông tin chi tiết của người dùng theo ID.
+        /// </summary>
+        /// <param name="userId">ID của người dùng cần lấy thông tin.</param>
+        /// <param name="cancellationToken">Token để hủy thao tác bất đồng bộ.</param>
+        /// <returns>
+        /// <see cref="UserDetailDTO"/> chứa thông tin chi tiết người dùng bao gồm:
+        /// Id, Username, Email, Phone, Address, Name.
+        /// </returns>
+        /// <exception cref="ArgumentException">Ném ra khi userId không hợp lệ (nhỏ hơn hoặc bằng 0).</exception>
+        /// <exception cref="InvalidOperationException">Ném ra khi không tìm thấy người dùng.</exception>
         public async Task<UserDetailDTO> GetUserDetailsAsync(int userId, CancellationToken cancellationToken = default)
         {
             // Validate input
@@ -472,8 +670,8 @@ namespace LandingPageApp.Application.Services
                 Id = person.Id,
                 Username = person.Username,
                 Email = person.Email ?? string.Empty,
-                Phone = person.Phone,
-                Address = person.Address,
+                Phone = person.Phone ?? string.Empty,
+                Address = person.Address ?? string.Empty,
                 Name = person.Name,
 
             };

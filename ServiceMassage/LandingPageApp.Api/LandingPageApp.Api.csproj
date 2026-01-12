@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>06c631dc-8864-4eb9-b54b-a9dc5fa0f35c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.11.1" />
     <PackageReference Include="StackExchange.Redis" Version="2.10.1" />
@@ -22,10 +27,6 @@
     <Folder Include="Middlewares\" />
     <Folder Include="Logging\" />
     <Folder Include="Auth\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Controllers\AuthControlleradsdad.cs" />
   </ItemGroup>
 
   <ItemGroup>

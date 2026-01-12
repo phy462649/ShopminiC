@@ -85,12 +85,12 @@ export default function HeaderAdmin({
                   className="h-10 w-10 rounded-full object-cover"
                 />
                 <span className="hidden sm:inline text-base">{user.name}</span>
-                <button
+                {/* <button
                   onClick={onSignOut}
                   className="px-5 py-3 text-base rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 >
                   Sign out
-                </button>
+                </button> */}
               </>
             ) : (
               <>

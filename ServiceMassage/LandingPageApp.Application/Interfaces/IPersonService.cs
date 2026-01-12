@@ -1,19 +1,15 @@
 ﻿using LandingPageApp.Application.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LandingPageApp.Application.Interfaces
+namespace LandingPageApp.Application.Interfaces;
+
+public interface IPersonService
 {
-    public interface IPersonService
-    {
-        Task<IEnumerable<object>> GetAllAsync();
-        Task<object> GetByIdAsync(int id);
-        Task<object> CreateAsync(object createDto);
-        Task<object> UpdateAsync(long id, object updateDto);
-        Task<bool> DeleteAsync(long id);
-        Task<PersonSearchResponse> SearchAsync(PersonSearchRequest request);
-    }
+    Task<IEnumerable<PersonDto>> GetAllAsync(CancellationToken ct = default);
+    Task<PersonDto?> GetByIdAsync(long id, CancellationToken ct = default);
+    Task<PersonDetailDto?> GetDetailByIdAsync(long id, CancellationToken ct = default);
+    Task<PersonDto> CreateAsync(CreatePersonDto dto, CancellationToken ct = default);
+    Task<PersonDto> UpdateAsync(long id, UpdatePersonDto dto, CancellationToken ct = default);
+    Task<bool> DeleteAsync(long id, CancellationToken ct = default);
+    Task<PersonSearchResponse> SearchAsync(PersonSearchRequest request, CancellationToken ct = default);
+    Task<IEnumerable<PersonDto>> GetByRoleAsync(long roleId, CancellationToken ct = default);
 }

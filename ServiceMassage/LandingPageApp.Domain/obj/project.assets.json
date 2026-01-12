@@ -14,6 +14,19 @@
             "related": ".xml"
           }
         }
+      },
+      "FluentValidation/12.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -48,11 +61,27 @@
         "lib/netstandard2.1/BCrypt.Net-Next.xml",
         "readme.md"
       ]
+    },
+    "FluentValidation/12.1.1": {
+      "sha512": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw==",
+      "type": "package",
+      "path": "fluentvalidation/12.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.12.1.1.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "BCrypt.Net-Next >= 4.0.3"
+      "BCrypt.Net-Next >= 4.0.3",
+      "FluentValidation >= 12.1.1"
     ]
   },
   "packageFolders": {
@@ -109,6 +138,10 @@
           "BCrypt.Net-Next": {
             "target": "Package",
             "version": "[4.0.3, )"
+          },
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[12.1.1, )"
           }
         },
         "imports": [

@@ -1,48 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { message } from "antd";
 import StaffScheduleForm from "./StaffScheduleForm";
-
-// Mock data
-const initialSchedules = [
-  {
-    id: 1,
-    staff_id: 3,
-    day_of_week: 1,
-    start_time: "09:00:00",
-    end_time: "17:00:00",
-    is_working: 1,
-    staff_name: "Nguyễn Văn A",
-  },
-  {
-    id: 2,
-    staff_id: 3,
-    day_of_week: 2,
-    start_time: "09:00:00",
-    end_time: "17:00:00",
-    is_working: 1,
-    staff_name: "Nguyễn Văn A",
-  },
-  {
-    id: 3,
-    staff_id: 4,
-    day_of_week: 3,
-    start_time: "10:00:00",
-    end_time: "18:00:00",
-    is_working: 0,
-    staff_name: "Trần Thị B",
-  },
-];
-
-const fetchSchedules = async () => initialSchedules;
+import {
+  useStaffSchedules,
+  useCreateStaffSchedule,
+  useUpdateStaffSchedule,
+  useDeleteStaffSchedule
+} from "../../../../../Hooks/useStaffSchedule";
 
 const dayLabels = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
 
 export default function StaffScheduleTable() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["staff_schedule"],
-    queryFn: fetchSchedules,
-  });
+  const { data, isLoading, isError } = useStaffSchedules();
+  const createMutation = useCreateStaffSchedule();
+  const updateMutation = useUpdateStaffSchedule();
+  const deleteMutation = useDeleteStaffSchedule();
 
   const [scheduleList, setScheduleList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -79,9 +51,13 @@ export default function StaffScheduleTable() {
   const handleDelete = () => {
     if (!selectedId) return message.error("Chọn lịch để xoá");
 
-    setScheduleList((prev) => prev.filter((s) => s.id !== selectedId));
-    setSelectedId(null);
-    message.success("Đã xoá lịch!");
+    if (window.confirm("Bạn có chắc chắn muốn xóa lịch này?")) {
+      deleteMutation.mutate(selectedId, {
+        onSuccess: () => {
+          setSelectedId(null);
+        }
+      });
+    }
   };
 
   const handleCloseForm = () => setFormOpen(false);
@@ -89,24 +65,24 @@ export default function StaffScheduleTable() {
   const handleSave = (newSchedule) => {
     if (editingSchedule) {
       // update
-      setScheduleList((prev) =>
-        prev.map((s) =>
-          s.id === editingSchedule.id ? { ...s, ...newSchedule } : s
-        )
-      );
+      updateMutation.mutate({
+        id: editingSchedule.id,
+        data: newSchedule
+      }, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditingSchedule(null);
+        }
+      });
     } else {
       // add new
-      setScheduleList((prev) => [
-        ...prev,
-        {
-          ...newSchedule,
-          id: prev.length ? Math.max(...prev.map((s) => s.id)) + 1 : 1,
-        },
-      ]);
+      createMutation.mutate(newSchedule, {
+        onSuccess: () => {
+          setFormOpen(false);
+          setEditingSchedule(null);
+        }
+      });
     }
-
-    setFormOpen(false);
-    setEditingSchedule(null);
   };
 
   if (isLoading) return <p className="p-4">Đang tải...</p>;
@@ -176,26 +152,33 @@ export default function StaffScheduleTable() {
           </thead>
 
           <tbody>
-            {scheduleList.map((s) => (
-              <tr
-                key={s.id}
-                className={`cursor-pointer hover:bg-gray-50 ${
-                  selectedId === s.id ? "bg-pink-100" : ""
-                }`}
-                onClick={() => setSelectedId(s.id)}
-              >
-                <td className="p-2 border text-center">{s.id}</td>
-                <td className="p-2 border text-center">{s.staff_name}</td>
-                <td className="p-2 border text-center">
-                  {dayLabels[s.day_of_week]}
-                </td>
-                <td className="p-2 border text-center">{s.start_time}</td>
-                <td className="p-2 border text-center">{s.end_time}</td>
-                <td className="p-2 border text-center">
-                  {s.is_working ? "Làm việc" : "Nghỉ"}
+            {(scheduleList && scheduleList.length > 0) ? (
+              scheduleList.map((s) => (
+                <tr
+                  key={s.id}
+                  className={`cursor-pointer hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""
+                    }`}
+                  onClick={() => setSelectedId(s.id)}
+                >
+                  <td className="p-2 border text-center">{s.id}</td>
+                  <td className="p-2 border text-center">{s.staff_name}</td>
+                  <td className="p-2 border text-center">
+                    {dayLabels[s.day_of_week]}
+                  </td>
+                  <td className="p-2 border text-center">{s.start_time}</td>
+                  <td className="p-2 border text-center">{s.end_time}</td>
+                  <td className="p-2 border text-center">
+                    {s.is_working ? "Làm việc" : "Nghỉ"}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="p-4 text-center text-gray-500">
+                  Không có dữ liệu
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
