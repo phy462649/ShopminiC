@@ -5,21 +5,35 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LandingPageApp.Api.Controllers;
 
+/// <summary>
+/// Controller quản lý người dùng trong hệ thống.
+/// Cung cấp các API để thực hiện CRUD và tìm kiếm người dùng.
+/// Yêu cầu quyền ADMIN để truy cập.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = "ADMIN")]
 public class PersonController : ControllerBase
 {
+    /// <summary>
+    /// Service xử lý logic nghiệp vụ người dùng.
+    /// </summary>
     private readonly IPersonService _personService;
 
+    /// <summary>
+    /// Khởi tạo PersonController với dependency injection.
+    /// </summary>
+    /// <param name="personService">Service quản lý người dùng.</param>
     public PersonController(IPersonService personService)
     {
         _personService = personService;
     }
 
     /// <summary>
-    /// Get all persons
+    /// Lấy danh sách tất cả người dùng trong hệ thống.
     /// </summary>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Danh sách người dùng.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<PersonDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetAll(CancellationToken ct)
@@ -29,8 +43,23 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Search and filter persons with advanced options
+    /// Tìm kiếm và lọc người dùng với các tùy chọn nâng cao.
+    /// Hỗ trợ tìm kiếm theo tên, email, số điện thoại, username, vai trò và ngày tạo.
     /// </summary>
+    /// <param name="search">Từ khóa tìm kiếm chung.</param>
+    /// <param name="name">Lọc theo tên.</param>
+    /// <param name="email">Lọc theo email.</param>
+    /// <param name="phone">Lọc theo số điện thoại.</param>
+    /// <param name="username">Lọc theo tên đăng nhập.</param>
+    /// <param name="roleId">Lọc theo ID vai trò.</param>
+    /// <param name="createdFrom">Lọc từ ngày tạo.</param>
+    /// <param name="createdTo">Lọc đến ngày tạo.</param>
+    /// <param name="sortBy">Trường sắp xếp (mặc định: CreatedAt).</param>
+    /// <param name="sortOrder">Thứ tự sắp xếp (asc/desc, mặc định: desc).</param>
+    /// <param name="page">Số trang (mặc định: 1).</param>
+    /// <param name="pageSize">Số bản ghi mỗi trang (mặc định: 10).</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Kết quả tìm kiếm với phân trang.</returns>
     [HttpGet("search")]
     [ProducesResponseType(typeof(PersonSearchResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,8 +99,11 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Get person by ID
+    /// Lấy thông tin người dùng theo ID.
     /// </summary>
+    /// <param name="id">ID của người dùng cần lấy.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin người dùng hoặc 404 nếu không tìm thấy.</returns>
     [HttpGet("{id:long}")]
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,8 +116,12 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Get person detail by ID (includes booking and order counts)
+    /// Lấy thông tin chi tiết người dùng theo ID.
+    /// Bao gồm số lượng booking và đơn hàng của người dùng.
     /// </summary>
+    /// <param name="id">ID của người dùng cần lấy chi tiết.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin chi tiết người dùng hoặc 404 nếu không tìm thấy.</returns>
     [HttpGet("{id:long}/detail")]
     [ProducesResponseType(typeof(PersonDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -98,8 +134,11 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Get persons by role
+    /// Lấy danh sách người dùng theo vai trò.
     /// </summary>
+    /// <param name="roleId">ID của vai trò cần lọc.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Danh sách người dùng có vai trò tương ứng.</returns>
     [HttpGet("role/{roleId:long}")]
     [ProducesResponseType(typeof(IEnumerable<PersonDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PersonDto>>> GetByRole(long roleId, CancellationToken ct)
@@ -109,8 +148,11 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Create a new person
+    /// Tạo mới một người dùng trong hệ thống.
     /// </summary>
+    /// <param name="dto">Thông tin người dùng cần tạo.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin người dùng vừa tạo với HTTP 201.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -121,8 +163,12 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Update an existing person
+    /// Cập nhật thông tin người dùng theo ID.
     /// </summary>
+    /// <param name="id">ID của người dùng cần cập nhật.</param>
+    /// <param name="dto">Thông tin cập nhật.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin người dùng sau khi cập nhật.</returns>
     [HttpPut("{id:long}")]
     [ProducesResponseType(typeof(PersonDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -134,8 +180,11 @@ public class PersonController : ControllerBase
     }
 
     /// <summary>
-    /// Delete a person
+    /// Xóa người dùng theo ID.
     /// </summary>
+    /// <param name="id">ID của người dùng cần xóa.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>HTTP 204 nếu xóa thành công, 404 nếu không tìm thấy.</returns>
     [HttpDelete("{id:long}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
