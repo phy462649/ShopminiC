@@ -12,8 +12,6 @@ public class ProductDto
     public long CategoryId { get; set; }
     public string? CategoryName { get; set; }
     public string? UrlImage { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 }
 
 #endregion

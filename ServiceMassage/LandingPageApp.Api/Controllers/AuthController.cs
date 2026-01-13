@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LandingPageApp.Api.Controllers
 {
+    /// <summary>
+    /// Controller xử lý các chức năng xác thực người dùng.
+    /// Bao gồm: đăng nhập, đăng ký, đăng nhập Google, quên mật khẩu, xác thực email.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -15,11 +19,12 @@ namespace LandingPageApp.Api.Controllers
         {
             _authService = authService;
         }
+
         /// <summary>
-        /// Login with username and password.
+        /// Đăng nhập bằng username và password.
         /// </summary>
-        /// <param name="loginDto">Login credentials</param>
-        /// <returns>AuthResponse with access token, refresh token, and user details</returns>
+        /// <param name="loginDto">Thông tin đăng nhập</param>
+        /// <returns>AuthResponse chứa access token, refresh token và thông tin người dùng</returns>
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -31,10 +36,30 @@ namespace LandingPageApp.Api.Controllers
         }
 
         /// <summary>
-        /// Register a new user account.
+        /// Đăng nhập bằng Google.
+        /// Nếu người dùng chưa có tài khoản, hệ thống sẽ tự động tạo tài khoản mới.
         /// </summary>
-        /// <param name="registerDto">Registration details including username, email, password</param>
-        /// <returns>AuthResponse with user details and success message</returns>
+        /// <param name="googleLoginDto">Thông tin đăng nhập Google bao gồm ID Token</param>
+        /// <returns>AuthResponse chứa access token, refresh token và thông tin người dùng</returns>
+        [HttpPost("google-login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AuthResponse>> GoogleLogin([FromBody] GoogleLoginDto googleLoginDto)
+        {
+            var result = await _authService.GoogleLoginAsync(googleLoginDto);
+            if (!result.Status)
+            {
+                return Unauthorized(result);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Đăng ký tài khoản mới.
+        /// </summary>
+        /// <param name="registerDto">Thông tin đăng ký bao gồm username, email, password</param>
+        /// <returns>AuthResponse với thông báo kết quả</returns>
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,25 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { message, Spin } from "antd";
 
-export default function RoomForm({ initialData, onSave, onClose }) {
-  const [form, setForm] = useState(initialData);
-  const firstInputRef = useRef(null);
+export default function RoomForm({ initialData, onClose, onSave, isLoading }) {
+  const isEditing = !!initialData?.id;
 
-  useEffect(() => {
-    setForm(initialData);
-  }, [initialData]);
-
-  useEffect(() => {
-    if (firstInputRef.current) firstInputRef.current.focus();
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  const [formData, setFormData] = useState(() => ({
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    capacity: initialData?.capacity || 1,
+  }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: name === "capacity" ? Number(value) : value,
     }));
@@ -27,88 +20,81 @@ export default function RoomForm({ initialData, onSave, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.name.trim()) return alert("Tên phòng không được để trống");
-    if (!form.capacity || form.capacity < 1) return alert("Sức chứa phải >= 1");
-    onSave(form);
+    
+    if (!formData.name.trim()) {
+      return message.warning("Please enter room name");
+    }
+    if (!formData.capacity || formData.capacity < 1) {
+      return message.warning("Capacity must be at least 1");
+    }
+
+    onSave(formData);
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="room-form-title"
-    >
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h2 id="room-form-title" className="text-xl font-semibold mb-4">
-          {initialData.id ? "Sửa phòng" : "Thêm phòng"}
-        </h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {isEditing ? "Edit Room" : "Add New Room"}
+          </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium" htmlFor="room-name">
-              Tên phòng
-            </label>
-            <input
-              ref={firstInputRef}
-              id="room-name"
-              name="name"
-              type="text"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              placeholder="Nhập tên phòng..."
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Name *</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter room name"
+              />
+            </div>
 
-          <div>
-            <label className="block mb-1 font-medium" htmlFor="room-desc">
-              Mô tả
-            </label>
-            <textarea
-              id="room-desc"
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              rows="3"
-              placeholder="Mô tả ngắn..."
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter description"
+              />
+            </div>
 
-          <div>
-            <label className="block mb-1 font-medium" htmlFor="room-cap">
-              Sức chứa
-            </label>
-            <input
-              id="room-cap"
-              name="capacity"
-              type="number"
-              min="1"
-              value={form.capacity}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Capacity *</label>
+              <input
+                type="number"
+                name="capacity"
+                min="1"
+                value={formData.capacity}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
 
-          <div className="flex justify-end mt-4 space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded-md"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-pink-600 text-white rounded-md"
-            >
-              Lưu
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50 flex items-center gap-2"
+              >
+                {isLoading && <Spin size="small" />}
+                {isEditing ? "Update" : "Create"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

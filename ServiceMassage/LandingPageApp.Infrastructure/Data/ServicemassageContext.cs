@@ -43,10 +43,6 @@ public partial class ServicemassageContext : DbContext
 
     public virtual DbSet<ViewTopSellingProduct> ViewTopSellingProducts { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=localhost;database=massageservice;user=root;password=root", ServerVersion.Parse("9.0.1-mysql"));
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -279,7 +275,7 @@ public partial class ServicemassageContext : DbContext
             entity.Property(e => e.PaymentType)
                 .HasColumnType("enum('booking','order')")
                 .HasColumnName("payment_type");
-            entity.Property(e => e.PersonalId).HasColumnName("personal_id");
+            entity.Property(e => e.PersonalId).HasColumnName("received_by_person_id");
             entity.Property(e => e.Status)
                 .HasDefaultValueSql("'pending'")
                 .HasColumnType("enum('pending','completed','failed')")
@@ -342,6 +338,9 @@ public partial class ServicemassageContext : DbContext
                  .HasDefaultValue(false);
             entity.Property(e => e.OTP)
                   .HasColumnType("varchar(7)");
+            entity.Property(e => e.GoogleId)
+                  .HasMaxLength(255)
+                  .HasColumnName("google_id");
             entity.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

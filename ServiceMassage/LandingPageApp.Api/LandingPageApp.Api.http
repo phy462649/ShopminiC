@@ -1,69 +1,73 @@
-@LandingPageApp.Api_HostAddress = http://localhost:5092
+@baseUrl = https://localhost:7200/api
+# Hoặc: @baseUrl = http://localhost:5092/api
 
-GET {{LandingPageApp.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### ===== AUTH ENDPOINTS =====
 
-###
-
-# Test Login API
-POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
+### Login
+POST {{baseUrl}}/Auth/login
 Content-Type: application/json
 
 {
-  "username": "john_doe",
-  "password": "phamhoangy84@gmail.com",
-  "deviceToken": "256ce561-f260-4094-9920-d88a06f02243"
+  "username": "your_username",
+  "password": "your_password",
+  "deviceToken": "your-device-token"
 }
 
-###
-
-# Test Login with different credentials
-POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
+### Login Admin (test)
+POST {{baseUrl}}/Auth/login
 Content-Type: application/json
 
 {
   "username": "admin",
-  "password": "Admin123456",
+  "password": "your_admin_password",
   "deviceToken": "test-device-token"
 }
 
-###
-
-# Register test user
-POST {{LandingPageApp.Api_HostAddress}}/api/auth/register
+### Register
+POST {{baseUrl}}/Auth/register
 Content-Type: application/json
 
 {
-  "username": "john_doe",
-  "email": "phamhoangy84@gmail.com",
-  "password": "TestPassword123",
-  "confirmPassword": "TestPassword123",
-  "name": "John Doe",
+  "username": "new_user",
+  "email": "user@example.com",
+  "password": "YourPassword123",
+  "confirmPassword": "YourPassword123",
+  "name": "New User",
   "phone": "0123456789",
-  "address": "Test Address"
+  "address": "123 Street"
 }
 
-###
-
-# Verify email after registration (use OTP from email)
-POST {{LandingPageApp.Api_HostAddress}}/api/auth/verify-email
+### Verify Email
+POST {{baseUrl}}/Auth/verify-email
 Content-Type: application/json
 
 {
-  "email": "phamhoangy84@gmail.com",
-  "otp": "123456"
+  "email": "user@example.com",
+  "code": "123456"
 }
 
-###
+### ===== CATEGORY ENDPOINTS =====
 
-# Login after email verification
-POST {{LandingPageApp.Api_HostAddress}}/api/auth/login
-Content-Type: application/json
+### Get All Categories
+GET {{baseUrl}}/Category
 
-{
-  "username": "john_doe",
-  "password": "TestPassword123",
-  "deviceToken": "256ce561-f260-4094-9920-d88a06f02243"
-}
+### Get Category by ID
+GET {{baseUrl}}/Category/1
 
-###
+### ===== BOOKING ENDPOINTS =====
+# Yêu cầu Authorization header
+
+### Get All Bookings
+GET {{baseUrl}}/Booking
+Authorization: Bearer {{token}}
+
+### ===== PRODUCT ENDPOINTS =====
+
+### Get All Products
+GET {{baseUrl}}/Product
+Authorization: Bearer {{token}}
+
+### ===== NOTES =====
+# 1. Thay {{token}} bằng JWT token sau khi login
+# 2. KHÔNG commit file này với credentials thật
+# 3. Tạo file .http.local cho test cá nhân (đã được gitignore)

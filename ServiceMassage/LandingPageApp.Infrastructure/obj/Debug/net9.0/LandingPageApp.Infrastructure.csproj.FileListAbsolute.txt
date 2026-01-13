@@ -1,3 +1,9 @@
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.AssemblyInfo.cs
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.sourcelink.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Infrastructure.deps.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Infrastructure.runtimeconfig.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Infrastructure.dll
@@ -6,12 +12,6 @@ C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Domain.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Application.pdb
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\bin\Debug\net9.0\LandingPageApp.Domain.pdb
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.csproj.AssemblyReference.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.AssemblyInfoInputs.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.AssemblyInfo.cs
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.sourcelink.json
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingP.37C64FA5.Up2Date
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\LandingPageApp.Infrastructure.dll
 C:\Users\PHY\CV\ShopminiC\ServiceMassage\LandingPageApp.Infrastructure\obj\Debug\net9.0\refint\LandingPageApp.Infrastructure.dll

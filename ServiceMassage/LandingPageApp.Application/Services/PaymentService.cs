@@ -57,7 +57,7 @@ public class PaymentService : IPaymentService
     public async Task<IEnumerable<PaymentDto>> GetAllAsync(CancellationToken ct = default)
     {
         var payments = await _uow.payments.Query()
-            .Include(p => p.Personal)
+            .Include(p => p.PersonalId)
             .Include(p => p.Booking)
             .Include(p => p.Order)
             .AsNoTracking()

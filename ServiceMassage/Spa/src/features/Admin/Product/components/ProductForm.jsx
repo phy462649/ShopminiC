@@ -1,111 +1,156 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { message, Spin } from "antd";
+import { useCategory } from "../../Categories/hooks/useCategory";
 
-export default function ProductForm({ initialData, onSave, onClose }) {
-  const [form, setForm] = useState(initialData);
-  const firstInputRef = useRef(null);
+export default function ProductForm({ initialData, onClose, onSave, isLoading }) {
+  const { data: categories = [] } = useCategory();
+  const isEditing = !!initialData?.id;
 
-  useEffect(() => {
-    if (firstInputRef.current) firstInputRef.current.focus();
-  }, []);
+  const [formData, setFormData] = useState(() => ({
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    price: initialData?.price || 0,
+    stock: initialData?.stock || 0,
+    categoryId: initialData?.categoryId || initialData?.category_id || "",
+    urlImage: initialData?.urlImage || "",
+  }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setForm((prev) => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === "price" || name === "stock" ? Number(value) : value,
+      [name]: name === "price" || name === "stock" || name === "categoryId" 
+        ? Number(value) 
+        : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!formData.name.trim()) {
+      return message.warning("Please enter product name");
+    }
+    if (!formData.price || formData.price <= 0) {
+      return message.warning("Please enter valid price");
+    }
 
-    if (!form.name.trim()) return alert("Tên sản phẩm không được để trống");
-    if (form.price <= 0) return alert("Giá phải lớn hơn 0");
-
-    onSave(form);
+    onSave(formData);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">
-          {initialData.id ? "Sửa sản phẩm" : "Thêm sản phẩm"}
-        </h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {isEditing ? "Edit Product" : "Add New Product"}
+          </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="block mb-1 font-medium">Tên sản phẩm</label>
-            <input
-              ref={firstInputRef}
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              placeholder="Nhập tên..."
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Name *</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter product name"
+              />
+            </div>
 
-          {/* Description */}
-          <div>
-            <label className="block mb-1 font-medium">Mô tả</label>
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              rows="3"
-              placeholder="Mô tả..."
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter description"
+              />
+            </div>
 
-          {/* Price */}
-          <div>
-            <label className="block mb-1 font-medium">Giá (VND)</label>
-            <input
-              type="number"
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              min="0"
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Category</label>
+              <select
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Stock */}
-          <div>
-            <label className="block mb-1 font-medium">Tồn kho</label>
-            <input
-              type="number"
-              name="stock"
-              value={form.stock}
-              onChange={handleChange}
-              className="w-full border rounded-md p-2"
-              min="0"
-            />
-          </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Price *</label>
+                <input
+                  type="number"
+                  name="price"
+                  min="0"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Stock *</label>
+                <input
+                  type="number"
+                  name="stock"
+                  min="0"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+            </div>
 
-          {/* Actions */}
-          <div className="flex justify-end mt-4 space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded-md"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-pink-600 text-white rounded-md"
-            >
-              Lưu
-            </button>
-          </div>
-        </form>
+            <div>
+              <label className="block text-sm font-medium mb-1">Image URL</label>
+              <input
+                type="text"
+                name="urlImage"
+                value={formData.urlImage}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter image URL"
+              />
+              {formData.urlImage && (
+                <img 
+                  src={formData.urlImage} 
+                  alt="Preview" 
+                  className="mt-2 w-24 h-24 object-cover rounded border"
+                />
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50 flex items-center gap-2"
+              >
+                {isLoading && <Spin size="small" />}
+                {isEditing ? "Update" : "Create"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

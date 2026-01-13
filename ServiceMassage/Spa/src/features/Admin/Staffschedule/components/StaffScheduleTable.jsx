@@ -1,181 +1,149 @@
-import { useState, useEffect } from "react";
-import { message } from "antd";
+import { useState } from "react";
+import { message, Tag, Modal } from "antd";
 import StaffScheduleForm from "./StaffScheduleForm";
 import {
-  useStaffSchedules,
+  useStaffSchedule,
   useCreateStaffSchedule,
   useUpdateStaffSchedule,
-  useDeleteStaffSchedule
-} from "../../../../../Hooks/useStaffSchedule";
-
-const dayLabels = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+  useDeleteStaffSchedule,
+} from "../hooks/useStaffschedule";
 
 export default function StaffScheduleTable() {
-  const { data, isLoading, isError } = useStaffSchedules();
+  const { data: schedules = [], isLoading, isError, error } = useStaffSchedule();
   const createMutation = useCreateStaffSchedule();
   const updateMutation = useUpdateStaffSchedule();
   const deleteMutation = useDeleteStaffSchedule();
 
-  const [scheduleList, setScheduleList] = useState([]);
+  // Debug log
+  console.log('StaffSchedule Data:', schedules);
+  console.log('StaffSchedule isLoading:', isLoading);
+  console.log('StaffSchedule isError:', isError);
+  console.log('StaffSchedule error:', error);
+
   const [selectedId, setSelectedId] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingSchedule, setEditingSchedule] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const emptySchedule = {
-    staff_id: "",
-    day_of_week: "",
-    start_time: "",
-    end_time: "",
-    is_working: 1,
-  };
-
-  useEffect(() => {
-    if (data) setScheduleList(data);
-  }, [data]);
+  const filteredSchedules = schedules.filter((s) =>
+    [s.staffName, s.dayOfWeekName]
+      .filter(Boolean)
+      .some((field) => String(field).toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   const handleAdd = () => {
     setEditingSchedule(null);
     setFormOpen(true);
   };
 
-  const handleUpdate = () => {
-    if (!selectedId) return message.warning("Chọn lịch để sửa");
-
-    const schedule = scheduleList.find((s) => s.id === selectedId);
-    if (!schedule) return;
-
-    setEditingSchedule(schedule);
-    setFormOpen(true);
+  const handleEdit = () => {
+    if (!selectedId) return message.warning("Please select a schedule to edit");
+    const schedule = schedules.find((s) => s.id === selectedId);
+    if (schedule) {
+      setEditingSchedule(schedule);
+      setFormOpen(true);
+    }
   };
 
   const handleDelete = () => {
-    if (!selectedId) return message.error("Chọn lịch để xoá");
-
-    if (window.confirm("Bạn có chắc chắn muốn xóa lịch này?")) {
-      deleteMutation.mutate(selectedId, {
-        onSuccess: () => {
-          setSelectedId(null);
-        }
-      });
-    }
+    if (!selectedId) return message.warning("Please select a schedule to delete");
+    Modal.confirm({
+      title: "Confirm Delete",
+      content: "Are you sure you want to delete this schedule?",
+      okText: "Delete",
+      cancelText: "Cancel",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteMutation.mutate(selectedId, {
+          onSuccess: () => setSelectedId(null),
+        });
+      },
+    });
   };
 
-  const handleCloseForm = () => setFormOpen(false);
-
-  const handleSave = (newSchedule) => {
+  const handleSave = (data) => {
     if (editingSchedule) {
-      // update
-      updateMutation.mutate({
-        id: editingSchedule.id,
-        data: newSchedule
-      }, {
-        onSuccess: () => {
-          setFormOpen(false);
-          setEditingSchedule(null);
-        }
-      });
+      updateMutation.mutate(
+        { id: editingSchedule.id, data },
+        { onSuccess: () => setFormOpen(false) }
+      );
     } else {
-      // add new
-      createMutation.mutate(newSchedule, {
-        onSuccess: () => {
-          setFormOpen(false);
-          setEditingSchedule(null);
-        }
+      createMutation.mutate(data, {
+        onSuccess: () => setFormOpen(false),
       });
     }
   };
 
-  if (isLoading) return <p className="p-4">Đang tải...</p>;
-  if (isError) return <p className="p-4 text-red-600">Lỗi tải dữ liệu</p>;
+  if (isLoading) return <div className="p-4 text-center">Loading...</div>;
+  if (isError) return <div className="p-4 text-center text-red-500">Error loading data</div>;
 
   return (
     <div className="p-4">
       {/* Toolbar */}
-      <div className="mb-4 flex items-center">
-        <div className="relative w-64 mr-auto">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="relative min-w-[200px] max-w-xs">
           <input
             type="text"
-            placeholder="Tìm kiếm lịch làm việc..."
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
-          <svg
-            className="w-5 h-5 absolute left-3 top-2.5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z"
-            />
+          <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
           </svg>
         </div>
 
-        <div className="flex mx-8">
-          <button
-            className="px-4 py-2 bg-green-500 text-white rounded-md"
-            onClick={handleAdd}
-          >
-            Thêm
+        <div className="flex gap-4">
+          <button onClick={handleAdd} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            Add
           </button>
-
-          <button
-            className="px-4 py-2 bg-yellow-500 text-white rounded-md mx-4"
-            onClick={handleUpdate}
-          >
-            Sửa
+          <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+            Edit
           </button>
-
-          <button
-            className="px-4 py-2 bg-red-500 text-white rounded-md"
-            onClick={handleDelete}
-          >
-            Xóa
+          <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+            Delete
           </button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300 text-base">
-          <thead className="bg-gray-100">
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-full text-sm">
+          <thead className="bg-pink-50">
             <tr>
-              <th className="p-2 border">ID</th>
-              <th className="p-2 border">Nhân viên</th>
-              <th className="p-2 border">Thứ</th>
-              <th className="p-2 border">Bắt đầu</th>
-              <th className="p-2 border">Kết thúc</th>
-              <th className="p-2 border">Trạng thái</th>
+              <th className="p-3 text-center font-semibold">ID</th>
+              <th className="p-3 text-center font-semibold">Staff</th>
+              <th className="p-3 text-center font-semibold">Day</th>
+              <th className="p-3 text-center font-semibold">Start Time</th>
+              <th className="p-3 text-center font-semibold">End Time</th>
+              <th className="p-3 text-center font-semibold">Status</th>
             </tr>
           </thead>
-
           <tbody>
-            {(scheduleList && scheduleList.length > 0) ? (
-              scheduleList.map((s) => (
+            {filteredSchedules.length > 0 ? (
+              filteredSchedules.map((s) => (
                 <tr
                   key={s.id}
-                  className={`cursor-pointer hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""
-                    }`}
                   onClick={() => setSelectedId(s.id)}
+                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""}`}
                 >
-                  <td className="p-2 border text-center">{s.id}</td>
-                  <td className="p-2 border text-center">{s.staff_name}</td>
-                  <td className="p-2 border text-center">
-                    {dayLabels[s.day_of_week]}
-                  </td>
-                  <td className="p-2 border text-center">{s.start_time}</td>
-                  <td className="p-2 border text-center">{s.end_time}</td>
-                  <td className="p-2 border text-center">
-                    {s.is_working ? "Làm việc" : "Nghỉ"}
+                  <td className="p-3 text-center font-medium">{s.id}</td>
+                  <td className="p-3 text-center">{s.staffName}</td>
+                  <td className="p-3 text-center">{s.dayOfWeekName}</td>
+                  <td className="p-3 text-center">{s.startTime}</td>
+                  <td className="p-3 text-center">{s.endTime}</td>
+                  <td className="p-3 text-center">
+                    <Tag color={s.isWorking ? "green" : "red"}>
+                      {s.isWorking ? "Working" : "Off"}
+                    </Tag>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-500">
-                  Không có dữ liệu
+                  No data available
                 </td>
               </tr>
             )}
@@ -183,12 +151,14 @@ export default function StaffScheduleTable() {
         </table>
       </div>
 
-      {/* Form Add / Edit */}
+      {/* Form Modal */}
       {formOpen && (
         <StaffScheduleForm
-          initialData={editingSchedule || emptySchedule}
-          onClose={handleCloseForm}
+          key={editingSchedule?.id || 'new'}
+          initialData={editingSchedule}
+          onClose={() => setFormOpen(false)}
           onSave={handleSave}
+          isLoading={createMutation.isPending || updateMutation.isPending}
         />
       )}
     </div>

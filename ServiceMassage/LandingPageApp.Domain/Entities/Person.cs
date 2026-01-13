@@ -24,6 +24,11 @@ public partial class Person
 
     public string? OTP { get; set; }
 
+    /// <summary>
+    /// Google User ID (sub claim) - dùng cho đăng nhập bằng Google.
+    /// </summary>
+    public string? GoogleId { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

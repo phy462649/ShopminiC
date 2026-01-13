@@ -17,78 +17,33 @@ public class OrderItemController : ControllerBase
         _orderItemService = orderItemService;
     }
 
-    /// <summary>
-    /// Get all order items
-    /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<OrderItemDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<OrderItemDto>>> GetAll(CancellationToken ct)
-    {
-        var items = await _orderItemService.GetAllAsync(ct);
-        return Ok(items);
-    }
+        => Ok(await _orderItemService.GetAllAsync(ct));
 
-    /// <summary>
-    /// Get order item by ID
-    /// </summary>
     [HttpGet("{id:long}")]
-    [ProducesResponseType(typeof(OrderItemDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderItemDto>> GetById(long id, CancellationToken ct)
     {
         var item = await _orderItemService.GetByIdAsync(id, ct);
-        if (item is null)
-            return NotFound(new { message = $"Không tìm thấy order item với Id: {id}" });
-        return Ok(item);
+        return item is null ? NotFound(new { message = $"Không tìm thấy order item với Id: {id}" }) : Ok(item);
     }
 
-    /// <summary>
-    /// Get order items by order ID
-    /// </summary>
     [HttpGet("order/{orderId:long}")]
-    [ProducesResponseType(typeof(IEnumerable<OrderItemDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<OrderItemDto>>> GetByOrderId(long orderId, CancellationToken ct)
-    {
-        var items = await _orderItemService.GetByOrderIdAsync(orderId, ct);
-        return Ok(items);
-    }
+        => Ok(await _orderItemService.GetByOrderIdAsync(orderId, ct));
 
-    /// <summary>
-    /// Create a new order item
-    /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(OrderItemDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderItemDto>> Create([FromBody] CreateOrderItemDto dto, CancellationToken ct)
     {
         var item = await _orderItemService.CreateAsync(dto, ct);
         return CreatedAtAction(nameof(GetById), new { id = item.Id }, item);
     }
 
-    /// <summary>
-    /// Update an existing order item
-    /// </summary>
     [HttpPut("{id:long}")]
-    [ProducesResponseType(typeof(OrderItemDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderItemDto>> Update(long id, [FromBody] UpdateOrderItemDto dto, CancellationToken ct)
-    {
-        var item = await _orderItemService.UpdateAsync(id, dto, ct);
-        return Ok(item);
-    }
+        => Ok(await _orderItemService.UpdateAsync(id, dto, ct));
 
-    /// <summary>
-    /// Delete an order item
-    /// </summary>
     [HttpDelete("{id:long}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(long id, CancellationToken ct)
-    {
-        var result = await _orderItemService.DeleteAsync(id, ct);
-        if (!result)
-            return NotFound(new { message = $"Không tìm thấy order item với Id: {id}" });
-        return NoContent();
-    }
+        => await _orderItemService.DeleteAsync(id, ct) ? NoContent() : NotFound(new { message = $"Không tìm thấy order item với Id: {id}" });
 }

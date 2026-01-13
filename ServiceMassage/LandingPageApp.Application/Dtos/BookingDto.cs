@@ -17,8 +17,6 @@ public class BookingDto
     public DateTime? EndTime { get; set; }
     public StatusBooking? Status { get; set; }
     public decimal? TotalAmount { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
     public List<BookingServiceItemDto> Services { get; set; } = new();
 }
 

@@ -679,6 +679,164 @@ namespace LandingPageApp.Application.Services
             return userDetailDto;
         }
 
+        /// <summary>
+        /// Đăng nhập bằng Google ID Token.
+        /// Xác thực token với Google, nếu người dùng chưa tồn tại sẽ tự động tạo tài khoản mới.
+        /// </summary>
+        /// <param name="googleLoginDto">Thông tin đăng nhập Google bao gồm ID Token.</param>
+        /// <param name="cancellationToken">Token hủy bỏ thao tác.</param>
+        /// <returns>AuthResponse chứa access token, refresh token và thông tin người dùng.</returns>
+        public async Task<AuthResponse> GoogleLoginAsync(GoogleLoginDto googleLoginDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                // Validate input
+                InputValidator.NotNull(googleLoginDto, nameof(googleLoginDto));
+                InputValidator.NotEmpty(googleLoginDto.IdToken, "IdToken");
+
+                var deviceId = string.IsNullOrWhiteSpace(googleLoginDto.DeviceToken)
+                    ? "default"
+                    : googleLoginDto.DeviceToken;
+
+                // Xác thực Google ID Token
+                var payload = await Google.Apis.Auth.GoogleJsonWebSignature.ValidateAsync(googleLoginDto.IdToken);
+
+                if (payload == null)
+                {
+                    return new AuthResponse { Status = false, Message = "Invalid Google token" };
+                }
+
+                // Lấy thông tin từ payload
+                var googleId = payload.Subject;
+                var email = payload.Email;
+                var name = payload.Name ?? email.Split('@')[0];
+                var emailVerified = payload.EmailVerified;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    return new AuthResponse { Status = false, Message = "Email not found in Google token" };
+                }
+
+                // Tìm người dùng theo email
+                var person = await _personRepository.Query()
+                    .FirstOrDefaultAsync(p => p.Email == email, cancellationToken);
+
+                if (person == null)
+                {
+                    // Tạo tài khoản mới cho người dùng Google
+                    await _uow.BeginTransactionAsync(cancellationToken);
+                    try
+                    {
+                        // Tạo username từ email (loại bỏ phần @domain)
+                        var baseUsername = email.Split('@')[0];
+                        var username = baseUsername;
+                        var counter = 1;
+
+                        // Kiểm tra username đã tồn tại chưa, nếu có thì thêm số
+                        while (await _personRepository.FindByUsernameAsync(username, cancellationToken) != null)
+                        {
+                            username = $"{baseUsername}{counter}";
+                            counter++;
+                        }
+
+                        // Tạo password ngẫu nhiên (người dùng Google không cần dùng)
+                        var randomPassword = Guid.NewGuid().ToString("N")[..16];
+                        var hashedPassword = _securityService.HashPassword(randomPassword);
+
+                        person = new Person
+                        {
+                            Username = username,
+                            PasswordHash = hashedPassword,
+                            Name = name,
+                            Email = email,
+                            Phone = string.Empty,
+                            Address = string.Empty,
+                            GoogleId = googleId,
+                            StatusVerify = emailVerified, // Email từ Google đã được xác thực
+                            RoleId = 2, // Default role ID for regular users
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
+                        };
+
+                        await _personRepository.AddAsync(person, cancellationToken);
+                        await _uow.SaveChangesAsync(cancellationToken);
+                        await _uow.CommitTransactionAsync(cancellationToken);
+                    }
+                    catch
+                    {
+                        await _uow.RollbackTransactionAsync(cancellationToken);
+                        throw;
+                    }
+                }
+                else
+                {
+                    // Cập nhật GoogleId nếu chưa có
+                    if (string.IsNullOrEmpty(person.GoogleId))
+                    {
+                        person.GoogleId = googleId;
+                        person.UpdatedAt = DateTime.UtcNow;
+                        _personRepository.Update(person);
+                        await _uow.SaveChangesAsync(cancellationToken);
+                    }
+
+                    // Nếu email chưa được xác thực, cập nhật trạng thái
+                    if (!person.StatusVerify && emailVerified)
+                    {
+                        person.StatusVerify = true;
+                        person.UpdatedAt = DateTime.UtcNow;
+                        _personRepository.Update(person);
+                        await _uow.SaveChangesAsync(cancellationToken);
+                    }
+                }
+
+                // Tạo tokens
+                var accessToken = _tokenService.GenerateAccessToken(person);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+
+                // Lưu refresh token vào Redis
+                var refreshTokenKey = $"refresh_token:{person.Id}:{deviceId}";
+                await _cacheRediservice.RemoveAsync(refreshTokenKey);
+                await _cacheRediservice.SetAsync(refreshTokenKey, refreshToken, TimeSpan.FromDays(7));
+
+                // Lưu mapping token -> userId
+                var tokenUserIdKey = $"refresh_token_user:{refreshToken}:{deviceId}";
+                await _cacheRediservice.SetAsync(tokenUserIdKey, person.Id.ToString(), TimeSpan.FromDays(7));
+
+                return new AuthResponse
+                {
+                    Status = true,
+                    Message = "Google login successful",
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    ExpiresIn = 900,
+                    User = new UserDetailDTO
+                    {
+                        Id = person.Id,
+                        Username = person.Username,
+                        Phone = person.Phone ?? string.Empty,
+                        Email = person.Email ?? string.Empty,
+                        Address = person.Address ?? string.Empty,
+                        Name = person.Name,
+                    }
+                };
+            }
+            catch (Google.Apis.Auth.InvalidJwtException)
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = "Invalid or expired Google token"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new AuthResponse
+                {
+                    Status = false,
+                    Message = $"Google login failed: {ex.Message}"
+                };
+            }
+        }
 
         //public async Task<ApiResponse> OtpEmailAsync(string email)
         //{

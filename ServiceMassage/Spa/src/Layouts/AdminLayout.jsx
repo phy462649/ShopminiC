@@ -15,17 +15,16 @@ export default function AdminLayout() {
   const activePage = getActivePage();
 
   const sidebarItems = [
-    { id: "logo", label: "", isLogo: true }, // <--- logo ở vị trí đầu
-
+    { id: "logo", label: "", isLogo: true },
     { id: "dashboard", label: "Dashboard" },
     { id: "Personal", label: "Personal" },
     { id: "Booking", label: "Booking" },
     { id: "Category", label: "Category" },
+    { id: "Service", label: "Service" },
+    { id: "Product", label: "Product" },
     { id: "Orders", label: "Orders" },
-    { id: "OrderItem", label: "OrderItem" },
     { id: "Payment", label: "Payment" },
     { id: "Room", label: "Room" },
-    { id: "Staff", label: "Staff" },
     { id: "StaffSchedule", label: "StaffSchedule" },
   ];
 

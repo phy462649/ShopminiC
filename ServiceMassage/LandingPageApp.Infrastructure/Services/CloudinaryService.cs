@@ -1,4 +1,4 @@
-﻿using CloudinaryDotNet;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using LandingPageApp.Application.Interfaces;
 using Microsoft.Extensions.Options;
@@ -41,7 +41,9 @@ public class CloudinaryService : ICloudinaryService
             var result = await _cloudinary.UploadAsync(uploadParams);
 
             if (result.Error != null)
+            {
                 return new CloudinaryUploadResult { Success = false, Error = result.Error.Message };
+            }
 
             return new CloudinaryUploadResult
             {
@@ -71,15 +73,25 @@ public class CloudinaryService : ICloudinaryService
             var result = await _cloudinary.DestroyAsync(deleteParams);
             return result.Result == "ok";
         }
-        catch { return false; }
+        catch
+        {
+            return false;
+        }
     }
 
     public string GetImageUrl(string publicId, int? width = null, int? height = null)
     {
         var transformation = new Transformation();
-        if (width.HasValue) transformation = transformation.Width(width.Value);
-        if (height.HasValue) transformation = transformation.Height(height.Value);
+
+        if (width.HasValue)
+            transformation = transformation.Width(width.Value);
+        if (height.HasValue)
+            transformation = transformation.Height(height.Value);
+
         transformation = transformation.Crop("fill").Quality("auto").FetchFormat("auto");
-        return _cloudinary.Api.UrlImgUp.Transform(transformation).BuildUrl(publicId);
+
+        return _cloudinary.Api.UrlImgUp
+            .Transform(transformation)
+            .BuildUrl(publicId);
     }
 }

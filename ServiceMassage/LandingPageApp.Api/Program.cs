@@ -254,3 +254,6 @@ app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.Health
 });
 
 app.Run();
+
+// Expose Program class for integration tests
+public partial class Program { }

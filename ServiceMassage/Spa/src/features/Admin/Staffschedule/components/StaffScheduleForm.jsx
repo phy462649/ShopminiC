@@ -1,135 +1,147 @@
 import { useState } from "react";
+import { message, Spin } from "antd";
+import { useStaff } from "../../Staff/hooks/useStaff";
 
-export default function StaffScheduleForm({
-  staffOptions = [],
-  onSubmit,
-  submitting = false,
-  error = null,
-}) {
-  const [form, setForm] = useState({
-    staff_id: "",
-    day_of_week: "1",
-    start_time: "",
-    end_time: "",
-    is_working: true,
-  });
+const dayLabels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+export default function StaffScheduleForm({ initialData, onClose, onSave, isLoading }) {
+  const { data: staffList = [] } = useStaff();
+  const isEditing = !!initialData?.id;
+
+  const [formData, setFormData] = useState(() => ({
+    staffId: initialData?.staffId || "",
+    dayOfWeek: initialData?.dayOfWeek ?? 1,
+    startTime: initialData?.startTime || "",
+    endTime: initialData?.endTime || "",
+    isWorking: initialData?.isWorking ?? true,
+  }));
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm((f) => ({
-      ...f,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.staff_id) return alert("Chọn nhân viên");
-    if (!form.start_time || !form.end_time)
-      return alert("Nhập đầy đủ thời gian");
+    
+    if (!formData.staffId) {
+      return message.warning("Please select a staff");
+    }
+    if (!formData.startTime || !formData.endTime) {
+      return message.warning("Please enter start and end time");
+    }
 
-    onSubmit?.(form);
+    onSave({
+      staffId: Number(formData.staffId),
+      dayOfWeek: Number(formData.dayOfWeek),
+      startTime: formData.startTime,
+      endTime: formData.endTime,
+      isWorking: formData.isWorking,
+    });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-4 bg-white rounded-xl shadow"
-    >
-      <h2 className="text-lg font-semibold">Thêm lịch làm việc</h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {isEditing ? "Edit Schedule" : "Add New Schedule"}
+          </h2>
 
-      {error && <p className="text-red-600">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Staff *</label>
+              <select
+                name="staffId"
+                value={formData.staffId}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+              >
+                <option value="">-- Select Staff --</option>
+                {staffList.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      {/* STAFF */}
-      <label className="block">
-        <span className="font-medium">Nhân viên</span>
-        <select
-          name="staff_id"
-          value={form.staff_id}
-          onChange={handleChange}
-          className="mt-1 w-full border rounded p-2"
-          required
-        >
-          <option value="">-- Chọn nhân viên --</option>
-          {staffOptions.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-      </label>
+            <div>
+              <label className="block text-sm font-medium mb-1">Day of Week *</label>
+              <select
+                name="dayOfWeek"
+                value={formData.dayOfWeek}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+              >
+                {dayLabels.map((day, idx) => (
+                  <option key={idx} value={idx}>
+                    {day}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-      {/* DAY */}
-      <label className="block">
-        <span className="font-medium">Ngày trong tuần</span>
-        <select
-          name="day_of_week"
-          value={form.day_of_week}
-          onChange={handleChange}
-          className="mt-1 w-full border rounded p-2"
-        >
-          {[
-            "Chủ nhật",
-            "Thứ 2",
-            "Thứ 3",
-            "Thứ 4",
-            "Thứ 5",
-            "Thứ 6",
-            "Thứ 7",
-          ].map((d, i) => (
-            <option value={i} key={i}>
-              {d}
-            </option>
-          ))}
-        </select>
-      </label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Start Time *</label>
+                <input
+                  type="time"
+                  name="startTime"
+                  value={formData.startTime}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">End Time *</label>
+                <input
+                  type="time"
+                  name="endTime"
+                  value={formData.endTime}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+            </div>
 
-      {/* TIME RANGE */}
-      <div className="grid grid-cols-2 gap-4">
-        <label className="block">
-          <span className="font-medium">Bắt đầu</span>
-          <input
-            type="time"
-            name="start_time"
-            value={form.start_time}
-            onChange={handleChange}
-            className="mt-1 w-full border rounded p-2"
-            required
-          />
-        </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="isWorking"
+                id="isWorking"
+                checked={formData.isWorking}
+                onChange={handleChange}
+                className="w-4 h-4 text-pink-500 focus:ring-pink-500"
+              />
+              <label htmlFor="isWorking" className="text-sm font-medium">
+                Working
+              </label>
+            </div>
 
-        <label className="block">
-          <span className="font-medium">Kết thúc</span>
-          <input
-            type="time"
-            name="end_time"
-            value={form.end_time}
-            onChange={handleChange}
-            className="mt-1 w-full border rounded p-2"
-            required
-          />
-        </label>
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50 flex items-center gap-2"
+              >
+                {isLoading && <Spin size="small" />}
+                {isEditing ? "Update" : "Create"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-
-      {/* IS WORKING */}
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          name="is_working"
-          checked={form.is_working}
-          onChange={handleChange}
-        />
-        <span>Đang làm việc</span>
-      </label>
-
-      {/* BUTTON */}
-      <button
-        type="submit"
-        disabled={submitting}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-      >
-        {submitting ? "Đang lưu..." : "Lưu lịch"}
-      </button>
-    </form>
+    </div>
   );
 }

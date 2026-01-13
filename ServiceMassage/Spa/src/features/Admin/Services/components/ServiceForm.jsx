@@ -1,85 +1,155 @@
-// ServiceForm.jsx
 import { useState } from "react";
+import { message, Spin } from "antd";
+import { useCategory } from "../../Categories/hooks/useCategory";
 
-export default function ServiceForm({ initialData, onSave, onClose }) {
-  const [input, setInput] = useState(initialData);
+export default function ServiceForm({ initialData, onClose, onSave, isLoading }) {
+  const { data: categories = [] } = useCategory();
+  const isEditing = !!initialData?.id;
 
-  const handle = (k, v) => setInput((p) => ({ ...p, [k]: v }));
+  const [formData, setFormData] = useState(() => ({
+    name: initialData?.name || "",
+    description: initialData?.description || "",
+    duration_minutes: initialData?.duration_minutes || initialData?.durationMinutes || 30,
+    price: initialData?.price || 0,
+    categoryId: initialData?.categoryId || initialData?.category_id || "",
+    urlImage: initialData?.urlImage || "",
+  }));
 
-  const handleSubmit = () => {
-    if (!input.name.trim()) return alert("Tên dịch vụ không được trống");
-    if (!input.duration_minutes || input.duration_minutes <= 0)
-      return alert("Thời lượng phải > 0");
-    if (input.price <= 0) return alert("Giá phải > 0");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "duration_minutes" || name === "price" || name === "categoryId" 
+        ? Number(value) 
+        : value,
+    }));
+  };
 
-    onSave(input);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!formData.name.trim()) {
+      return message.warning("Please enter service name");
+    }
+    if (!formData.price || formData.price <= 0) {
+      return message.warning("Please enter valid price");
+    }
+
+    onSave(formData);
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="bg-white w-full max-w-md p-6 rounded-md shadow">
-        <h2 className="text-xl font-semibold mb-4">
-          {initialData?.id ? "Sửa dịch vụ" : "Thêm dịch vụ"}
-        </h2>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            {isEditing ? "Edit Service" : "Add New Service"}
+          </h2>
 
-        <label className="block mb-3">
-          <span className="text-sm font-medium">Tên dịch vụ *</span>
-          <input
-            value={input.name}
-            onChange={(e) => handle("name", e.target.value)}
-            className="w-full mt-1 border rounded px-3 py-2"
-            placeholder="Ví dụ: Gội đầu thư giãn"
-          />
-        </label>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Name *</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter service name"
+              />
+            </div>
 
-        <label className="block mb-3">
-          <span className="text-sm font-medium">Mô tả</span>
-          <textarea
-            value={input.description || ""}
-            onChange={(e) => handle("description", e.target.value)}
-            className="w-full mt-1 border rounded px-3 py-2 min-h-[80px]"
-            placeholder="Mô tả dịch vụ..."
-          />
-        </label>
+            <div>
+              <label className="block text-sm font-medium mb-1">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={3}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter description"
+              />
+            </div>
 
-        <label className="block mb-3">
-          <span className="text-sm font-medium">Thời lượng (phút) *</span>
-          <input
-            type="number"
-            value={input.duration_minutes}
-            onChange={(e) => handle("duration_minutes", Number(e.target.value))}
-            className="w-full mt-1 border rounded px-3 py-2"
-            placeholder="VD: 30"
-            min={1}
-          />
-        </label>
+            <div>
+              <label className="block text-sm font-medium mb-1">Category</label>
+              <select
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <label className="block mb-4">
-          <span className="text-sm font-medium">Giá *</span>
-          <input
-            type="number"
-            value={input.price}
-            onChange={(e) => handle("price", Number(e.target.value))}
-            className="w-full mt-1 border rounded px-3 py-2"
-            placeholder="VD: 150000"
-            min={1}
-          />
-        </label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Duration (minutes) *</label>
+                <input
+                  type="number"
+                  name="duration_minutes"
+                  min="1"
+                  value={formData.duration_minutes}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Price *</label>
+                <input
+                  type="number"
+                  name="price"
+                  min="0"
+                  value={formData.price}
+                  onChange={handleChange}
+                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                />
+              </div>
+            </div>
 
-        <div className="flex justify-end gap-3 pt-2">
-          <button onClick={onClose} className="px-4 py-2 rounded bg-gray-200">
-            Hủy
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 rounded bg-pink-600 text-white"
-          >
-            Lưu
-          </button>
+            <div>
+              <label className="block text-sm font-medium mb-1">Image URL</label>
+              <input
+                type="text"
+                name="urlImage"
+                value={formData.urlImage}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
+                placeholder="Enter image URL"
+              />
+              {formData.urlImage && (
+                <img 
+                  src={formData.urlImage} 
+                  alt="Preview" 
+                  className="mt-2 w-24 h-24 object-cover rounded border"
+                />
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50 flex items-center gap-2"
+              >
+                {isLoading && <Spin size="small" />}
+                {isEditing ? "Update" : "Create"}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

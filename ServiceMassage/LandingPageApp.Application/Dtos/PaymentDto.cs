@@ -17,7 +17,6 @@ public class PaymentDto
     public long PersonalId { get; set; }
     public string? PersonalName { get; set; }
     public string? CreatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 }
 
 #endregion

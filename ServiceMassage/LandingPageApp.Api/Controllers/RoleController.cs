@@ -18,56 +18,28 @@ public class RoleController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<RoleDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll(CancellationToken cancellationToken)
-    {
-        var roles = await _roleService.GetAllAsync(cancellationToken);
-        return Ok(roles);
-    }
+    public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll(CancellationToken ct)
+        => Ok(await _roleService.GetAllAsync(ct));
 
-    [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(RoleDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RoleDto>> GetById(int id, CancellationToken cancellationToken)
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<RoleDto>> GetById(long id, CancellationToken ct)
     {
-        var role = await _roleService.GetByIdAsync(id, cancellationToken);
-        
-        if (role is null)
-            return NotFound(new { message = $"Role với Id {id} không tồn tại" });
-        
-        return Ok(role);
+        var role = await _roleService.GetByIdAsync(id, ct);
+        return role is null ? NotFound(new { message = $"Role với Id {id} không tồn tại" }) : Ok(role);
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(RoleDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RoleDto>> Create([FromBody] CreateRoleDto dto, CancellationToken cancellationToken)
+    public async Task<ActionResult<RoleDto>> Create([FromBody] CreateRoleDto dto, CancellationToken ct)
     {
-        var result = await _roleService.CreateAsync(dto, cancellationToken);
+        var result = await _roleService.CreateAsync(dto, ct);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
-    [HttpPut("{id}")]
-    [ProducesResponseType(typeof(RoleDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RoleDto>> Update(int id, [FromBody] UpdateRoleDto dto, CancellationToken cancellationToken)
-    {
-        var result = await _roleService.UpdateAsync(id, dto, cancellationToken);
-        return Ok(result);
-    }
+    [HttpPut("{id:long}")]
+    public async Task<ActionResult<RoleDto>> Update(long id, [FromBody] UpdateRoleDto dto, CancellationToken ct)
+        => Ok(await _roleService.UpdateAsync(id, dto, ct));
 
-    [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
-    {
-        var deleted = await _roleService.DeleteAsync(id, cancellationToken);
-        
-        if (!deleted)
-            return NotFound(new { message = $"Role với Id {id} không tồn tại" });
-        
-        return NoContent();
-    }
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> Delete(long id, CancellationToken ct)
+        => await _roleService.DeleteAsync(id, ct) ? NoContent() : NotFound(new { message = $"Role với Id {id} không tồn tại" });
 }

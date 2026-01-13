@@ -1,0 +1,90 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Rider
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+TestResult.xml
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# Code Coverage
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage/
+
+# Sensitive files - QUAN TRỌNG
+**/secrets.json
+**/appsettings.*.local.json
+**/*.local.json
+.env.local
+.env.*.local
+
+# User secrets (đã được bảo vệ bởi .NET)
+# Lưu tại: %APPDATA%\Microsoft\UserSecrets\
+
+# HTTP test files với credentials thật
+*.http.local
+
+# Logs
+*.log
+redis_log.txt
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Node modules (Frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build
+Spa/dist/
+Spa/build/
+
+# Docker
+.docker/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/

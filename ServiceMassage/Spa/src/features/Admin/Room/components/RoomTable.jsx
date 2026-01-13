@@ -1,222 +1,152 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
-import { message } from "antd";
+import { useState } from "react";
+import { message, Modal } from "antd";
 import RoomForm from "./RoomForm";
-
-const initialRooms = [
-  {
-    id: 1,
-    name: "Phòng VIP 1",
-    description: "Phòng rộng, có sofa",
-    capacity: 4,
-    created_at: "2024-01-01T10:00:00",
-    updated_at: "2024-01-01T10:00:00",
-  },
-  {
-    id: 2,
-    name: "Phòng Gội Đầu",
-    description: "Ghế gội đầu cao cấp",
-    capacity: 2,
-    created_at: "2024-01-05T12:00:00",
-    updated_at: "2024-01-05T12:00:00",
-  },
-];
-
-const fetchRooms = async () => {
-  // giả lập fetch (same UX as ProductTable)
-  return new Promise((res) => setTimeout(() => res(initialRooms), 200));
-};
+import {
+  useRoom,
+  useCreateRoom,
+  useUpdateRoom,
+  useDeleteRoom,
+} from "../hooks/useRoom";
 
 export default function RoomTable() {
-  const {
-    data = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["rooms"],
-    queryFn: fetchRooms,
-  });
+  const { data: rooms = [], isLoading, isError } = useRoom();
+  const createMutation = useCreateRoom();
+  const updateMutation = useUpdateRoom();
+  const deleteMutation = useDeleteRoom();
 
-  const [list, setList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
-  const [q, setQ] = useState("");
   const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState(null);
+  const [editingRoom, setEditingRoom] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => setList(data), [data]);
+  const filteredRooms = rooms.filter((r) =>
+    [r.name, r.description]
+      .filter(Boolean)
+      .some((field) => field.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
-  const filtered = q
-    ? list.filter((r) => r.name.toLowerCase().includes(q.toLowerCase()))
-    : list;
+  const handleAdd = () => {
+    setEditingRoom(null);
+    setFormOpen(true);
+  };
 
-  const handleSave = (input) => {
-    if (editing) {
-      setList((prev) =>
-        prev.map((r) =>
-          r.id === editing.id
-            ? { ...r, ...input, updated_at: new Date().toISOString() }
-            : r
-        )
-      );
-    } else {
-      setList((prev) => [
-        ...prev,
-        {
-          ...input,
-          id: prev.length ? Math.max(...prev.map((r) => r.id)) + 1 : 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-      ]);
+  const handleEdit = () => {
+    if (!selectedId) return message.warning("Please select a room to edit");
+    const room = rooms.find((r) => r.id === selectedId);
+    if (room) {
+      setEditingRoom(room);
+      setFormOpen(true);
     }
-    setEditing(null);
-    setFormOpen(false);
   };
 
   const handleDelete = () => {
-    if (!selectedId) return message.error("Chọn phòng để xoá");
-    setList((prev) => prev.filter((r) => r.id !== selectedId));
-    setSelectedId(null);
-    message.success("Đã xoá phòng!");
+    if (!selectedId) return message.warning("Please select a room to delete");
+    Modal.confirm({
+      title: "Confirm Delete",
+      content: "Are you sure you want to delete this room?",
+      okText: "Delete",
+      cancelText: "Cancel",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        deleteMutation.mutate(selectedId, {
+          onSuccess: () => setSelectedId(null),
+        });
+      },
+    });
   };
 
-  if (isLoading) return <p className="p-4">Đang tải...</p>;
-  if (isError) return <p className="p-4 text-red-600">Lỗi tải dữ liệu</p>;
+  const handleSave = (data) => {
+    if (editingRoom) {
+      updateMutation.mutate(
+        { id: editingRoom.id, data },
+        { onSuccess: () => setFormOpen(false) }
+      );
+    } else {
+      createMutation.mutate(data, {
+        onSuccess: () => setFormOpen(false),
+      });
+    }
+  };
+
+  if (isLoading) return <div className="p-4 text-center">Loading...</div>;
+  if (isError) return <div className="p-4 text-center text-red-500">Error loading data</div>;
 
   return (
     <div className="p-4">
       {/* Toolbar */}
-      <div className="mb-4 flex items-center">
-        <div className="relative w-64 mr-auto">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="relative min-w-[200px] max-w-xs">
           <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Tìm phòng..."
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-            aria-label="Tìm phòng"
           />
-          <svg
-            className="w-5 h-5 absolute left-3 top-2.5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z"
-            />
+          <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
           </svg>
         </div>
 
-        <div className="flex mx-8 space-x-3">
-          <button
-            onClick={() => {
-              setEditing(null);
-              setFormOpen(true);
-            }}
-            className="px-4 py-2 bg-green-600 text-white rounded-md"
-            aria-label="Thêm phòng"
-          >
-            Thêm
+        <div className="flex gap-4">
+          <button onClick={handleAdd} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+            Add
           </button>
-
-          <button
-            onClick={() => {
-              const item = list.find((r) => r.id === selectedId);
-              if (!item) return message.warning("Chọn phòng để sửa");
-              setEditing(item);
-              setFormOpen(true);
-            }}
-            className="px-4 py-2 bg-yellow-500 text-white rounded-md"
-            disabled={!selectedId}
-            aria-disabled={!selectedId}
-            aria-label="Sửa phòng"
-          >
-            Sửa
+          <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+            Edit
           </button>
-
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded-md"
-            disabled={!selectedId}
-            aria-disabled={!selectedId}
-            aria-label="Xóa phòng"
-          >
-            Xóa
+          <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+            Delete
           </button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border text-base">
-          <thead className="bg-gray-100">
+      <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <table className="min-w-full text-sm">
+          <thead className="bg-pink-50">
             <tr>
-              <th scope="col" className="p-2 border">
-                ID
-              </th>
-              <th scope="col" className="p-2 border">
-                Tên
-              </th>
-              <th scope="col" className="p-2 border">
-                Mô tả
-              </th>
-              <th scope="col" className="p-2 border">
-                Sức chứa
-              </th>
-              <th scope="col" className="p-2 border">
-                Ngày tạo
-              </th>
-              <th scope="col" className="p-2 border">
-                Cập nhật
-              </th>
+              <th className="p-3 text-center font-semibold">ID</th>
+              <th className="p-3 text-center font-semibold">Name</th>
+              <th className="p-3 text-center font-semibold">Description</th>
+              <th className="p-3 text-center font-semibold">Capacity</th>
+       
             </tr>
           </thead>
-
           <tbody>
-            {filtered.map((r) => (
-              <tr
-                key={r.id}
-                onClick={() => setSelectedId(r.id)}
-                className={`cursor-pointer hover:bg-gray-50 ${
-                  selectedId === r.id ? "bg-pink-100" : ""
-                }`}
-                role="row"
-              >
-                <td className="p-2 border text-center">{r.id}</td>
-                <td className="p-2 border">{r.name}</td>
-                <td className="p-2 border">{r.description || "-"}</td>
-                <td className="p-2 border text-center">{r.capacity}</td>
-                <td className="p-2 border text-center">
-                  {new Date(r.created_at).toLocaleDateString("vi-VN")}
-                </td>
-                <td className="p-2 border text-center">
-                  {new Date(r.updated_at).toLocaleDateString("vi-VN")}
+            {filteredRooms.length > 0 ? (
+              filteredRooms.map((r) => (
+                <tr
+                  key={r.id}
+                  onClick={() => setSelectedId(r.id)}
+                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === r.id ? "bg-pink-100" : ""}`}
+                >
+                  <td className="p-3 text-center font-medium">{r.id}</td>
+                  <td className="p-3 text-center">{r.name}</td>
+                  <td className="p-3 text-center">{r.description || "-"}</td>
+                  <td className="p-3 text-center">{r.capacity}</td>
+                  
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="p-4 text-center text-gray-500">
+                  No data available
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Form */}
+      {/* Form Modal */}
       {formOpen && (
         <RoomForm
-          initialData={
-            editing || {
-              name: "",
-              description: "",
-              capacity: 1,
-            }
-          }
+          key={editingRoom?.id || 'new'}
+          initialData={editingRoom}
+          onClose={() => setFormOpen(false)}
           onSave={handleSave}
-          onClose={() => {
-            setFormOpen(false);
-            setEditing(null);
-          }}
+          isLoading={createMutation.isPending || updateMutation.isPending}
         />
       )}
     </div>

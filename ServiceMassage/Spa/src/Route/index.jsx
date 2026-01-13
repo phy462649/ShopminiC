@@ -30,17 +30,15 @@ const Unauthorized = lazy(() => import("../Component/pages/Unauthorized"));
 
 // Admin Components - Lazy loaded
 const PersonalTable = lazy(() => import("../features/Admin/Personal/components/PersonalTable"));
-const BookingTable = lazy(() => import("../features/Admin/Bookings/components/BookingTable"));
+const BookingPage = lazy(() => import("../features/Admin/Bookings/pages/BookingPage"));
 const CategoryTable = lazy(() => import("../features/Admin/Categories/components/CategoryTable"));
-const OrdersTable = lazy(() => import("../features/Admin/Orders/components/OrdersTable"));
-const OrderItemTable = lazy(() => import("../features/Admin/OrderItem/components/OrderItemTable"));
+const OrderPage = lazy(() => import("../features/Admin/Orders/pages/OrderPage"));
 const PaymentTable = lazy(() => import("../features/Admin/Payment/components/PaymentTable"));
 const ProductTable = lazy(() => import("../features/Admin/Product/components/ProductTable"));
 const RoomTable = lazy(() => import("../features/Admin/Room/components/RoomTable"));
 const RoleTable = lazy(() => import("../features/Admin/Role/components/RoleTable"));
 const ServiceTable = lazy(() => import("../features/Admin/Services/components/ServiceTable"));
-const StaffTable = lazy(() => import("../features/Admin/Staff/components/StaffTable"));
-const StaffScheduleTable = lazy(() => import("../features/Admin/Staffschedule/components/StaffScheduleTable"));
+const StaffScheduleTable = lazy(() => import("../features/Admin/Staffschedule/components/StaffscheduleTable"));
 
 // Loading Component
 function Loading() {
@@ -120,16 +118,14 @@ const router = createBrowserRouter([
       { index: true, element: <Suspense fallback={<Loading />}><Dashboard /></Suspense> },
       { path: "dashboard", element: <Suspense fallback={<Loading />}><Dashboard /></Suspense> },
       { path: "Personal", element: <Suspense fallback={<Loading />}><PersonalTable /></Suspense> },
-      { path: "Booking", element: <Suspense fallback={<Loading />}><BookingTable /></Suspense> },
+      { path: "Booking", element: <Suspense fallback={<Loading />}><BookingPage /></Suspense> },
       { path: "Category", element: <Suspense fallback={<Loading />}><CategoryTable /></Suspense> },
-      { path: "Orders", element: <Suspense fallback={<Loading />}><OrdersTable /></Suspense> },
-      { path: "OrderItem", element: <Suspense fallback={<Loading />}><OrderItemTable /></Suspense> },
+      { path: "Orders", element: <Suspense fallback={<Loading />}><OrderPage /></Suspense> },
       { path: "Payment", element: <Suspense fallback={<Loading />}><PaymentTable /></Suspense> },
       { path: "Product", element: <Suspense fallback={<Loading />}><ProductTable /></Suspense> },
       { path: "Room", element: <Suspense fallback={<Loading />}><RoomTable /></Suspense> },
       { path: "Role", element: <Suspense fallback={<Loading />}><RoleTable /></Suspense> },
       { path: "Service", element: <Suspense fallback={<Loading />}><ServiceTable /></Suspense> },
-      { path: "Staff", element: <Suspense fallback={<Loading />}><StaffTable /></Suspense> },
       { path: "StaffSchedule", element: <Suspense fallback={<Loading />}><StaffScheduleTable /></Suspense> },
     ],
   },

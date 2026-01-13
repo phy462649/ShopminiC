@@ -15,8 +15,6 @@ public class StaffScheduleDto
     public TimeOnly EndTime { get; set; }
     public ShiftName? ShiftName { get; set; }
     public bool? IsWorking { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 
     private static string GetDayName(sbyte day) => day switch
     {

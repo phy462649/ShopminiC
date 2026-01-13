@@ -17,92 +17,37 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
-    /// <summary>
-    /// Get all products
-    /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll(CancellationToken ct)
-    {
-        var products = await _productService.GetAllAsync(ct);
-        return Ok(products);
-    }
+        => Ok(await _productService.GetAllAsync(ct));
 
-    /// <summary>
-    /// Get product by ID
-    /// </summary>
     [HttpGet("{id:long}")]
-    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductDto>> GetById(long id, CancellationToken ct)
     {
         var product = await _productService.GetByIdAsync(id, ct);
-        if (product is null)
-            return NotFound(new { message = $"Không tìm thấy sản phẩm với Id: {id}" });
-        return Ok(product);
+        return product is null ? NotFound(new { message = $"Không tìm thấy sản phẩm với Id: {id}" }) : Ok(product);
     }
 
-    /// <summary>
-    /// Get products by category
-    /// </summary>
     [HttpGet("category/{categoryId:long}")]
-    [ProducesResponseType(typeof(IEnumerable<ProductDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetByCategory(long categoryId, CancellationToken ct)
-    {
-        var products = await _productService.GetByCategoryAsync(categoryId, ct);
-        return Ok(products);
-    }
+        => Ok(await _productService.GetByCategoryAsync(categoryId, ct));
 
-    /// <summary>
-    /// Create a new product
-    /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductDto>> Create([FromBody] CreateProductDto dto, CancellationToken ct)
     {
         var product = await _productService.CreateAsync(dto, ct);
         return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
 
-    /// <summary>
-    /// Update an existing product
-    /// </summary>
     [HttpPut("{id:long}")]
-    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductDto>> Update(long id, [FromBody] UpdateProductDto dto, CancellationToken ct)
-    {
-        var product = await _productService.UpdateAsync(id, dto, ct);
-        return Ok(product);
-    }
+        => Ok(await _productService.UpdateAsync(id, dto, ct));
 
-    /// <summary>
-    /// Update product stock
-    /// </summary>
     [HttpPatch("{id:long}/stock")]
-    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ProductDto>> UpdateStock(long id, [FromBody] UpdateProductStockDto dto, CancellationToken ct)
-    {
-        var product = await _productService.UpdateStockAsync(id, dto.Quantity, ct);
-        return Ok(product);
-    }
+        => Ok(await _productService.UpdateStockAsync(id, dto.Quantity, ct));
 
-    /// <summary>
-    /// Delete a product
-    /// </summary>
     [HttpDelete("{id:long}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(long id, CancellationToken ct)
-    {
-        var result = await _productService.DeleteAsync(id, ct);
-        if (!result)
-            return NotFound(new { message = $"Không tìm thấy sản phẩm với Id: {id}" });
-        return NoContent();
-    }
+        => await _productService.DeleteAsync(id, ct) ? NoContent() : NotFound(new { message = $"Không tìm thấy sản phẩm với Id: {id}" });
 }

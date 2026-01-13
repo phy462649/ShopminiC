@@ -9,12 +9,33 @@ using Microsoft.Extensions.Logging;
 
 namespace LandingPageApp.Application.Services;
 
+/// <summary>
+/// Service xử lý logic nghiệp vụ cho lịch làm việc của nhân viên.
+/// Quản lý việc tạo, cập nhật, xóa lịch làm việc theo ngày và theo tuần.
+/// </summary>
 public class StaffScheduleService : IStaffScheduleService
 {
+    /// <summary>
+    /// Unit of Work để quản lý transaction và repositories.
+    /// </summary>
     private readonly IUnitOfWork _uow;
+
+    /// <summary>
+    /// AutoMapper để chuyển đổi giữa Entity và DTO.
+    /// </summary>
     private readonly IMapper _mapper;
+
+    /// <summary>
+    /// Logger để ghi log hoạt động.
+    /// </summary>
     private readonly ILogger<StaffScheduleService> _logger;
 
+    /// <summary>
+    /// Khởi tạo StaffScheduleService với dependency injection.
+    /// </summary>
+    /// <param name="uow">Unit of Work.</param>
+    /// <param name="mapper">AutoMapper instance.</param>
+    /// <param name="logger">Logger instance.</param>
     public StaffScheduleService(
         IUnitOfWork uow,
         IMapper mapper,
@@ -25,6 +46,12 @@ public class StaffScheduleService : IStaffScheduleService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Lấy danh sách tất cả lịch làm việc.
+    /// Bao gồm thông tin nhân viên.
+    /// </summary>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Danh sách lịch làm việc.</returns>
     public async Task<IEnumerable<StaffScheduleDto>> GetAllAsync(CancellationToken ct = default)
     {
         var schedules = await _uow.staffSchedules.Query()
@@ -35,6 +62,12 @@ public class StaffScheduleService : IStaffScheduleService
         return _mapper.Map<IEnumerable<StaffScheduleDto>>(schedules);
     }
 
+    /// <summary>
+    /// Lấy thông tin lịch làm việc theo ID.
+    /// </summary>
+    /// <param name="id">ID của lịch làm việc.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin lịch làm việc hoặc null nếu không tìm thấy.</returns>
     public async Task<StaffScheduleDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
         var schedule = await _uow.staffSchedules.Query()
@@ -44,6 +77,13 @@ public class StaffScheduleService : IStaffScheduleService
         return schedule is null ? null : _mapper.Map<StaffScheduleDto>(schedule);
     }
 
+    /// <summary>
+    /// Lấy danh sách lịch làm việc theo ID nhân viên.
+    /// Sắp xếp theo ngày trong tuần và thời gian bắt đầu.
+    /// </summary>
+    /// <param name="staffId">ID của nhân viên.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Danh sách lịch làm việc của nhân viên.</returns>
     public async Task<IEnumerable<StaffScheduleDto>> GetByStaffIdAsync(long staffId, CancellationToken ct = default)
     {
         var schedules = await _uow.staffSchedules.Query()
@@ -57,6 +97,13 @@ public class StaffScheduleService : IStaffScheduleService
         return _mapper.Map<IEnumerable<StaffScheduleDto>>(schedules);
     }
 
+    /// <summary>
+    /// Lấy lịch làm việc theo tuần của nhân viên.
+    /// Trả về lịch làm việc được nhóm theo các ngày trong tuần.
+    /// </summary>
+    /// <param name="staffId">ID của nhân viên.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Lịch làm việc theo tuần.</returns>
     public async Task<StaffWeeklyScheduleDto> GetWeeklyScheduleAsync(long staffId, CancellationToken ct = default)
     {
         var schedules = await _uow.staffSchedules.Query()
@@ -77,21 +124,29 @@ public class StaffScheduleService : IStaffScheduleService
         };
     }
 
+    /// <summary>
+    /// Tạo lịch làm việc mới.
+    /// Kiểm tra ngày trong tuần hợp lệ (0-6) và không trùng lịch.
+    /// </summary>
+    /// <param name="dto">Thông tin lịch làm việc cần tạo.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin lịch làm việc vừa tạo.</returns>
+    /// <exception cref="BusinessException">Khi dữ liệu không hợp lệ hoặc lịch bị trùng.</exception>
     public async Task<StaffScheduleDto> CreateAsync(CreateStaffScheduleDto dto, CancellationToken ct = default)
     {
-        // Validate day of week
+        // Kiểm tra ngày trong tuần hợp lệ (0 = Chủ nhật, 6 = Thứ bảy)
         if (dto.DayOfWeek < 0 || dto.DayOfWeek > 6)
         {
             throw new BusinessException("DayOfWeek phải từ 0 (Chủ nhật) đến 6 (Thứ bảy).");
         }
 
-        // Validate time range
+        // Kiểm tra thời gian hợp lệ
         if (dto.StartTime >= dto.EndTime)
         {
             throw new BusinessException("Thời gian bắt đầu phải trước thời gian kết thúc.");
         }
 
-        // Check for overlapping schedule
+        // Kiểm tra lịch trùng
         var hasOverlap = await _uow.staffSchedules.Query()
             .Where(s => s.StaffId == dto.StaffId)
             .Where(s => s.DayOfWeek == dto.DayOfWeek)
@@ -114,6 +169,14 @@ public class StaffScheduleService : IStaffScheduleService
         return await GetByIdAsync(schedule.Id, ct) ?? throw new BusinessException("Lỗi khi tạo lịch làm việc.");
     }
 
+    /// <summary>
+    /// Tạo nhiều lịch làm việc cùng lúc cho một nhân viên.
+    /// Dùng để thiết lập lịch làm việc cho cả tuần.
+    /// </summary>
+    /// <param name="dto">Thông tin các lịch làm việc cần tạo.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Danh sách lịch làm việc vừa tạo.</returns>
+    /// <exception cref="BusinessException">Khi danh sách rỗng hoặc có lịch bị trùng.</exception>
     public async Task<IEnumerable<StaffScheduleDto>> CreateBulkAsync(CreateBulkStaffScheduleDto dto, CancellationToken ct = default)
     {
         if (!dto.Schedules.Any())
@@ -121,7 +184,7 @@ public class StaffScheduleService : IStaffScheduleService
             throw new BusinessException("Danh sách lịch làm việc không được rỗng.");
         }
 
-        // Validate all schedules
+        // Kiểm tra tất cả lịch hợp lệ
         foreach (var item in dto.Schedules)
         {
             if (item.DayOfWeek < 0 || item.DayOfWeek > 6)
@@ -143,7 +206,7 @@ public class StaffScheduleService : IStaffScheduleService
 
             foreach (var item in dto.Schedules)
             {
-                // Check for overlapping schedule
+                // Kiểm tra lịch trùng
                 var hasOverlap = await _uow.staffSchedules.Query()
                     .Where(s => s.StaffId == dto.StaffId)
                     .Where(s => s.DayOfWeek == item.DayOfWeek)
@@ -185,24 +248,34 @@ public class StaffScheduleService : IStaffScheduleService
         }
     }
 
+    /// <summary>
+    /// Cập nhật thông tin lịch làm việc.
+    /// Kiểm tra không trùng lịch (loại trừ lịch hiện tại).
+    /// </summary>
+    /// <param name="id">ID của lịch làm việc cần cập nhật.</param>
+    /// <param name="dto">Thông tin cập nhật.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Thông tin lịch làm việc sau khi cập nhật.</returns>
+    /// <exception cref="NotFoundException">Khi không tìm thấy lịch làm việc.</exception>
+    /// <exception cref="BusinessException">Khi dữ liệu không hợp lệ hoặc lịch bị trùng.</exception>
     public async Task<StaffScheduleDto> UpdateAsync(long id, UpdateStaffScheduleDto dto, CancellationToken ct = default)
     {
         var schedule = await _uow.staffSchedules.GetByIdAsync(id, ct)
             ?? throw new NotFoundException($"Không tìm thấy StaffSchedule với Id: {id}");
 
-        // Validate day of week
+        // Kiểm tra ngày trong tuần hợp lệ
         if (dto.DayOfWeek < 0 || dto.DayOfWeek > 6)
         {
             throw new BusinessException("DayOfWeek phải từ 0 (Chủ nhật) đến 6 (Thứ bảy).");
         }
 
-        // Validate time range
+        // Kiểm tra thời gian hợp lệ
         if (dto.StartTime >= dto.EndTime)
         {
             throw new BusinessException("Thời gian bắt đầu phải trước thời gian kết thúc.");
         }
 
-        // Check for overlapping schedule (exclude current)
+        // Kiểm tra lịch trùng (loại trừ lịch hiện tại)
         var hasOverlap = await _uow.staffSchedules.Query()
             .Where(s => s.StaffId == schedule.StaffId)
             .Where(s => s.Id != id)
@@ -226,6 +299,12 @@ public class StaffScheduleService : IStaffScheduleService
         return await GetByIdAsync(schedule.Id, ct) ?? throw new BusinessException("Lỗi khi cập nhật lịch làm việc.");
     }
 
+    /// <summary>
+    /// Xóa lịch làm việc theo ID.
+    /// </summary>
+    /// <param name="id">ID của lịch làm việc cần xóa.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>True nếu xóa thành công, false nếu không tìm thấy.</returns>
     public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
     {
         var schedule = await _uow.staffSchedules.GetByIdAsync(id, ct);
@@ -241,6 +320,12 @@ public class StaffScheduleService : IStaffScheduleService
         return true;
     }
 
+    /// <summary>
+    /// Xóa tất cả lịch làm việc của một nhân viên.
+    /// </summary>
+    /// <param name="staffId">ID của nhân viên.</param>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>True nếu xóa thành công, false nếu không tìm thấy lịch nào.</returns>
     public async Task<bool> DeleteByStaffIdAsync(long staffId, CancellationToken ct = default)
     {
         var schedules = await _uow.staffSchedules.Query()

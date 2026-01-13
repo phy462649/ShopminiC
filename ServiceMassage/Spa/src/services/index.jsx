@@ -10,4 +10,3 @@ export { default as paymentService } from './paymentService';
 export { default as roomService } from './roomService';
 export { default as serviceService } from './serviceService';
 export { default as personService } from './personService';
-export { default as staffScheduleService } from './staffScheduleService';

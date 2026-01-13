@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandingPageApp.Domain", "La
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandingPageApp.Infrastructure", "LandingPageApp.Infrastructure\LandingPageApp.Infrastructure.csproj", "{C7CEFD53-1A3B-4EF4-B399-24A424E3F834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandingPageApp.Tests", "LandingPageApp.Tests\LandingPageApp.Tests.csproj", "{1E699FFD-56E4-424B-A231-37EA9C85794C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,18 +69,6 @@ Global
 		{C7CEFD53-1A3B-4EF4-B399-24A424E3F834}.Release|x64.Build.0 = Release|Any CPU
 		{C7CEFD53-1A3B-4EF4-B399-24A424E3F834}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7CEFD53-1A3B-4EF4-B399-24A424E3F834}.Release|x86.Build.0 = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|x64.Build.0 = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Debug|x86.Build.0 = Debug|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|x64.ActiveCfg = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|x64.Build.0 = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|x86.ActiveCfg = Release|Any CPU
-		{1E699FFD-56E4-424B-A231-37EA9C85794C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
