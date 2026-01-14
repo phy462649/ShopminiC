@@ -8,15 +8,15 @@ export default function CategoryProductSection({ categories = [], products = [] 
 
   // Main tabs (top categories)
   const mainTabs = [
-    { id: "natural", name: "MY PHAM THIEN NHIEN", icon: "*" },
+    { id: "natural", name: "Mỹ phẩm thiên nhiên", icon: "*" },
     ...categories.slice(0, 3).map((cat) => ({ id: cat.id, name: cat.name })),
   ];
 
   // Sub categories for left sidebar
   const subCategories = [
-    "My pham cham soc da mat",
-    "My pham cham soc toc",
-    "San pham Amenities",
+    "Mỹ phẩm chăm sóc da mặt",
+    "Mỹ phẩm chăm sóc tóc",
+    "Sản phẩm Amenities",
   ];
 
   // Filter products based on active tab
@@ -32,7 +32,7 @@ export default function CategoryProductSection({ categories = [], products = [] 
 
   return (
     <section className="py-8 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Tabs Header */}
         <div className="flex border-b">
           {mainTabs.map((tab, index) => (
@@ -86,7 +86,7 @@ export default function CategoryProductSection({ categories = [], products = [] 
                 onClick={() => navigate("/products")}
                 className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-pink-500 text-white px-4 py-2 rounded text-sm hover:bg-pink-600"
               >
-                Xem them
+                Xem thêm
               </button>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function CategoryProductSection({ categories = [], products = [] 
                     />
                     {product.isNew && (
                       <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-0.5 rounded">
-                        Moi
+                        Mới
                       </span>
                     )}
                     {product.discount && (
@@ -121,9 +121,9 @@ export default function CategoryProductSection({ categories = [], products = [] 
                     {product.name}
                   </h3>
                   <p className="mt-1 text-sm">
-                    <span className="text-gray-500">Gia ban: </span>
+                    <span className="text-gray-500">Giá bán: </span>
                     <span className="text-pink-500 font-bold">
-                      {product.price?.toLocaleString("vi-VN")} d
+                      {product.price?.toLocaleString("vi-VN")} đ
                     </span>
                   </p>
                 </div>
@@ -136,7 +136,7 @@ export default function CategoryProductSection({ categories = [], products = [] 
                 onClick={() => navigate("/products")}
                 className="px-8 py-2 border-2 border-pink-500 text-pink-500 rounded-full hover:bg-pink-500 hover:text-white transition"
               >
-                Xem tat ca san pham
+                Xem tất cả sản phẩm
               </button>
             </div>
           </div>

@@ -57,7 +57,7 @@ public class PaymentService : IPaymentService
     public async Task<IEnumerable<PaymentDto>> GetAllAsync(CancellationToken ct = default)
     {
         var payments = await _uow.payments.Query()
-            .Include(p => p.PersonalId)
+            .Include(p => p.Personal)
             .Include(p => p.Booking)
             .Include(p => p.Order)
             .AsNoTracking()
@@ -93,6 +93,8 @@ public class PaymentService : IPaymentService
     {
         var payments = await _uow.payments.Query()
             .Include(p => p.Personal)
+            .Include(p => p.Booking)
+            .Include(p => p.Order)
             .Where(p => p.BookingId == bookingId)
             .AsNoTracking()
             .ToListAsync(ct);
@@ -110,6 +112,8 @@ public class PaymentService : IPaymentService
     {
         var payments = await _uow.payments.Query()
             .Include(p => p.Personal)
+            .Include(p => p.Booking)
+            .Include(p => p.Order)
             .Where(p => p.OrderId == orderId)
             .AsNoTracking()
             .ToListAsync(ct);
@@ -184,7 +188,7 @@ public class PaymentService : IPaymentService
                 Method = dto.Method,
                 Status = PaymentStatus.Pending,
                 PaymentTime = DateTime.UtcNow,
-                CreatedBy = dto.CreatedBy
+                // CreatedBy = dto.CreatedBy
             };
 
             await _uow.payments.AddAsync(payment, ct);

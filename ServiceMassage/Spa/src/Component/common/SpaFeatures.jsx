@@ -5,9 +5,9 @@ export default function SpaFeatures() {
 
   return (
     <section className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
           {/* Left - Pool Sauna */}
           <div className="md:row-span-2">
             <div className="relative h-full min-h-[400px] rounded-lg overflow-hidden">
@@ -84,19 +84,21 @@ export default function SpaFeatures() {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={() => navigate("/services")}
-            className="px-8 py-3 border-2 border-gray-800 text-gray-800 rounded hover:bg-gray-800 hover:text-white transition font-medium"
-          >
-            Find out more
-          </button>
-          <button
-            onClick={() => navigate("/booking")}
-            className="px-8 py-3 bg-[#c4727a] text-white rounded hover:bg-[#b5636b] transition font-medium"
-          >
-            Find out more
-          </button>
+        <div className="w-full flex justify-center mt-8">
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate("/services")}
+              className="px-8 py-3 border-2 border-gray-800 text-gray-800 rounded hover:bg-gray-800 hover:text-white transition font-medium"
+            >
+              Find out more
+            </button>
+            <button
+              onClick={() => navigate("/booking")}
+              className="px-8 py-3 bg-[#c4727a] text-white rounded hover:bg-[#b5636b] transition font-medium"
+            >
+              Find out more
+            </button>
+          </div>
         </div>
       </div>
     </section>

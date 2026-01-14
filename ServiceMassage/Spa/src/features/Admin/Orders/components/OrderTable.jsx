@@ -154,7 +154,7 @@ export default function OrderTable() {
                   <tr
                     key={o.id}
                     onClick={() => setSelectedId(o.id)}
-                    className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === o.id ? "bg-pink-100" : ""}`}
+                    className={`cursor-pointer border-b ${selectedId === o.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                   >
                     <td className="p-3 text-center">
                       <button

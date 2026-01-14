@@ -8,13 +8,14 @@ export default function RoomForm({ initialData, onClose, onSave, isLoading }) {
     name: initialData?.name || "",
     description: initialData?.description || "",
     capacity: initialData?.capacity || 1,
+    active: initialData?.active ?? true,
   }));
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "capacity" ? Number(value) : value,
+      [name]: type === "checkbox" ? checked : name === "capacity" ? Number(value) : value,
     }));
   };
 
@@ -74,6 +75,18 @@ export default function RoomForm({ initialData, onClose, onSave, isLoading }) {
                 onChange={handleChange}
                 className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
               />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="active"
+                id="active"
+                checked={formData.active}
+                onChange={handleChange}
+                className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
+              />
+              <label htmlFor="active" className="text-sm font-medium">Active</label>
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t">

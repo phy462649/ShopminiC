@@ -449,6 +449,10 @@ public partial class ServicemassageContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnType("bit(1)")
+                .HasColumnName("active");
         });
 
         modelBuilder.Entity<Service>(entity =>

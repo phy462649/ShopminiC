@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 import { productService, categoryService } from "../../services";
+import { mockProducts, mockCategories } from "../../data/mockProducts";
 
 export default function Products() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem("cart");
     return saved ? JSON.parse(saved) : [];
@@ -42,8 +45,8 @@ export default function Products() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const productList = Array.isArray(products) ? products : [];
-  const categoryList = Array.isArray(categories) ? categories : [];
+  const productList = Array.isArray(products) && products.length > 0 ? products : mockProducts;
+  const categoryList = Array.isArray(categories) && categories.length > 0 ? categories : mockCategories;
 
   // Search results (dropdown)
   const searchResults = searchTerm.length > 0
@@ -220,7 +223,8 @@ export default function Products() {
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group"
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group cursor-pointer"
+              onClick={() => navigate(`/products/${product.id}`)}
             >
               <div className="relative">
                 <img
@@ -228,6 +232,11 @@ export default function Products() {
                   alt={product.name}
                   className="w-full h-48 object-cover group-hover:scale-105 transition"
                 />
+                {product.discount && (
+                  <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded">
+                    -{product.discount}%
+                  </span>
+                )}
                 {product.stock <= 0 && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                     <span className="text-white font-bold">Hết hàng</span>
@@ -236,18 +245,25 @@ export default function Products() {
               </div>
               <div className="p-4">
                 <span className="text-xs text-pink-500 bg-pink-50 px-2 py-1 rounded">
-                  {categoryList.find((c) => c.id === product.categoryId)?.name || "Khác"}
+                  {product.categoryName || categoryList.find((c) => c.id === product.categoryId)?.name || "Khác"}
                 </span>
                 <h3 className="font-semibold text-gray-800 mt-2 mb-1 line-clamp-2">{product.name}</h3>
                 <p className="text-gray-500 text-sm mb-2 line-clamp-2">{product.description}</p>
                 <div className="flex items-center justify-between">
-                  <p className="text-pink-500 font-bold text-lg">
-                    {product.price?.toLocaleString("vi-VN")}đ
-                  </p>
+                  <div>
+                    <p className="text-pink-500 font-bold text-lg">
+                      {product.price?.toLocaleString("vi-VN")}đ
+                    </p>
+                    {product.originalPrice && (
+                      <p className="text-gray-400 text-sm line-through">
+                        {product.originalPrice?.toLocaleString("vi-VN")}đ
+                      </p>
+                    )}
+                  </div>
                   <span className="text-xs text-gray-400">Còn {product.stock || 0}</span>
                 </div>
                 <button
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                   disabled={product.stock <= 0}
                   className="w-full mt-3 bg-pink-500 text-white py-2 rounded hover:bg-pink-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >

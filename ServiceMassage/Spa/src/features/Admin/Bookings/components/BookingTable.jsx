@@ -136,7 +136,7 @@ export default function BookingTable() {
                   <tr
                     key={b.id}
                     onClick={() => setSelectedId(b.id)}
-                    className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === b.id ? "bg-pink-100" : ""}`}
+                    className={`cursor-pointer border-b ${selectedId === b.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                   >
                     <td className="p-3 text-center">
                       <button

@@ -121,17 +121,15 @@ export default function ProductTable() {
                 <tr
                   key={p.id}
                   onClick={() => setSelectedId(p.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === p.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === p.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{p.id}</td>
                   <td className="p-3 text-center">
-                    {p.urlImage ? (
-                      <img src={p.urlImage} alt={p.name} className="w-12 h-12 object-cover rounded mx-auto" />
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded mx-auto flex items-center justify-center text-gray-400 text-xs">
-                        No img
-                      </div>
-                    )}
+                    <img 
+                      src={p.urlImage || "/OIP.jpg"} 
+                      alt={p.name} 
+                      className="w-12 h-12 object-cover rounded mx-auto" 
+                    />
                   </td>
                   <td className="p-3 text-center">{p.name}</td>
                   <td className="p-3 text-center">{p.description || "-"}</td>

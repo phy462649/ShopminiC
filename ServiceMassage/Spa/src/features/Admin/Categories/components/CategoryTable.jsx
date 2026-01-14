@@ -125,7 +125,7 @@ export default function CategoryTable() {
                 <tr
                   key={c.id}
                   onClick={() => setSelectedId(c.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === c.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === c.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{c.id}</td>
                   <td className="p-3 text-center">{c.name}</td>

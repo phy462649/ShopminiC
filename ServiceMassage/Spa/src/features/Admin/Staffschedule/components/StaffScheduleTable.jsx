@@ -126,7 +126,7 @@ export default function StaffScheduleTable() {
                 <tr
                   key={s.id}
                   onClick={() => setSelectedId(s.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === s.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{s.id}</td>
                   <td className="p-3 text-center">{s.staffName}</td>

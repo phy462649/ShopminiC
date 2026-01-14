@@ -8,17 +8,17 @@ import {
   useDeletePayment,
 } from "../hooks/usePayment";
 
-const statusColors = {
-  pending: "orange",
-  completed: "green",
-  failed: "red",
-};
+// paymentType: 0 = Booking, 1 = Order
+const paymentTypeLabels = { 0: "Booking", 1: "Order" };
 
-const methodLabels = {
-  cash: "Cash",
-  card: "Card",
-  momo: "Momo",
-  bank_transfer: "Bank Transfer",
+// method: 0 = Cash, 1 = Card, 2 = Momo, 3 = Bank Transfer
+const methodLabels = { 0: "Cash", 1: "Card", 2: "Momo", 3: "Bank Transfer" };
+
+// status: 0 = Pending, 1 = Completed, 2 = Failed
+const statusConfig = {
+  0: { label: "Pending", color: "orange" },
+  1: { label: "Completed", color: "green" },
+  2: { label: "Failed", color: "red" },
 };
 
 export default function PaymentTable() {
@@ -33,7 +33,7 @@ export default function PaymentTable() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredPayments = payments.filter((p) =>
-    [p.payment_type, p.method, p.status, String(p.booking_id || ''), String(p.order_id || '')]
+    [p.personalName, p.personalPhone, p.personalEmail, p.bookingStatus, p.orderStatus]
       .filter(Boolean)
       .some((field) => String(field).toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -81,6 +81,15 @@ export default function PaymentTable() {
     }
   };
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
+
+  const formatDateTime = (dateStr) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleString("vi-VN");
+  };
+
   if (isLoading) return <div className="p-4 text-center">Loading...</div>;
   if (isError) return <div className="p-4 text-center text-red-500">Error loading data</div>;
 
@@ -115,12 +124,13 @@ export default function PaymentTable() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
+      <div className="overflow-x-auto bg-white rounded-lg shadow" style={{ maxHeight: 'calc(100vh - 280px)' }}>
         <table className="min-w-full text-sm">
-          <thead className="bg-pink-50">
+          <thead className="bg-pink-50 sticky top-0">
             <tr>
               <th className="p-3 text-center font-semibold">ID</th>
               <th className="p-3 text-center font-semibold">Type</th>
+              <th className="p-3 text-center font-semibold">Customer</th>
               <th className="p-3 text-center font-semibold">Reference</th>
               <th className="p-3 text-center font-semibold">Amount</th>
               <th className="p-3 text-center font-semibold">Method</th>
@@ -134,30 +144,52 @@ export default function PaymentTable() {
                 <tr
                   key={p.id}
                   onClick={() => setSelectedId(p.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === p.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === p.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{p.id}</td>
-                  <td className="p-3 text-center capitalize">{p.payment_type}</td>
-                  <td className="p-3 text-center">{p.booking_id || p.order_id || "-"}</td>
-                  <td className="p-3 text-center font-semibold text-pink-600">
-                    ${Number(p.amount).toLocaleString("en-US")}
-                  </td>
-                  <td className="p-3 text-center">{methodLabels[p.method] || p.method}</td>
                   <td className="p-3 text-center">
-                    <Tag color={statusColors[p.status] || "default"}>
-                      {typeof p.status === 'string' 
-                        ? p.status.charAt(0).toUpperCase() + p.status.slice(1)
-                        : p.status}
+                    <Tag color={p.paymentType === 0 ? "blue" : "purple"}>
+                      {paymentTypeLabels[p.paymentType] || p.paymentType}
                     </Tag>
                   </td>
                   <td className="p-3 text-center">
-                    {p.payment_time ? new Date(p.payment_time).toLocaleString("en-US") : "-"}
+                    <div>{p.personalName}</div>
+                    <div className="text-xs text-gray-500">{p.personalPhone}</div>
+                  </td>
+                  <td className="p-3 text-center">
+                    {p.paymentType === 0 ? (
+                      <div>
+                        <div>Booking #{p.bookingId}</div>
+                        <Tag color={p.bookingStatus === 'Confirmed' ? 'green' : p.bookingStatus === 'Cancelled' ? 'red' : 'orange'} className="text-xs">
+                          {p.bookingStatus}
+                        </Tag>
+                      </div>
+                    ) : (
+                      <div>
+                        <div>Order #{p.orderId}</div>
+                        <Tag color={p.orderStatus === 'completed' ? 'green' : 'orange'} className="text-xs">
+                          {p.orderStatus}
+                        </Tag>
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-3 text-center font-semibold text-pink-600">
+                    {formatCurrency(p.amount)}
+                  </td>
+                  <td className="p-3 text-center">{methodLabels[p.method] || p.method}</td>
+                  <td className="p-3 text-center">
+                    <Tag color={statusConfig[p.status]?.color || "default"}>
+                      {statusConfig[p.status]?.label || p.status}
+                    </Tag>
+                  </td>
+                  <td className="p-3 text-center text-xs">
+                    {formatDateTime(p.paymentTime)}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="p-4 text-center text-gray-500">
+                <td colSpan="8" className="p-4 text-center text-gray-500">
                   No data available
                 </td>
               </tr>

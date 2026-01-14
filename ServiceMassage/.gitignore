@@ -19,6 +19,9 @@ x86/
 # Rider
 .idea/
 
+# Kiro
+.kiro/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -88,3 +91,4 @@ Spa/build/
 *.tfstate
 *.tfstate.*
 .terraform/
+

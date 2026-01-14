@@ -13,6 +13,8 @@ public partial class Room
 
     public int? Capacity { get; set; }
 
+    public bool Active { get; set; } = true;
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

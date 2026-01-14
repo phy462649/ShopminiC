@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../features/Auth/UseAuth";
 import { authService } from "../services";
 
-export default function HeaderHomePage() {
+export default function 
+HeaderHomePage() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);

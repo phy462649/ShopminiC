@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { productService, categoryService } from "../../services";
-import ImageSlider from "../common/ImageSlider";
+import { mockProducts, mockCategories } from "../../data/mockProducts";
+// import ImageSlider from "../common/ImageSlider";
 import PromoBanner from "../common/PromoBanner";
 import CategoryProductSection from "../common/CategoryProductSection";
 import SpaFeatures from "../common/SpaFeatures";
@@ -19,8 +20,8 @@ export default function Home() {
     queryFn: categoryService.getAll,
   });
 
-  const productList = Array.isArray(products) ? products : [];
-  const categoryList = Array.isArray(categories) ? categories : [];
+  const productList = Array.isArray(products) && products.length > 0 ? products : mockProducts;
+  const categoryList = Array.isArray(categories) && categories.length > 0 ? categories : mockCategories;
 
   // Fake promo products (thêm discount)
   const promoProducts = productList.slice(0, 9).map((p, i) => ({
@@ -30,14 +31,14 @@ export default function Home() {
   }));
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       {/* Image Slider */}
-      <ImageSlider />
+      {/* <ImageSlider />  */}
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-pink-100 to-purple-100 py-16">
+      <section className="bg-gradient-to-r from-pink-100 to-purple-100 py-16 w-full">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-10">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-10">
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
                 Chào mừng đến với <span className="text-pink-500">SPA Beauty</span>
@@ -60,32 +61,38 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className="flex-1">
-              <img src="/Banner.jpg" alt="Spa" className="rounded-2xl shadow-2xl w-full max-w-md mx-auto" />
+            <div className="flex-1 flex justify-center">
+              <img src="/Banner.jpg" alt="Spa" className="rounded-2xl shadow-2xl w-full max-w-md" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Promo Banner */}
-      <PromoBanner products={promoProducts} />
+      <div className="w-full">
+        <PromoBanner products={promoProducts} />
+      </div>
 
       {/* Category Product Section */}
-      <CategoryProductSection categories={categoryList} products={productList} />
+      <div className="w-full">
+        <CategoryProductSection categories={categoryList} products={productList} />
+      </div>
 
       {/* Spa Features Section */}
-      <SpaFeatures />
+      <div className="w-full">
+        <SpaFeatures />
+      </div>
 
       {/* Categories */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-gray-50 w-full">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Danh mục sản phẩm</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 justify-items-center">
             {categoryList.slice(0, 6).map((cat) => (
               <div
                 key={cat.id}
                 onClick={() => navigate(`/products?category=${cat.id}`)}
-                className="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition"
+                className="bg-white rounded-lg p-4 text-center cursor-pointer hover:shadow-lg transition w-full max-w-[150px]"
               >
                 <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">💆</span>
@@ -98,7 +105,7 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-12">
+      <section className="py-12 w-full">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold text-gray-800">Sản phẩm nổi bật</h2>
@@ -109,11 +116,12 @@ export default function Home() {
               Xem tất cả →
             </button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
             {productList.slice(0, 8).map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group"
+                onClick={() => navigate(`/products/${product.id}`)}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition group cursor-pointer w-full"
               >
                 <div className="relative">
                   <img
@@ -121,17 +129,29 @@ export default function Home() {
                     alt={product.name}
                     className="w-full h-48 object-cover group-hover:scale-105 transition"
                   />
+                  {product.discount && (
+                    <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded">
+                      -{product.discount}%
+                    </span>
+                  )}
                 </div>
-                <div className="p-4">
+                <div className="p-4 text-center">
                   <h3 className="font-semibold text-gray-800 line-clamp-2">{product.name}</h3>
-                  <p className="text-pink-500 font-bold mt-2">
-                    {product.price?.toLocaleString("vi-VN")}đ
-                  </p>
+                  <div className="mt-2">
+                    <p className="text-pink-500 font-bold">
+                      {product.price?.toLocaleString("vi-VN")}đ
+                    </p>
+                    {product.originalPrice && (
+                      <p className="text-gray-400 text-sm line-through">
+                        {product.originalPrice?.toLocaleString("vi-VN")}đ
+                      </p>
+                    )}
+                  </div>
                   <button
-                    onClick={() => navigate("/products")}
+                    onClick={(e) => { e.stopPropagation(); navigate(`/products/${product.id}`); }}
                     className="mt-3 w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600"
                   >
-                    Mua ngay
+                    Xem chi tiết
                   </button>
                 </div>
               </div>
@@ -141,19 +161,19 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-pink-50 py-12">
+      <section className="bg-pink-50 py-12 w-full">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-10">
             Tại sao chọn chúng tôi?
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 justify-items-center">
             {[
               { icon: "💆", title: "Chuyên nghiệp", desc: "Đội ngũ được đào tạo bài bản" },
               { icon: "✨", title: "Chất lượng", desc: "Sản phẩm cao cấp, an toàn" },
               { icon: "💝", title: "Tận tâm", desc: "Phục vụ như người thân" },
               { icon: "🎁", title: "Ưu đãi", desc: "Nhiều khuyến mãi hấp dẫn" },
             ].map((item, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 text-center shadow-sm">
+              <div key={index} className="bg-white rounded-lg p-6 text-center shadow-sm w-full max-w-[250px]">
                 <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl">{item.icon}</span>
                 </div>
@@ -161,6 +181,44 @@ export default function Home() {
                 <p className="text-gray-600 text-sm">{item.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo Gallery */}
+      <section className="py-12 w-full bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-serif text-gray-800">Hình ảnh khách hàng hoàn thành tiến trình dịch vụ</h2>
+            <button 
+              onClick={() => navigate("/gallery")}
+              className="text-pink-500 hover:text-pink-600 font-medium flex items-center gap-1"
+            >
+              Xem tất cả <span>→</span>
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/OIP.jpg" 
+                alt="Spa massage" 
+                className="w-full h-64 object-cover hover:scale-105 transition duration-300"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/OIP.jpg" 
+                alt="Spa treatment" 
+                className="w-full h-64 object-cover hover:scale-105 transition duration-300"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/OIP.jpg" 
+                alt="Spa resort" 
+                className="w-full h-64 object-cover hover:scale-105 transition duration-300"
+              />
+            </div>
           </div>
         </div>
       </section>

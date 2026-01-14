@@ -122,17 +122,15 @@ export default function ServiceTable() {
                 <tr
                   key={s.id}
                   onClick={() => setSelectedId(s.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === s.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === s.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{s.id}</td>
                   <td className="p-3 text-center">
-                    {s.urlImage ? (
-                      <img src={s.urlImage} alt={s.name} className="w-12 h-12 object-cover rounded mx-auto" />
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded mx-auto flex items-center justify-center text-gray-400 text-xs">
-                        No img
-                      </div>
-                    )}
+                    <img 
+                      src={s.urlImage || "/OIP.jpg"} 
+                      alt={s.name} 
+                      className="w-12 h-12 object-cover rounded mx-auto" 
+                    />
                   </td>
                   <td className="p-3 text-center">{s.name}</td>
                   <td className="p-3 text-center">{s.description || "-"}</td>

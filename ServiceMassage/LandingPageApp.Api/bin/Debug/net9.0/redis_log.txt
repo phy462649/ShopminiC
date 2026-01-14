@@ -1573,3 +1573,1093 @@ Total Keys: 14
 
 --- END REDIS DATA ---
 
+
+=                                                           =
+[2026-01-14 20:42:47.075]
+OPERATION: REMOVE
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 13
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:40:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:58:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:18
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:39:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:36:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.19:15:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:23:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:55:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:38:55
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:21:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:18
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:10:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:04:21
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 20:42:47.284]
+OPERATION: SET
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "TAXXYlh38c/2d8JRd\u002BYUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ=="
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 14
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:40:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:58:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:18
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:39:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:36:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.19:15:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"TAXXYlh38c/2d8JRd\u002BYUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==", sldexp:-1, absexp:639045997672610633}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:23:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:55:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:38:54
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:21:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:17
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:10:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:04:21
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 20:42:47.344]
+OPERATION: SET
+KEY: refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "2"
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 15
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:40:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:58:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:17
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:39:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:36:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.19:15:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"TAXXYlh38c/2d8JRd\u002BYUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==", sldexp:-1, absexp:639045997672610633}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:23:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:55:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:38:54
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:21:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.18:02:17
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:10:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.01:04:21
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:26:49.124]
+OPERATION: REMOVE
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 14
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:56:34
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:14:20
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:16
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:15:58
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:55:30
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:52:44
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:31:56
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:39:18
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:54
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:54:53
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:37:46
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:16
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:26:43
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:20:19
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:26:49.255]
+OPERATION: SET
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "j\u002Bl6TtYEFmytP0\u002BEGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ=="
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 15
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:56:34
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:14:20
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:16
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:15:58
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:55:30
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:52:44
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:31:56
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"j\u002Bl6TtYEFmytP0\u002BEGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==", sldexp:-1, absexp:639046024092442225}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:39:18
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:54
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:54:52
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:37:46
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:15
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:26:43
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:20:19
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:26:49.330]
+OPERATION: SET
+KEY: refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "2"
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 16
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:56:34
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.23:14:20
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:15
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:15:57
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:55:30
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:52:44
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:31:56
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"j\u002Bl6TtYEFmytP0\u002BEGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==", sldexp:-1, absexp:639046024092442225}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:39:18
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:54
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:54:52
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:37:46
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.17:18:15
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:26:43
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:20:19
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:47:40.452]
+OPERATION: REMOVE
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 15
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:53:29
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:35:43
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:55:06
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:34:38
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:31:53
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:05
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:27
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:51:03
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:34:01
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:39:08
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:16:55
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:05:52
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:59:28
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:47:40.493]
+OPERATION: SET
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g=="
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 16
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:53:29
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:35:43
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:55:06
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:34:38
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:31:53
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:05
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==", sldexp:-1, absexp:639046036604917557}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:27
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:51:03
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:34:01
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:39:08
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:16:55
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:05:52
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:59:28
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 21:47:40.543]
+OPERATION: SET
+KEY: refresh_token_user:l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "2"
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 17
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:53:29
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:35:43
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:55:06
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:34:38
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:31:53
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.18:11:05
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==", sldexp:-1, absexp:639046036604917557}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:27
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:51:03
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:34:01
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:39:08
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:57:24
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:16:55
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:05:52
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {absexp:639046036605426561, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:59:28
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 22:03:46.963]
+OPERATION: REMOVE
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 16
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:37:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:19:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:39:00
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:15:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:54:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:02:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:34:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:17:55
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:23:02
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:00:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.16:49:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:43:53
+  Values: {absexp:639046036605426561, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:43:22
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 22:03:47.116]
+OPERATION: SET
+KEY: refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "LYkL7wWu49odruhcWmesFWaxLZX7OOb7J0A74CewBAObaqApUwzX3L3I24cNYtbUj/Wq/r5/g/CVEXic950kGg=="
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 17
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:37:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:19:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:39:00
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:15:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:54:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"LYkL7wWu49odruhcWmesFWaxLZX7OOb7J0A74CewBAObaqApUwzX3L3I24cNYtbUj/Wq/r5/g/CVEXic950kGg==", sldexp:-1, absexp:639046046271026530}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:02:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:34:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:17:55
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:23:02
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:00:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.16:49:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:43:53
+  Values: {absexp:639046036605426561, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:43:21
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+
+
+=                                                           =
+[2026-01-14 22:03:47.210]
+OPERATION: SET
+KEY: refresh_token_user:LYkL7wWu49odruhcWmesFWaxLZX7OOb7J0A74CewBAObaqApUwzX3L3I24cNYtbUj/Wq/r5/g/CVEXic950kGg==:fd365a33-c724-429a-9d9b-cca62f068d43
+VALUE: "2"
+RESULT: Expiry: 7.00:00:00
+=                                                           =
+
+--- ALL REDIS DATA ---
+Total Keys: 18
+
+  Key: LandingPage_refresh_token_user:LYkL7wWu49odruhcWmesFWaxLZX7OOb7J0A74CewBAObaqApUwzX3L3I24cNYtbUj/Wq/r5/g/CVEXic950kGg==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {absexp:639046046272069897, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:53KqPy/SbOlIUnka+35359Msj+/GPyCgygUMoGMoeWGYk9xA8oS40/uJnVBboiGYAToCP/70f9BS7Dlw90xm2g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:37:22
+  Values: {absexp:639045132699289013, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:n2P0C3dlVUTLWUYjViUoyKkGw2OPTsAjAyoqM+AYNdCuMJSRtIiIGpqwm4WIy5M4kOxNrWTRcVfM+Aru52xQoQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:19:36
+  Values: {absexp:639044294036899351, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX+zt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {absexp:639044919053317690, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:TAXXYlh38c/2d8JRd+YUwiUB2DDRuiIZgP20e7LfzE88cgx00zCJLlXNDol6hlNsz4neaehTxVGBDv/faoNYEQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.22:39:00
+  Values: {absexp:639045997673433237, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:jKyvLJRgl9oSvrQg/V/iTJ3TsYJkGC299DIemieOYQw0VygalmR6vnGZb/7+hgtCUcSM+pvlyol3kOtMhSQ6IA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:18:32
+  Values: {absexp:639045121394473428, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:NeXe6bmerzk7YFOKbmTTURRaoOViBRP/lyUX7g2XrUHwMhVSpWICWi+a0uqg/xvcXxcI/G8tWC8vxbwswZS9IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:15:46
+  Values: {absexp:639044939740170464, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:kbF6+wMSo/IQbUcFsP+mFnn7TYlP4cKvHlA06oYePXGW4+ft5B1iuplH/fE0BcFhBYZtvuyr22ilJedpFg1JlA==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:54:58
+  Values: {absexp:639044963255831095, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:59:59
+  Values: {data:"LYkL7wWu49odruhcWmesFWaxLZX7OOb7J0A74CewBAObaqApUwzX3L3I24cNYtbUj/Wq/r5/g/CVEXic950kGg==", sldexp:-1, absexp:639046046271026530}
+
+  Key: LandingPage_refresh_token_user:WjNHtrxANhaQxYyaOW4dRcxR3VSDpguvk2Iy4c46DRsBO1T5nBuFtuhqzPaDJbQS6qa3fUBWV3+o5Cf5aWZ0Ew==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.22:02:20
+  Values: {absexp:639045111679161483, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:33DT4PyyU+PIrVD8CxuOFqiljc4uBdgvHmvPENJe8C7wYYnJhCHQJ1txORiNMlJclyORit/8Ai8MXalyd3Oqzw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.17:34:56
+  Values: {absexp:639044951236692050, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:+XzQz3YpWPHPfwbSu1wZuR/Ba2azMhlQSyI2tt+Ck4goOlAYVSbNRSybWGjZjpX+x34SwdwIYTzOGXpl3J9+IQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:17:55
+  Values: {absexp:639044293022910285, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:j+l6TtYEFmytP0+EGdeJVtlDtnAIPjp1tept1tdx/L3C8fpXwHyOWbqXFrn1/jLnFQPl/1kfkhgLNLmU3oxfmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:23:02
+  Values: {absexp:639046024093274984, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token:2:31fa3a6c-1b2a-4936-8ccf-46ffc1c78e39
+  Type: Hash
+  TTL: 5.16:41:18
+  Values: {data:"2lM/ws7Fo6YdE2T4CswHWiOgrN2KGXrdXV0ieINX\u002Bzt3MboiMQ0IOkSoThtEpgOEcYPClg3pDaC38OrZWciErg==", sldexp:-1, absexp:639044919052803315}
+
+  Key: LandingPage_refresh_token_user:J9OyYcLEIf2sAQCUtu1FvBOr8n0DCnq1bbBVzn9NMGcUaosUBFfNNYLgHSa8+89bLrDFYJ03pXFRxq5/joNvmQ==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.00:00:48
+  Values: {absexp:639044318755820570, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:73yZln/6+O0V321u04BYJlgJkd1OHK2MjQiUBeilTx5/EZKs+YpKk5Jc5CaZlqGzffw4TZ2U1x0gSYak4DKxgw==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 5.16:49:45
+  Values: {absexp:639044924126572703, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:l6Y5pACVVRNqUc9m9owFrbfviEUsb7ap8FusIZPlJMQtwoxAQpIWAVY5A/FSFGLyvmjw6rsSaTwnQDMwQ03Y7g==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 6.23:43:53
+  Values: {absexp:639046036605426561, sldexp:-1, data:"2"}
+
+  Key: LandingPage_refresh_token_user:8DDHgvPab8XB2xsq16K0R41f9D3ykJQgxGPIZZryhqUFm8KtFsEh3wqV/O1AI1cvzVy1owl7juHjzNopng8k0Q==:fd365a33-c724-429a-9d9b-cca62f068d43
+  Type: Hash
+  TTL: 4.23:43:21
+  Values: {absexp:639044308291346111, sldexp:-1, data:"2"}
+
+--- END REDIS DATA ---
+

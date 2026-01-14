@@ -123,7 +123,7 @@ export default function PersonalTable() {
                 <tr
                   key={p.id}
                   onClick={() => setSelectedId(p.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === p.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === p.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{p.id}</td>
                   <td className="p-3 text-center">{p.name}</td>

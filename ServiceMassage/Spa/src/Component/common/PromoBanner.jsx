@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { mockProducts } from "../../data/mockProducts";
 
 export default function PromoBanner({ products = [] }) {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Use mock products if no products passed
+  const displayProducts = products.length > 0 ? products : mockProducts;
 
   const benefits = [
     { icon: "🚚", title: "GIÁ SHIP ƯU ĐÃI", desc: "Với tất cả các đơn hàng" },
@@ -14,14 +18,14 @@ export default function PromoBanner({ products = [] }) {
 
   // Auto slide
   useEffect(() => {
-    if (products.length === 0) return;
+    if (displayProducts.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % Math.ceil(products.length / 3));
+      setCurrentSlide((prev) => (prev + 1) % Math.ceil(displayProducts.length / 3));
     }, 5000);
     return () => clearInterval(timer);
-  }, [products.length]);
+  }, [displayProducts.length]);
 
-  const promoProducts = products.slice(0, 9);
+  const promoProducts = displayProducts.slice(0, 9);
   const totalSlides = Math.ceil(promoProducts.length / 3);
   const visibleProducts = promoProducts.slice(currentSlide * 3, currentSlide * 3 + 3);
 

@@ -10,7 +10,13 @@ public class PaymentMapper : Profile
     {
         // Entity -> DTO
         CreateMap<Payment, PaymentDto>()
-            .ForMember(dest => dest.PersonalName, opt => opt.MapFrom(src => src.Personal != null ? src.Personal.Name : null));
+            .ForMember(dest => dest.PersonalName, opt => opt.MapFrom(src => src.Personal != null ? src.Personal.Name : null))
+            .ForMember(dest => dest.PersonalPhone, opt => opt.MapFrom(src => src.Personal != null ? src.Personal.Phone : null))
+            .ForMember(dest => dest.PersonalEmail, opt => opt.MapFrom(src => src.Personal != null ? src.Personal.Email : null))
+            .ForMember(dest => dest.BookingStatus, opt => opt.MapFrom(src => src.Booking != null ? src.Booking.Status.ToString() : null))
+            .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.Booking != null ? src.Booking.StartTime : (DateTime?)null))
+            .ForMember(dest => dest.OrderStatus, opt => opt.MapFrom(src => src.Order != null ? src.Order.Status.ToString() : null))
+            .ForMember(dest => dest.OrderTotalAmount, opt => opt.MapFrom(src => src.Order != null ? src.Order.TotalAmount : null));
 
         // DTO -> Entity
         CreateMap<CreatePaymentDto, Payment>()

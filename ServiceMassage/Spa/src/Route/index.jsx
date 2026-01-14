@@ -18,6 +18,7 @@ const ResetPassword = lazy(() => import("../features/Admin/LoginRegister/Compone
 const Home = lazy(() => import("../Component/pages/Home"));
 const Services = lazy(() => import("../Component/pages/Services"));
 const Products = lazy(() => import("../Component/pages/Products"));
+const ProductDetail = lazy(() => import("../Component/pages/ProductDetail"));
 const About = lazy(() => import("../Component/pages/About"));
 const Contact = lazy(() => import("../Component/pages/Contact"));
 
@@ -38,7 +39,7 @@ const ProductTable = lazy(() => import("../features/Admin/Product/components/Pro
 const RoomTable = lazy(() => import("../features/Admin/Room/components/RoomTable"));
 const RoleTable = lazy(() => import("../features/Admin/Role/components/RoleTable"));
 const ServiceTable = lazy(() => import("../features/Admin/Services/components/ServiceTable"));
-const StaffScheduleTable = lazy(() => import("../features/Admin/Staffschedule/components/StaffscheduleTable"));
+const StaffSchedulePage = lazy(() => import("../features/Admin/Staffschedule/pages/StaffschedulePage"));
 
 // Loading Component
 function Loading() {
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
       { index: true, element: <Suspense fallback={<Loading />}><Home /></Suspense> },
       { path: "services", element: <Suspense fallback={<Loading />}><Services /></Suspense> },
       { path: "products", element: <Suspense fallback={<Loading />}><Products /></Suspense> },
+      { path: "products/:id", element: <Suspense fallback={<Loading />}><ProductDetail /></Suspense> },
       { path: "about", element: <Suspense fallback={<Loading />}><About /></Suspense> },
       { path: "contact", element: <Suspense fallback={<Loading />}><Contact /></Suspense> },
     ],
@@ -126,7 +128,7 @@ const router = createBrowserRouter([
       { path: "Room", element: <Suspense fallback={<Loading />}><RoomTable /></Suspense> },
       { path: "Role", element: <Suspense fallback={<Loading />}><RoleTable /></Suspense> },
       { path: "Service", element: <Suspense fallback={<Loading />}><ServiceTable /></Suspense> },
-      { path: "StaffSchedule", element: <Suspense fallback={<Loading />}><StaffScheduleTable /></Suspense> },
+      { path: "StaffSchedule", element: <Suspense fallback={<Loading />}><StaffSchedulePage /></Suspense> },
     ],
   },
   // Redirect unknown routes

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { message, Modal } from "antd";
+import { message, Modal, Tag } from "antd";
 import RoomForm from "./RoomForm";
 import {
   useRoom,
@@ -110,6 +110,7 @@ export default function RoomTable() {
               <th className="p-3 text-center font-semibold">Name</th>
               <th className="p-3 text-center font-semibold">Description</th>
               <th className="p-3 text-center font-semibold">Capacity</th>
+              <th className="p-3 text-center font-semibold">Status</th>
        
             </tr>
           </thead>
@@ -119,12 +120,17 @@ export default function RoomTable() {
                 <tr
                   key={r.id}
                   onClick={() => setSelectedId(r.id)}
-                  className={`cursor-pointer border-b hover:bg-gray-50 ${selectedId === r.id ? "bg-pink-100" : ""}`}
+                  className={`cursor-pointer border-b ${selectedId === r.id ? "bg-pink-100" : "hover:bg-gray-50"}`}
                 >
                   <td className="p-3 text-center font-medium">{r.id}</td>
                   <td className="p-3 text-center">{r.name}</td>
                   <td className="p-3 text-center">{r.description || "-"}</td>
                   <td className="p-3 text-center">{r.capacity}</td>
+                  <td className="p-3 text-center">
+                    <Tag color={r.active ? "green" : "red"}>
+                      {r.active ? "Active" : "Inactive"}
+                    </Tag>
+                  </td>
                   
                 </tr>
               ))

@@ -215,6 +215,7 @@ var app = builder.Build();
 // ===========================================
 // MIDDLEWARE PIPELINE
 // ===========================================
+app.UseRequestTiming(); // Đo thời gian response
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Enable CORS

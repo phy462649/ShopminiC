@@ -6,6 +6,22 @@
 ul {
   margin-bottom: 0;
 }
+
+/* Prevent cursor flickering on table rows */
+table tbody tr {
+  cursor: pointer;
+}
+
+table tbody tr * {
+  cursor: inherit;
+}
+
+/* Stable hover states */
+.hover\:bg-gray-50:hover,
+.hover\:bg-pink-100:hover {
+  transition: background-color 0.15s ease-in-out;
+}
+
 /* Animation keyframes */
 @keyframes slideIn {
   from {
