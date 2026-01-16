@@ -12,7 +12,7 @@ export default function SpaFeatures() {
           <div className="md:row-span-2">
             <div className="relative h-full min-h-[400px] rounded-lg overflow-hidden">
               <img
-                src="/OIP.jpg"
+                src="/Screenshot 2026-01-15 220226.png"
                 alt="Pool Sauna"
                 className="w-full h-full object-cover"
               />
@@ -49,7 +49,7 @@ export default function SpaFeatures() {
           <div className="md:row-span-2">
             <div className="relative h-full min-h-[400px] rounded-lg overflow-hidden">
               <img
-                src="/OIP.jpg"
+                src="/Screenshot 2026-01-15 220230.png"
                 alt="Natural Balance"
                 className="w-full h-full object-cover"
               />
@@ -67,7 +67,7 @@ export default function SpaFeatures() {
           {/* Center Bottom - Massage Image */}
           <div className="rounded-lg overflow-hidden">
             <img
-              src="/OIP.jpg"
+              src="/Screenshot 2026-01-15 220239.png"
               alt="Massage Treatment"
               className="w-full h-48 object-cover"
             />
@@ -76,7 +76,7 @@ export default function SpaFeatures() {
           {/* Center Bottom - Spa Treatment Image */}
           <div className="rounded-lg overflow-hidden">
             <img
-              src="/OIP.jpg"
+              src="/Screenshot 2026-01-15 220249.png"
               alt="Spa Treatment"
               className="w-full h-48 object-cover"
             />

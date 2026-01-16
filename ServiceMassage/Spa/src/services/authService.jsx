@@ -28,7 +28,7 @@ export const authService = {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) return null;
     
-    const response = await apiClient.post(`${ENDPOINT}/refresh`, refreshToken);
+    const response = await apiClient.post(`${ENDPOINT}/refresh`, { refreshToken });
     if (response.status && response.accessToken) {
       apiClient.setToken(response.accessToken);
       if (response.refreshToken) {

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockProducts } from "../../data/mockProducts";
+import { useCart } from "../../Store/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   const product = mockProducts.find((p) => p.id === Number(id));
   const relatedProducts = mockProducts
@@ -29,12 +31,12 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = () => {
-    // TODO: Add to cart logic
+    addToCart(product, quantity);
     alert(`Đã thêm ${quantity} sản phẩm "${product.name}" vào giỏ hàng!`);
   };
 
   const handleBuyNow = () => {
-    // TODO: Buy now logic
+    addToCart(product, quantity);
     navigate("/checkout", { state: { product, quantity } });
   };
 

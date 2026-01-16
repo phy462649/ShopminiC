@@ -1,7 +1,8 @@
-﻿using LandingPageApp.Application.Dtos;
+using LandingPageApp.Application.Dtos;
 using LandingPageApp.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace LandingPageApp.Api.Controllers
 {
@@ -11,6 +12,7 @@ namespace LandingPageApp.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting("auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -72,15 +74,15 @@ namespace LandingPageApp.Api.Controllers
         /// <summary>
         /// Refresh access token using refresh token.
         /// </summary>
-        /// <param name="refreshToken">The refresh token</param>
+        /// <param name="request">The refresh token request containing refreshToken and deviceToken</param>
         /// <returns>AuthResponse with new access token</returns>
         [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthResponse>> RefreshToken([FromBody] string refreshToken,string device)
+        public async Task<ActionResult<AuthResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
         {
-            var result = await _authService.RefreshTokenAsync(refreshToken,device);
+            var result = await _authService.RefreshTokenAsync(request.RefreshToken, request.DeviceToken);
             return Ok(result);
         }
         /// <summary>
@@ -142,6 +144,29 @@ namespace LandingPageApp.Api.Controllers
                 return BadRequest(success);
 
             return Ok(success);
+        }
+
+        /// <summary>
+        /// Kiểm tra user hiện tại có phải Admin không.
+        /// </summary>
+        /// <returns>200 nếu là Admin, 403 nếu không phải</returns>
+        [HttpGet("isAdmin")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<object> IsAdmin()
+        {
+            // Thử nhiều cách lấy role claim
+            var roleClaim = User.FindFirst("role")?.Value 
+                ?? User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+            
+            var isAdmin = roleClaim?.Equals("ADMIN", StringComparison.OrdinalIgnoreCase) ?? false;
+            
+            if (!isAdmin)
+                return StatusCode(403, new { status = false });
+            
+            return Ok(new { status = true });
         }
 
     }

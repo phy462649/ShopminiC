@@ -189,7 +189,7 @@ export default function Home() {
       <section className="py-12 w-full bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-serif text-gray-800">Hình ảnh khách hàng hoàn thành tiến trình dịch vụ</h2>
+            <h2 className="text-3xl font-serif text-gray-800">Hình ảnh khách hàng :</h2>
             <button 
               onClick={() => navigate("/gallery")}
               className="text-pink-500 hover:text-pink-600 font-medium flex items-center gap-1"
@@ -200,21 +200,21 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="overflow-hidden rounded-lg">
               <img 
-                src="/OIP.jpg" 
+                src="/1.png" 
                 alt="Spa massage" 
                 className="w-full h-64 object-cover hover:scale-105 transition duration-300"
               />
             </div>
             <div className="overflow-hidden rounded-lg">
               <img 
-                src="/OIP.jpg" 
+                src="/customer2.png" 
                 alt="Spa treatment" 
                 className="w-full h-64 object-cover hover:scale-105 transition duration-300"
               />
             </div>
             <div className="overflow-hidden rounded-lg">
               <img 
-                src="/OIP.jpg" 
+                src="/customer1.png" 
                 alt="Spa resort" 
                 className="w-full h-64 object-cover hover:scale-105 transition duration-300"
               />

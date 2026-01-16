@@ -1,6 +1,6 @@
 import { adminApiClient } from '../../../../services/apiClient';
 
-const ENDPOINT = '/service';
+const ENDPOINT = '/services';
 
 export const serviceApi = {
   getAll: (params = {}) => adminApiClient.get(ENDPOINT, params),

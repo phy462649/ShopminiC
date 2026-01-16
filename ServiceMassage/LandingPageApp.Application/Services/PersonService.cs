@@ -16,6 +16,12 @@ namespace LandingPageApp.Application.Services;
 /// </summary>
 public class PersonService : IPersonService
 {
+    // Cache keys
+    private const string CacheKeyAll = "persons:all";
+    private const string CacheKeyById = "persons:id:{0}";
+    private const string CacheKeyByRole = "persons:role:{0}";
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
+
     /// <summary>
     /// Repository quản lý người dùng.
     /// </summary>
@@ -42,6 +48,11 @@ public class PersonService : IPersonService
     private readonly ILogger<PersonService> _logger;
 
     /// <summary>
+    /// Redis cache service.
+    /// </summary>
+    private readonly ICacheRediservice _cache;
+
+    /// <summary>
     /// Khởi tạo PersonService với dependency injection.
     /// </summary>
     /// <param name="personRepository">Repository người dùng.</param>
@@ -49,47 +60,83 @@ public class PersonService : IPersonService
     /// <param name="mapper">AutoMapper instance.</param>
     /// <param name="securityService">Service bảo mật.</param>
     /// <param name="logger">Logger instance.</param>
+    /// <param name="cache">Redis cache service.</param>
     public PersonService(
         IPersonRepository personRepository,
         IUnitOfWork unitOfWork,
         IMapper mapper,
         ISecurityService securityService,
-        ILogger<PersonService> logger)
+        ILogger<PersonService> logger,
+        ICacheRediservice cache)
     {
         _personRepository = personRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _securityService = securityService;
         _logger = logger;
+        _cache = cache;
     }
 
     /// <summary>
     /// Lấy danh sách tất cả người dùng.
     /// Bao gồm thông tin vai trò.
+    /// Sử dụng Redis cache để tối ưu hiệu suất.
     /// </summary>
     /// <param name="ct">Token hủy bỏ thao tác.</param>
     /// <returns>Danh sách người dùng.</returns>
     public async Task<IEnumerable<PersonDto>> GetAllAsync(CancellationToken ct = default)
     {
+        // Thử lấy từ cache trước
+        var cached = await _cache.GetAsync<IEnumerable<PersonDto>>(CacheKeyAll);
+        if (cached != null)
+        {
+            _logger.LogDebug("Cache hit for {CacheKey}", CacheKeyAll);
+            return cached;
+        }
+
+        // Cache miss - lấy từ DB
+        _logger.LogDebug("Cache miss for {CacheKey}, loading from DB", CacheKeyAll);
         var persons = await _personRepository.Query()
             .Include(p => p.Role)
             .ToListAsync(ct);
-        return _mapper.Map<IEnumerable<PersonDto>>(persons);
+        var result = _mapper.Map<IEnumerable<PersonDto>>(persons);
+
+        // Lưu vào cache
+        await _cache.SetAsync(CacheKeyAll, result, CacheDuration);
+        return result;
     }
 
     /// <summary>
     /// Lấy thông tin người dùng theo ID.
     /// Bao gồm thông tin vai trò.
+    /// Sử dụng Redis cache để tối ưu hiệu suất.
     /// </summary>
     /// <param name="id">ID của người dùng.</param>
     /// <param name="ct">Token hủy bỏ thao tác.</param>
     /// <returns>Thông tin người dùng hoặc null nếu không tìm thấy.</returns>
     public async Task<PersonDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
+        var cacheKey = string.Format(CacheKeyById, id);
+
+        // Thử lấy từ cache trước
+        var cached = await _cache.GetAsync<PersonDto>(cacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Cache hit for {CacheKey}", cacheKey);
+            return cached;
+        }
+
+        // Cache miss - lấy từ DB
+        _logger.LogDebug("Cache miss for {CacheKey}, loading from DB", cacheKey);
         var person = await _personRepository.Query()
             .Include(p => p.Role)
             .FirstOrDefaultAsync(p => p.Id == id, ct);
-        return person is null ? null : _mapper.Map<PersonDto>(person);
+
+        if (person is null) return null;
+
+        var result = _mapper.Map<PersonDto>(person);
+        await _cache.SetAsync(cacheKey, result, CacheDuration);
+        return result;
     }
 
     /// <summary>
@@ -113,6 +160,7 @@ public class PersonService : IPersonService
     /// Tạo người dùng mới.
     /// Kiểm tra trùng username và email trước khi tạo.
     /// Mật khẩu được hash trước khi lưu.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
     /// <param name="dto">Thông tin người dùng cần tạo.</param>
     /// <param name="ct">Token hủy bỏ thao tác.</param>
@@ -148,6 +196,10 @@ public class PersonService : IPersonService
             throw new BusinessException($"Role với Id: {dto.RoleId} không tồn tại.");
         }
 
+        // Invalidate cache TRƯỚC khi thao tác DB
+        await InvalidatePersonCacheAsync(dto.RoleId);
+
+        dto.Password ="";
         var person = _mapper.Map<Person>(dto);
         person.PasswordHash = _securityService.HashPassword(dto.Password);
         person.StatusVerify = false;
@@ -158,14 +210,14 @@ public class PersonService : IPersonService
 
         _logger.LogInformation("Created person: {Username} with Id: {Id}", person.Username, person.Id);
 
-        // Reload với role
-        var createdPerson = await GetByIdAsync(person.Id, ct);
-        return createdPerson!;
+        // Load và cache person mới
+        return await LoadAndCachePersonAsync(person.Id, ct);
     }
 
     /// <summary>
     /// Cập nhật thông tin người dùng.
     /// Kiểm tra trùng email (loại trừ người dùng hiện tại) trước khi cập nhật.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
     /// <param name="id">ID của người dùng cần cập nhật.</param>
     /// <param name="dto">Thông tin cập nhật.</param>
@@ -177,6 +229,8 @@ public class PersonService : IPersonService
     {
         var person = await _personRepository.GetByIdAsync(id, ct)
             ?? throw new NotFoundException($"Không tìm thấy người dùng với Id: {id}");
+
+        var oldRoleId = person.RoleId;
 
         // Kiểm tra trùng email (loại trừ người dùng hiện tại)
         if (!string.IsNullOrEmpty(dto.Email))
@@ -196,6 +250,14 @@ public class PersonService : IPersonService
         {
             throw new BusinessException($"Role với Id: {dto.RoleId} không tồn tại.");
         }
+        var countAdmin = await CountAdminAsync(ct);
+        if (countAdmin >= 1)
+        {
+            throw new BusinessException("Chỉ được phép có 1 admin trong hệ thống.");
+        }
+
+        // Invalidate cache TRƯỚC khi thao tác DB
+        await InvalidatePersonCacheAsync(id, oldRoleId, dto.RoleId);
 
         _mapper.Map(dto, person);
         person.UpdatedAt = DateTime.UtcNow;
@@ -205,14 +267,14 @@ public class PersonService : IPersonService
 
         _logger.LogInformation("Updated person: {Id}", person.Id);
 
-        // Reload với role
-        var updatedPerson = await GetByIdAsync(person.Id, ct);
-        return updatedPerson!;
+        // Load và cache person đã cập nhật
+        return await LoadAndCachePersonAsync(person.Id, ct);
     }
 
     /// <summary>
     /// Xóa người dùng theo ID.
     /// Không thể xóa người dùng đang có booking hoặc đơn hàng liên quan.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
     /// <param name="id">ID của người dùng cần xóa.</param>
     /// <param name="ct">Token hủy bỏ thao tác.</param>
@@ -242,6 +304,15 @@ public class PersonService : IPersonService
         {
             throw new BusinessException($"Không thể xóa người dùng '{person.Username}' vì đang có đơn hàng liên quan.");
         }
+
+        var countAdmin = await CountAdminAsync(ct);
+        if (person.RoleId == 1 && countAdmin <= 1)
+        {
+            throw new BusinessException("Không thể xóa admin cuối cùng trong hệ thống.");
+        }
+
+        // Invalidate cache TRƯỚC khi thao tác DB
+        await InvalidatePersonCacheAsync(id, person.RoleId);
 
         _personRepository.Delete(person);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -322,10 +393,11 @@ public class PersonService : IPersonService
         // Áp dụng phân trang
         var skip = (request.Page - 1) * request.PageSize;
         var items = await query.Skip(skip).Take(request.PageSize).ToListAsync(ct);
+        var itemDtos = _mapper.Map<List<PersonDto>>(items);
 
         return new PersonSearchResponse
         {
-            Items = items,
+            Items = itemDtos,
             TotalCount = totalCount,
             Page = request.Page,
             PageSize = request.PageSize,
@@ -335,17 +407,45 @@ public class PersonService : IPersonService
 
     /// <summary>
     /// Lấy danh sách người dùng theo vai trò.
+    /// Sử dụng Redis cache để tối ưu hiệu suất.
     /// </summary>
     /// <param name="roleId">ID của vai trò.</param>
     /// <param name="ct">Token hủy bỏ thao tác.</param>
     /// <returns>Danh sách người dùng có vai trò tương ứng.</returns>
     public async Task<IEnumerable<PersonDto>> GetByRoleAsync(long roleId, CancellationToken ct = default)
     {
+        var cacheKey = string.Format(CacheKeyByRole, roleId);
+
+        // Thử lấy từ cache trước
+        var cached = await _cache.GetAsync<IEnumerable<PersonDto>>(cacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Cache hit for {CacheKey}", cacheKey);
+            return cached;
+        }
+
+        // Cache miss - lấy từ DB
+        _logger.LogDebug("Cache miss for {CacheKey}, loading from DB", cacheKey);
         var persons = await _personRepository.Query()
             .Include(p => p.Role)
             .Where(p => p.RoleId == roleId)
             .ToListAsync(ct);
-        return _mapper.Map<IEnumerable<PersonDto>>(persons);
+        var result = _mapper.Map<IEnumerable<PersonDto>>(persons);
+
+        await _cache.SetAsync(cacheKey, result, CacheDuration);
+        return result;
+    }
+
+    /// <summary>
+    /// Đếm số lượng admin (RoleId = 1).
+    /// Dùng để kiểm tra chỉ cho phép tối đa 1 admin.
+    /// </summary>
+    /// <param name="ct">Token hủy bỏ thao tác.</param>
+    /// <returns>Số lượng admin hiện có.</returns>
+    public async Task<int> CountAdminAsync(CancellationToken ct = default)
+    {
+        return await _personRepository.Query()
+            .CountAsync(p => p.RoleId == 1, ct);
     }
 
     /// <summary>
@@ -364,5 +464,58 @@ public class PersonService : IPersonService
         return validFields.Contains(sortBy, StringComparer.OrdinalIgnoreCase)
             ? sortBy
             : "CreatedAt";
+    }
+
+    /// <summary>
+    /// Invalidate cache cho person (dùng khi Create).
+    /// </summary>
+    private async Task InvalidatePersonCacheAsync(long roleId)
+    {
+        _logger.LogDebug("Invalidating person cache for roleId: {RoleId}", roleId);
+        await Task.WhenAll(
+            _cache.RemoveAsync(CacheKeyAll),
+            _cache.RemoveAsync(string.Format(CacheKeyByRole, roleId))
+        );
+    }
+
+    /// <summary>
+    /// Invalidate cache cho person (dùng khi Update/Delete).
+    /// </summary>
+    private async Task InvalidatePersonCacheAsync(long personId, long roleId, long? newRoleId = null)
+    {
+        _logger.LogDebug("Invalidating person cache for personId: {PersonId}, roleId: {RoleId}", personId, roleId);
+        
+        var tasks = new List<Task>
+        {
+            _cache.RemoveAsync(CacheKeyAll),
+            _cache.RemoveAsync(string.Format(CacheKeyById, personId)),
+            _cache.RemoveAsync(string.Format(CacheKeyByRole, roleId))
+        };
+
+        // Nếu role thay đổi, invalidate cache của role mới
+        if (newRoleId.HasValue && newRoleId.Value != roleId)
+        {
+            tasks.Add(_cache.RemoveAsync(string.Format(CacheKeyByRole, newRoleId.Value)));
+        }
+
+        await Task.WhenAll(tasks);
+    }
+
+    /// <summary>
+    /// Load person từ DB và cache lại.
+    /// </summary>
+    private async Task<PersonDto> LoadAndCachePersonAsync(long personId, CancellationToken ct = default)
+    {
+        var person = await _personRepository.Query()
+            .Include(p => p.Role)
+            .FirstOrDefaultAsync(p => p.Id == personId, ct);
+
+        var result = _mapper.Map<PersonDto>(person);
+        
+        // Cache person mới
+        var cacheKey = string.Format(CacheKeyById, personId);
+        await _cache.SetAsync(cacheKey, result, CacheDuration);
+        
+        return result;
     }
 }

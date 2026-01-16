@@ -12,4 +12,5 @@ public interface IPersonService
     Task<bool> DeleteAsync(long id, CancellationToken ct = default);
     Task<PersonSearchResponse> SearchAsync(PersonSearchRequest request, CancellationToken ct = default);
     Task<IEnumerable<PersonDto>> GetByRoleAsync(long roleId, CancellationToken ct = default);
+    Task<int> CountAdminAsync(CancellationToken ct = default);
 }

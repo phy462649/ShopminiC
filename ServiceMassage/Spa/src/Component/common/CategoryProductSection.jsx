@@ -77,7 +77,7 @@ export default function CategoryProductSection({ categories = [], products = [] 
             {/* Banner */}
             <div className="mt-4 relative rounded-lg overflow-hidden">
               <img
-                src="/OIP.jpg"
+                src="/Screenshot 2026-01-15 220258.png"
                 alt="Banner"
                 className="w-full h-48 object-cover"
               />

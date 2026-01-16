@@ -21,6 +21,7 @@ const Products = lazy(() => import("../Component/pages/Products"));
 const ProductDetail = lazy(() => import("../Component/pages/ProductDetail"));
 const About = lazy(() => import("../Component/pages/About"));
 const Contact = lazy(() => import("../Component/pages/Contact"));
+const Profile = lazy(() => import("../Component/pages/Profile"));
 
 // Dashboard Component
 const Dashboard = lazy(() => import("../Component/pages/Dashboard"));
@@ -67,6 +68,7 @@ const router = createBrowserRouter([
       { path: "products/:id", element: <Suspense fallback={<Loading />}><ProductDetail /></Suspense> },
       { path: "about", element: <Suspense fallback={<Loading />}><About /></Suspense> },
       { path: "contact", element: <Suspense fallback={<Loading />}><Contact /></Suspense> },
+      { path: "profile", element: <Suspense fallback={<Loading />}><Profile /></Suspense> },
     ],
   },
   // Auth Routes

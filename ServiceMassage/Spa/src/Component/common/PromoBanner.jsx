@@ -148,7 +148,7 @@ export default function PromoBanner({ products = [] }) {
           <div className="w-72 hidden lg:block">
             <div className="relative h-full rounded-lg overflow-hidden">
               <img
-                src="/OIP.jpg"
+                src="/Screenshot 2026-01-15 220303.png"
                 alt="Best Seller"
                 className="w-full h-full object-cover"
               />

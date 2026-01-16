@@ -1,29 +1,68 @@
 import { useState } from "react";
-import { message, Tag, Modal } from "antd";
+import { message, Tag, Modal, Select } from "antd";
 import PersonalForm from "./PersonalForm";
 import {
   usePersonal,
   useCreatePersonal,
   useUpdatePersonal,
   useDeletePersonal,
+  useSearchPersonal,
 } from "../hooks/usePersonal";
 
 export default function PersonalTable() {
-  const { data: personals = [], isLoading, isError } = usePersonal();
+  const { data: personals = [], isLoading, isError, refetch } = usePersonal();
   const createMutation = useCreatePersonal();
   const updateMutation = useUpdatePersonal();
   const deleteMutation = useDeletePersonal();
+  const searchMutation = useSearchPersonal();
 
   const [selectedId, setSelectedId] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editingPersonal, setEditingPersonal] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  
+  // Search params
+  const [searchParams, setSearchParams] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    roleId: null,
+    sortBy: 'CreatedAt',
+    sortOrder: 'desc',
+    page: 1,
+    pageSize: 10
+  });
 
-  const filteredPersonals = personals.filter((p) =>
-    [p.name, p.username, p.email, p.phone, p.address]
-      .filter(Boolean)
-      .some((field) => field.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const handleSearchChange = (field, value) => {
+    setSearchParams(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSearch = () => {
+    const params = {};
+    if (searchParams.name) params.name = searchParams.name;
+    if (searchParams.email) params.email = searchParams.email;
+    if (searchParams.phone) params.phone = searchParams.phone;
+    if (searchParams.roleId) params.roleId = searchParams.roleId;
+    params.sortBy = searchParams.sortBy;
+    params.sortOrder = searchParams.sortOrder;
+    params.page = searchParams.page;
+    params.pageSize = searchParams.pageSize;
+    
+    searchMutation.mutate(params);
+  };
+
+  const handleReset = () => {
+    setSearchParams({
+      name: '',
+      email: '',
+      phone: '',
+      roleId: null,
+      sortBy: 'CreatedAt',
+      sortOrder: 'desc',
+      page: 1,
+      pageSize: 10
+    });
+    refetch();
+  };
 
   const handleAdd = () => {
     setEditingPersonal(null);
@@ -73,32 +112,71 @@ export default function PersonalTable() {
 
   return (
     <div className="p-4">
-      {/* Toolbar */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-        <div className="relative min-w-[200px] max-w-xs">
+      {/* Search Filters */}
+      <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <input
             type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+            placeholder="Search by name..."
+            value={searchParams.name}
+            onChange={(e) => handleSearchChange('name', e.target.value)}
+            className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
           />
-          <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 3a7.5 7.5 0 006.15 13.65z" />
-          </svg>
+          <input
+            type="text"
+            placeholder="Search by email..."
+            value={searchParams.email}
+            onChange={(e) => handleSearchChange('email', e.target.value)}
+            className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+          />
+          <input
+            type="text"
+            placeholder="Search by phone..."
+            value={searchParams.phone}
+            onChange={(e) => handleSearchChange('phone', e.target.value)}
+            className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+          />
+          <Select
+            placeholder="Filter by role"
+            value={searchParams.roleId}
+            onChange={(value) => handleSearchChange('roleId', value)}
+            allowClear
+            className="w-full"
+            options={[
+              { value: 1, label: 'ADMIN' },
+              { value: 2, label: 'USER' },
+              { value: 3, label: 'STAFF' },
+            ]}
+          />
         </div>
+        <div className="flex gap-2">
+          <button 
+            onClick={handleSearch}
+            disabled={searchMutation.isPending}
+            className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:opacity-50"
+          >
+            {searchMutation.isPending ? "Searching..." : "Search"}
+          </button>
+          <button 
+            onClick={handleReset}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
 
-        <div className="flex gap-4">
-          <button onClick={handleAdd} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-            Add
-          </button>
-          <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
-            Edit
-          </button>
-          <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-            Delete
-          </button>
-        </div>
+      {/* Action Buttons */}
+      <div className="mb-4 flex justify-end gap-4">
+        <button onClick={handleAdd} className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+          Add New
+        </button>
+        <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600">
+          Edit
+        </button>
+        <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+          Delete
+        </button>
       </div>
 
       {/* Table */}
@@ -114,12 +192,11 @@ export default function PersonalTable() {
               <th className="p-3 text-center font-semibold">Address</th>
               <th className="p-3 text-center font-semibold">Role</th>
               <th className="p-3 text-center font-semibold">Verified</th>
-              {/* <th className="p-3 text-center font-semibold">Created At</th> */}
             </tr>
           </thead>
           <tbody>
-            {filteredPersonals.length > 0 ? (
-              filteredPersonals.map((p) => (
+            {personals.length > 0 ? (
+              personals.map((p) => (
                 <tr
                   key={p.id}
                   onClick={() => setSelectedId(p.id)}
@@ -132,7 +209,7 @@ export default function PersonalTable() {
                   <td className="p-3 text-center">{p.phone}</td>
                   <td className="p-3 text-center">{p.address}</td>
                   <td className="p-3 text-center">
-                    <Tag color={p.roleName === "ADMIN" ? "red" : "blue"}>
+                    <Tag color={p.roleName === "ADMIN" ? "red" : p.roleName === "STAFF" ? "blue" : "green"}>
                       {p.roleName}
                     </Tag>
                   </td>
@@ -141,14 +218,11 @@ export default function PersonalTable() {
                       {p.statusVerify ? "Verified" : "Pending"}
                     </Tag>
                   </td>
-                  {/* <td className="p-3 text-center">
-                    {p.createdAt ? new Date(p.createdAt).toLocaleDateString("en-US") : "-"}
-                  </td> */}
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="9" className="p-4 text-center text-gray-500">
+                <td colSpan="8" className="p-4 text-center text-gray-500">
                   No data available
                 </td>
               </tr>

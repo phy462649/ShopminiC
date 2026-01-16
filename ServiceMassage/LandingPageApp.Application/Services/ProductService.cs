@@ -12,81 +12,127 @@ namespace LandingPageApp.Application.Services;
 /// <summary>
 /// Service quản lý các thao tác liên quan đến sản phẩm.
 /// Cung cấp các chức năng CRUD, quản lý tồn kho và truy vấn sản phẩm theo danh mục.
+/// Sử dụng Redis cache để tối ưu hiệu suất.
 /// </summary>
 public class ProductService : IProductService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ILogger<ProductService> _logger;
+    private readonly ICacheRediservice _cache;
+    
+    // Cache keys
+    private const string AllProductsCacheKey = "products:all";
+    private const string ProductByIdCacheKey = "products:id:{0}";
+    private const string ProductsByCategoryCacheKey = "products:category:{0}";
+    private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(10);
 
     /// <summary>
     /// Khởi tạo một instance mới của <see cref="ProductService"/>.
     /// </summary>
-    /// <param name="unitOfWork">Unit of Work để quản lý các repository và transaction.</param>
-    /// <param name="mapper">AutoMapper để chuyển đổi giữa entity và DTO.</param>
-    /// <param name="logger">Logger để ghi log các hoạt động của service.</param>
     public ProductService(
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        ILogger<ProductService> logger)
+        ILogger<ProductService> logger,
+        ICacheRediservice cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _logger = logger;
+        _cache = cache;
     }
 
     /// <summary>
     /// Lấy danh sách tất cả sản phẩm bao gồm thông tin danh mục.
+    /// Sử dụng Redis cache để tối ưu.
     /// </summary>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>Danh sách các sản phẩm dưới dạng <see cref="ProductDto"/>.</returns>
     public async Task<IEnumerable<ProductDto>> GetAllAsync(CancellationToken ct = default)
     {
+        // Try get from cache first
+        var cached = await _cache.GetAsync<List<ProductDto>>(AllProductsCacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Products loaded from cache");
+            return cached;
+        }
+
+        // Load from database
         var products = await _unitOfWork.products.Query()
             .Include(p => p.Category)
             .ToListAsync(ct);
-        return _mapper.Map<IEnumerable<ProductDto>>(products);
+        var result = _mapper.Map<List<ProductDto>>(products);
+        
+        // Store in cache
+        await _cache.SetAsync(AllProductsCacheKey, result, CacheExpiry);
+        _logger.LogDebug("Products cached: {Count} items", result.Count);
+        
+        return result;
     }
 
     /// <summary>
     /// Lấy thông tin chi tiết của một sản phẩm theo Id.
+    /// Sử dụng Redis cache để tối ưu.
     /// </summary>
-    /// <param name="id">Id của sản phẩm cần tìm.</param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>
-    /// Thông tin sản phẩm dưới dạng <see cref="ProductDto"/> nếu tìm thấy;
-    /// ngược lại trả về <c>null</c>.
-    /// </returns>
     public async Task<ProductDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
+        var cacheKey = string.Format(ProductByIdCacheKey, id);
+        
+        // Try get from cache first
+        var cached = await _cache.GetAsync<ProductDto>(cacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Product {Id} loaded from cache", id);
+            return cached;
+        }
+
+        // Load from database
         var product = await _unitOfWork.products.Query()
             .Include(p => p.Category)
             .FirstOrDefaultAsync(p => p.Id == id, ct);
-        return product is null ? null : _mapper.Map<ProductDto>(product);
+        
+        if (product is null) return null;
+        
+        var result = _mapper.Map<ProductDto>(product);
+        
+        // Store in cache
+        await _cache.SetAsync(cacheKey, result, CacheExpiry);
+        
+        return result;
     }
 
     /// <summary>
     /// Lấy danh sách sản phẩm theo danh mục.
+    /// Sử dụng Redis cache để tối ưu.
     /// </summary>
-    /// <param name="categoryId">Id của danh mục cần lọc sản phẩm.</param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>Danh sách các sản phẩm thuộc danh mục được chỉ định.</returns>
     public async Task<IEnumerable<ProductDto>> GetByCategoryAsync(long categoryId, CancellationToken ct = default)
     {
+        var cacheKey = string.Format(ProductsByCategoryCacheKey, categoryId);
+        
+        // Try get from cache first
+        var cached = await _cache.GetAsync<List<ProductDto>>(cacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Products for category {CategoryId} loaded from cache", categoryId);
+            return cached;
+        }
+
+        // Load from database
         var products = await _unitOfWork.products.Query()
             .Include(p => p.Category)
             .Where(p => p.CategoryId == categoryId)
             .ToListAsync(ct);
-        return _mapper.Map<IEnumerable<ProductDto>>(products);
+        var result = _mapper.Map<List<ProductDto>>(products);
+        
+        // Store in cache
+        await _cache.SetAsync(cacheKey, result, CacheExpiry);
+        
+        return result;
     }
 
     /// <summary>
     /// Tạo mới một sản phẩm.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="dto">Dữ liệu sản phẩm cần tạo.</param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>Thông tin sản phẩm vừa được tạo dưới dạng <see cref="ProductDto"/>.</returns>
-    /// <exception cref="BusinessException">Ném ra khi tên sản phẩm đã tồn tại trong hệ thống.</exception>
     public async Task<ProductDto> CreateAsync(CreateProductDto dto, CancellationToken ct = default)
     {
         // Validate category exists
@@ -107,6 +153,9 @@ public class ProductService : IProductService
             throw new BusinessException($"Sản phẩm với tên '{dto.Name}' đã tồn tại.");
         }
 
+        // Invalidate cache TRƯỚC khi thêm vào DB
+        await InvalidateProductCacheAsync(dto.CategoryId);
+
         var product = _mapper.Map<Product>(dto);
         product.CreatedAt = DateTime.UtcNow;
 
@@ -115,24 +164,21 @@ public class ProductService : IProductService
 
         _logger.LogInformation("Created product: {Name} with Id: {Id}", product.Name, product.Id);
 
-        // Reload with category
-        var createdProduct = await GetByIdAsync(product.Id, ct);
+        // Load fresh data and cache it
+        var createdProduct = await LoadAndCacheProductAsync(product.Id, ct);
         return createdProduct!;
     }
 
     /// <summary>
     /// Cập nhật thông tin sản phẩm theo Id.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="id">Id của sản phẩm cần cập nhật.</param>
-    /// <param name="dto">Dữ liệu cập nhật cho sản phẩm.</param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>Thông tin sản phẩm sau khi cập nhật dưới dạng <see cref="ProductDto"/>.</returns>
-    /// <exception cref="NotFoundException">Ném ra khi không tìm thấy sản phẩm với Id được chỉ định.</exception>
-    /// <exception cref="BusinessException">Ném ra khi tên sản phẩm mới đã tồn tại (trùng với sản phẩm khác).</exception>
     public async Task<ProductDto> UpdateAsync(long id, UpdateProductDto dto, CancellationToken ct = default)
     {
         var product = await _unitOfWork.products.GetByIdAsync(id, ct)
             ?? throw new NotFoundException($"Không tìm thấy sản phẩm với Id: {id}");
+
+        var oldCategoryId = product.CategoryId;
 
         // Check duplicate name (exclude current product)
         var existingProduct = await _unitOfWork.products
@@ -143,6 +189,13 @@ public class ProductService : IProductService
             throw new BusinessException($"Sản phẩm với tên '{dto.Name}' đã tồn tại.");
         }
 
+        // Invalidate cache TRƯỚC khi cập nhật DB (both old and new category if changed)
+        await InvalidateProductCacheAsync(oldCategoryId, id);
+        if (dto.CategoryId != oldCategoryId)
+        {
+            await _cache.RemoveAsync(string.Format(ProductsByCategoryCacheKey, dto.CategoryId));
+        }
+
         _mapper.Map(dto, product);
         product.UpdatedAt = DateTime.UtcNow;
 
@@ -151,27 +204,23 @@ public class ProductService : IProductService
 
         _logger.LogInformation("Updated product: {Id}", product.Id);
 
-        // Reload with category
-        var updatedProduct = await GetByIdAsync(product.Id, ct);
+        // Load fresh data and cache it
+        var updatedProduct = await LoadAndCacheProductAsync(product.Id, ct);
         return updatedProduct!;
     }
 
     /// <summary>
     /// Xóa sản phẩm theo Id.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="id">Id của sản phẩm cần xóa.</param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>
-    /// <c>true</c> nếu xóa thành công;
-    /// <c>false</c> nếu không tìm thấy sản phẩm.
-    /// </returns>
-    /// <exception cref="BusinessException">Ném ra khi sản phẩm đã có đơn hàng liên quan và không thể xóa.</exception>
     public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
     {
         var product = await _unitOfWork.products.GetByIdAsync(id, ct);
 
         if (product is null)
             return false;
+
+        var categoryId = product.CategoryId;
 
         // Check if product has any order items
         var hasOrderItems = await _unitOfWork.orderItem
@@ -181,6 +230,9 @@ public class ProductService : IProductService
         {
             throw new BusinessException($"Không thể xóa sản phẩm '{product.Name}' vì đã có đơn hàng liên quan.");
         }
+
+        // Invalidate cache TRƯỚC khi xóa khỏi DB
+        await InvalidateProductCacheAsync(categoryId, id);
 
         _unitOfWork.products.Delete(product);
         await _unitOfWork.SaveChangesAsync(ct);
@@ -192,15 +244,8 @@ public class ProductService : IProductService
 
     /// <summary>
     /// Cập nhật số lượng tồn kho của sản phẩm.
+    /// Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="id">Id của sản phẩm cần cập nhật tồn kho.</param>
-    /// <param name="quantity">
-    /// Số lượng thay đổi: giá trị dương để tăng tồn kho, giá trị âm để giảm tồn kho.
-    /// </param>
-    /// <param name="ct">Token để hủy thao tác bất đồng bộ.</param>
-    /// <returns>Thông tin sản phẩm sau khi cập nhật tồn kho dưới dạng <see cref="ProductDto"/>.</returns>
-    /// <exception cref="NotFoundException">Ném ra khi không tìm thấy sản phẩm với Id được chỉ định.</exception>
-    /// <exception cref="BusinessException">Ném ra khi số lượng tồn kho không đủ để thực hiện thao tác giảm.</exception>
     public async Task<ProductDto> UpdateStockAsync(long id, int quantity, CancellationToken ct = default)
     {
         var product = await _unitOfWork.products.GetByIdAsync(id, ct)
@@ -213,6 +258,9 @@ public class ProductService : IProductService
             throw new BusinessException($"Không đủ tồn kho. Hiện có: {product.Stock ?? 0}, yêu cầu giảm: {Math.Abs(quantity)}");
         }
 
+        // Invalidate cache TRƯỚC khi cập nhật DB
+        await InvalidateProductCacheAsync(product.CategoryId, id);
+
         product.Stock = newStock;
         product.UpdatedAt = DateTime.UtcNow;
 
@@ -222,7 +270,54 @@ public class ProductService : IProductService
         _logger.LogInformation("Updated stock for product {Id}: {OldStock} -> {NewStock}", 
             product.Id, product.Stock - quantity, newStock);
 
-        var updatedProduct = await GetByIdAsync(product.Id, ct);
+        // Load fresh data and cache it
+        var updatedProduct = await LoadAndCacheProductAsync(product.Id, ct);
         return updatedProduct!;
     }
+
+    #region Private Cache Helpers
+
+    /// <summary>
+    /// Invalidate tất cả cache liên quan đến product
+    /// </summary>
+    private async Task InvalidateProductCacheAsync(long? categoryId, long? productId = null)
+    {
+        // Remove all products cache
+        await _cache.RemoveAsync(AllProductsCacheKey);
+        
+        // Remove category cache if provided
+        if (categoryId.HasValue)
+        {
+            await _cache.RemoveAsync(string.Format(ProductsByCategoryCacheKey, categoryId.Value));
+        }
+        
+        // Remove specific product cache if provided
+        if (productId.HasValue)
+        {
+            await _cache.RemoveAsync(string.Format(ProductByIdCacheKey, productId.Value));
+        }
+        
+        _logger.LogDebug("Product cache invalidated");
+    }
+
+    /// <summary>
+    /// Load product từ DB và cache lại
+    /// </summary>
+    private async Task<ProductDto?> LoadAndCacheProductAsync(long id, CancellationToken ct = default)
+    {
+        var product = await _unitOfWork.products.Query()
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == id, ct);
+        
+        if (product is null) return null;
+        
+        var result = _mapper.Map<ProductDto>(product);
+        
+        // Cache the product
+        await _cache.SetAsync(string.Format(ProductByIdCacheKey, id), result, CacheExpiry);
+        
+        return result;
+    }
+
+    #endregion
 }

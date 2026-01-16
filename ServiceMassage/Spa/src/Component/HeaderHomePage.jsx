@@ -3,6 +3,8 @@ import logo from "../../public/OIP.jpg";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../features/Auth/UseAuth";
 import { authService } from "../services";
+import { useQuery } from "@tanstack/react-query";
+import apiClient from "../services/apiClient";
 
 export default function 
 HeaderHomePage() {
@@ -13,6 +15,16 @@ HeaderHomePage() {
 
   // Lấy thông tin user từ localStorage
   const user = authService.getCurrentUser();
+
+  // Check if user is admin via API
+  const { data: isAdminData } = useQuery({
+    queryKey: ["isAdmin"],
+    queryFn: () => apiClient.get("/Auth/isAdmin"),
+    enabled: isAuthenticated,
+    retry: false,
+  });
+
+  const isAdmin = isAdminData?.status === true || isAdminData === true;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -87,7 +99,7 @@ HeaderHomePage() {
 
               {/* Dropdown Menu */}
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border py-2 z-50">
+                <div className="absolute right-0 mt-2 w-56 bg-wkiêhite rounded-lg shadow-lg border py-2 z-50">
                   {/* User Info */}
                   <div className="px-4 py-3 border-b">
                     <p className="text-sm font-semibold text-gray-800">{user?.name || "Người dùng"}</p>
@@ -124,7 +136,7 @@ HeaderHomePage() {
                     </svg>
                     Lịch đặt
                   </button>
-                  {user?.role === "Admin" && (
+                  {isAdmin && (
                     <button
                       onClick={() => { navigate("/admin"); setShowDropdown(false); }}
                       className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-3"

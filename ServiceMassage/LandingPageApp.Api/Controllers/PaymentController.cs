@@ -7,7 +7,7 @@ namespace LandingPageApp.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize(Roles = "ADMIN,STAFF")]
+[Authorize(Roles = "ADMIN,STAFF")]
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;

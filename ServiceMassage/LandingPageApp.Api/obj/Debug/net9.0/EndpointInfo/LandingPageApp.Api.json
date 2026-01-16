@@ -4265,6 +4265,58 @@
         }
       }
     },
+    "/api/Auth/isAdmin": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Booking": {
       "get": {
         "tags": [
@@ -8175,10 +8227,6 @@
           },
           "method": {
             "$ref": "#/components/schemas/PaymentMethod"
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -8275,6 +8323,9 @@
           "capacity": {
             "type": "integer",
             "format": "int32"
+          },
+          "active": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -8541,14 +8592,37 @@
             "format": "date-time",
             "nullable": true
           },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "bookingId": {
             "type": "integer",
             "format": "int64",
             "nullable": true
           },
+          "bookingStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "bookingDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "orderId": {
             "type": "integer",
             "format": "int64",
+            "nullable": true
+          },
+          "orderStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderTotalAmount": {
+            "type": "number",
+            "format": "double",
             "nullable": true
           },
           "personalId": {
@@ -8559,7 +8633,11 @@
             "type": "string",
             "nullable": true
           },
-          "createdBy": {
+          "personalPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "personalEmail": {
             "type": "string",
             "nullable": true
           }
@@ -8949,6 +9027,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "active": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -9262,6 +9343,9 @@
           "capacity": {
             "type": "integer",
             "format": "int32"
+          },
+          "active": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

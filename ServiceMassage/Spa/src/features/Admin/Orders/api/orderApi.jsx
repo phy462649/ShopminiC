@@ -1,15 +1,16 @@
 import { adminApiClient } from '../../../../services/apiClient';
 
-const ENDPOINT = '/order';
-const ITEM_ENDPOINT = '/orderitem';
+const ENDPOINT = '/orders';
+const ITEM_ENDPOINT = '/order-items';
 
 export const orderApi = {
   // Order endpoints
   getAll: (params = {}) => adminApiClient.get(ENDPOINT, params),
   getById: (id) => adminApiClient.get(`${ENDPOINT}/${id}`),
+  getByCustomer: (customerId) => adminApiClient.get(`${ENDPOINT}/customer/${customerId}`),
   create: (data) => adminApiClient.post(ENDPOINT, data),
   update: (id, data) => adminApiClient.put(`${ENDPOINT}/${id}`, data),
-  updateStatus: (id, status) => adminApiClient.put(`${ENDPOINT}/${id}/status`, { status }),
+  updateStatus: (id, status) => adminApiClient.patch(`${ENDPOINT}/${id}/status`, { status }),
   delete: (id) => adminApiClient.delete(`${ENDPOINT}/${id}`),
 
   // Order Item endpoints

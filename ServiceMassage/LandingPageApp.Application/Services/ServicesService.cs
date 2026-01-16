@@ -10,72 +10,86 @@ namespace LandingPageApp.Application.Services;
 
 /// <summary>
 /// Service xử lý logic nghiệp vụ cho dịch vụ massage/spa.
-/// Quản lý việc tạo, cập nhật, xóa dịch vụ.
+/// Sử dụng Redis cache để tối ưu hiệu suất.
 /// </summary>
 public class ServicesService : IServicesService
 {
-    /// <summary>
-    /// Unit of Work để quản lý transaction và repositories.
-    /// </summary>
     private readonly IUnitOfWork _unitOfWork;
-
-    /// <summary>
-    /// AutoMapper để chuyển đổi giữa Entity và DTO.
-    /// </summary>
     private readonly IMapper _mapper;
-
-    /// <summary>
-    /// Logger để ghi log hoạt động.
-    /// </summary>
     private readonly ILogger<ServicesService> _logger;
+    private readonly ICacheRediservice _cache;
 
-    /// <summary>
-    /// Khởi tạo ServicesService với dependency injection.
-    /// </summary>
-    /// <param name="unitOfWork">Unit of Work.</param>
-    /// <param name="mapper">AutoMapper instance.</param>
-    /// <param name="logger">Logger instance.</param>
+    // Cache keys
+    private const string AllServicesCacheKey = "services:all";
+    private const string ServiceByIdCacheKey = "services:id:{0}";
+    private static readonly TimeSpan CacheExpiry = TimeSpan.FromMinutes(10);
+
     public ServicesService(
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        ILogger<ServicesService> logger)
+        ILogger<ServicesService> logger,
+        ICacheRediservice cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _logger = logger;
+        _cache = cache;
     }
 
     /// <summary>
-    /// Lấy danh sách tất cả dịch vụ.
+    /// Lấy danh sách tất cả dịch vụ từ cache hoặc DB.
     /// </summary>
-    /// <param name="ct">Token hủy bỏ thao tác.</param>
-    /// <returns>Danh sách dịch vụ.</returns>
     public async Task<IEnumerable<ServiceDto>> GetAllAsync(CancellationToken ct = default)
     {
+        // Try get from cache first
+        var cached = await _cache.GetAsync<List<ServiceDto>>(AllServicesCacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Services loaded from cache");
+            return cached;
+        }
+
+        // Load from database
         var services = await _unitOfWork.services.GetAllAsync(ct);
-        return _mapper.Map<IEnumerable<ServiceDto>>(services);
+        var result = _mapper.Map<List<ServiceDto>>(services);
+        
+        // Store in cache
+        await _cache.SetAsync(AllServicesCacheKey, result, CacheExpiry);
+        _logger.LogDebug("Services cached: {Count} items", result.Count);
+        
+        return result;
     }
 
     /// <summary>
-    /// Lấy thông tin dịch vụ theo ID.
+    /// Lấy thông tin dịch vụ theo ID từ cache hoặc DB.
     /// </summary>
-    /// <param name="id">ID của dịch vụ.</param>
-    /// <param name="ct">Token hủy bỏ thao tác.</param>
-    /// <returns>Thông tin dịch vụ hoặc null nếu không tìm thấy.</returns>
     public async Task<ServiceDto?> GetByIdAsync(long id, CancellationToken ct = default)
     {
+        var cacheKey = string.Format(ServiceByIdCacheKey, id);
+        
+        // Try get from cache first
+        var cached = await _cache.GetAsync<ServiceDto>(cacheKey);
+        if (cached != null)
+        {
+            _logger.LogDebug("Service {Id} loaded from cache", id);
+            return cached;
+        }
+
+        // Load from database
         var service = await _unitOfWork.services.GetByIdAsync(id, ct);
-        return service is null ? null : _mapper.Map<ServiceDto>(service);
+        if (service is null) return null;
+        
+        var result = _mapper.Map<ServiceDto>(service);
+        
+        // Store in cache
+        await _cache.SetAsync(cacheKey, result, CacheExpiry);
+        
+        return result;
     }
 
     /// <summary>
-    /// Tạo dịch vụ mới.
-    /// Kiểm tra trùng tên, thời gian và giá hợp lệ trước khi tạo.
+    /// Tạo dịch vụ mới. Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="dto">Thông tin dịch vụ cần tạo.</param>
-    /// <param name="ct">Token hủy bỏ thao tác.</param>
-    /// <returns>Thông tin dịch vụ vừa tạo.</returns>
-    /// <exception cref="BusinessException">Khi tên đã tồn tại hoặc dữ liệu không hợp lệ.</exception>
     public async Task<ServiceDto> CreateAsync(CreateServiceDto dto, CancellationToken ct = default)
     {
         // Kiểm tra trùng tên dịch vụ
@@ -87,17 +101,18 @@ public class ServicesService : IServicesService
             throw new BusinessException($"Dịch vụ với tên '{dto.Name}' đã tồn tại.");
         }
 
-        // Kiểm tra thời gian dịch vụ hợp lệ
         if (dto.DurationMinutes <= 0)
         {
             throw new BusinessException("Thời gian dịch vụ phải lớn hơn 0 phút.");
         }
 
-        // Kiểm tra giá dịch vụ hợp lệ
         if (dto.Price < 0)
         {
             throw new BusinessException("Giá dịch vụ không được âm.");
         }
+
+        // Invalidate cache TRƯỚC khi thêm vào DB
+        await InvalidateServiceCacheAsync();
 
         var service = _mapper.Map<Service>(dto);
         service.CreatedAt = DateTime.UtcNow;
@@ -107,25 +122,21 @@ public class ServicesService : IServicesService
 
         _logger.LogInformation("Created service: {Name} with Id: {Id}", service.Name, service.Id);
 
-        return _mapper.Map<ServiceDto>(service);
+        // Load fresh data and cache it
+        var result = _mapper.Map<ServiceDto>(service);
+        await _cache.SetAsync(string.Format(ServiceByIdCacheKey, service.Id), result, CacheExpiry);
+        
+        return result;
     }
 
     /// <summary>
-    /// Cập nhật thông tin dịch vụ.
-    /// Kiểm tra trùng tên (loại trừ dịch vụ hiện tại) trước khi cập nhật.
+    /// Cập nhật thông tin dịch vụ. Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="id">ID của dịch vụ cần cập nhật.</param>
-    /// <param name="dto">Thông tin cập nhật.</param>
-    /// <param name="ct">Token hủy bỏ thao tác.</param>
-    /// <returns>Thông tin dịch vụ sau khi cập nhật.</returns>
-    /// <exception cref="NotFoundException">Khi không tìm thấy dịch vụ.</exception>
-    /// <exception cref="BusinessException">Khi tên đã tồn tại hoặc dữ liệu không hợp lệ.</exception>
     public async Task<ServiceDto> UpdateAsync(long id, UpdateServiceDto dto, CancellationToken ct = default)
     {
         var service = await _unitOfWork.services.GetByIdAsync(id, ct)
             ?? throw new NotFoundException($"Không tìm thấy dịch vụ với Id: {id}");
 
-        // Kiểm tra trùng tên (loại trừ dịch vụ hiện tại)
         var existingService = await _unitOfWork.services
             .FindAsync(s => s.Name == dto.Name && s.Id != id, ct);
         
@@ -134,17 +145,18 @@ public class ServicesService : IServicesService
             throw new BusinessException($"Dịch vụ với tên '{dto.Name}' đã tồn tại.");
         }
 
-        // Kiểm tra thời gian dịch vụ hợp lệ
         if (dto.DurationMinutes <= 0)
         {
             throw new BusinessException("Thời gian dịch vụ phải lớn hơn 0 phút.");
         }
 
-        // Kiểm tra giá dịch vụ hợp lệ
         if (dto.Price < 0)
         {
             throw new BusinessException("Giá dịch vụ không được âm.");
         }
+
+        // Invalidate cache TRƯỚC khi cập nhật DB
+        await InvalidateServiceCacheAsync(id);
 
         _mapper.Map(dto, service);
         service.UpdatedAt = DateTime.UtcNow;
@@ -154,17 +166,16 @@ public class ServicesService : IServicesService
 
         _logger.LogInformation("Updated service: {Id}", service.Id);
 
-        return _mapper.Map<ServiceDto>(service);
+        // Load fresh data and cache it
+        var result = _mapper.Map<ServiceDto>(service);
+        await _cache.SetAsync(string.Format(ServiceByIdCacheKey, id), result, CacheExpiry);
+        
+        return result;
     }
 
     /// <summary>
-    /// Xóa dịch vụ theo ID.
-    /// Không thể xóa dịch vụ đang có booking liên quan.
+    /// Xóa dịch vụ theo ID. Invalidate cache TRƯỚC khi thao tác DB.
     /// </summary>
-    /// <param name="id">ID của dịch vụ cần xóa.</param>
-    /// <param name="ct">Token hủy bỏ thao tác.</param>
-    /// <returns>True nếu xóa thành công, false nếu không tìm thấy.</returns>
-    /// <exception cref="BusinessException">Khi dịch vụ đang có booking liên quan.</exception>
     public async Task<bool> DeleteAsync(long id, CancellationToken ct = default)
     {
         var service = await _unitOfWork.services.GetByIdAsync(id, ct);
@@ -172,7 +183,6 @@ public class ServicesService : IServicesService
         if (service is null)
             return false;
 
-        // Kiểm tra dịch vụ có booking liên quan không
         var hasBookingServices = await _unitOfWork.bookingservices
             .ExistsAsync(bs => bs.ServiceId == id, ct);
 
@@ -181,6 +191,9 @@ public class ServicesService : IServicesService
             throw new BusinessException($"Không thể xóa dịch vụ '{service.Name}' vì đang có booking liên quan.");
         }
 
+        // Invalidate cache TRƯỚC khi xóa khỏi DB
+        await InvalidateServiceCacheAsync(id);
+
         _unitOfWork.services.Delete(service);
         await _unitOfWork.SaveChangesAsync(ct);
 
@@ -188,4 +201,20 @@ public class ServicesService : IServicesService
 
         return true;
     }
+
+    #region Private Cache Helpers
+
+    private async Task InvalidateServiceCacheAsync(long? serviceId = null)
+    {
+        await _cache.RemoveAsync(AllServicesCacheKey);
+        
+        if (serviceId.HasValue)
+        {
+            await _cache.RemoveAsync(string.Format(ServiceByIdCacheKey, serviceId.Value));
+        }
+        
+        _logger.LogDebug("Service cache invalidated");
+    }
+
+    #endregion
 }

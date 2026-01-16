@@ -28,9 +28,9 @@ export default function PersonalForm({ initialData, onClose, onSave, isLoading }
     if (!formData.email.trim()) {
       return message.warning("Please enter email");
     }
-    if (!isEditing && !formData.password) {
-      return message.warning("Please enter password");
-    }
+    // if (!isEditing && !formData.password) {
+    //   return message.warning("Please enter password");
+    // }
 
     const dataToSave = { ...formData };
     if (isEditing && !dataToSave.password) {
@@ -107,7 +107,7 @@ export default function PersonalForm({ initialData, onClose, onSave, isLoading }
                   disabled={formData.roleId === 1}
                   className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-pink-500"
                 >
-                  {/* <option value={1}>ADMIN</option> */}
+                  <option value={1}>ADMIN</option>
                   <option value={2}>USER</option>
                   <option value={3}>STAFF</option>
                 </select>

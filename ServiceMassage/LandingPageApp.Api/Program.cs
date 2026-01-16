@@ -10,11 +10,14 @@ using LandingPageApp.Infrastructure.Caching;
 using LandingPageApp.Infrastructure.Data;
 using LandingPageApp.Infrastructure.Events;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +62,13 @@ builder.Services.AddHealthChecksConfiguration(builder.Configuration);
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<IOtpService, OtpService>();
-builder.Services.AddScoped<ICacheRediservice, RedisCacheService>();
+builder.Services.AddScoped<ICacheRediservice>(sp =>
+{
+    var cache = sp.GetRequiredService<IDistributedCache>();
+    var redis = sp.GetService<IConnectionMultiplexer>();
+    var logger = sp.GetRequiredService<ILogger<RedisCacheService>>();
+    return new RedisCacheService(cache, redis, logger);
+});
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -198,6 +207,35 @@ builder.Services.AddResponseCaching();
 builder.Services.AddResponseCompression();
 
 // ===========================================
+// RATE LIMITING
+// ===========================================
+builder.Services.AddRateLimiter(options =>
+{
+    // Global rate limit
+    options.GlobalLimiter = System.Threading.RateLimiting.PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+            factory: _ => new System.Threading.RateLimiting.FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst,
+                QueueLimit = 10
+            }));
+
+    // Auth endpoints rate limit (stricter)
+    options.AddFixedWindowLimiter("auth", opt =>
+    {
+        opt.PermitLimit = 10;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// ===========================================
 // CORS
 // ===========================================
 builder.Services.AddCors(options =>
@@ -207,6 +245,17 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
+    });
+    
+    // Production CORS policy - restrict to specific origins
+    options.AddPolicy("Production", policy =>
+    {
+        policy.WithOrigins(
+                builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+                ?? new[] { "https://localhost:3000" })
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -219,7 +268,7 @@ app.UseRequestTiming(); // Đo thời gian response
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Enable CORS
-app.UseCors("AllowAll");
+app.UseCors(app.Environment.IsDevelopment() ? "AllowAll" : "Production");
 
 if (app.Environment.IsDevelopment())
 {
@@ -232,6 +281,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 app.UseResponseCaching();
 app.UseResponseCompression();
 

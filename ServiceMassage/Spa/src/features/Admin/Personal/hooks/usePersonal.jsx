@@ -11,6 +11,7 @@ export const personalService = {
   create: (data) => adminApiClient.post(ENDPOINT, data),
   update: (id, data) => adminApiClient.put(`${ENDPOINT}/${id}`, data),
   delete: (id) => adminApiClient.delete(`${ENDPOINT}/${id}`),
+  search: (params) => adminApiClient.get(`${ENDPOINT}/search`, params),
 };
 
 export function usePersonal() {
@@ -18,6 +19,18 @@ export function usePersonal() {
     queryKey: QUERY_KEY,
     queryFn: personalService.getAll,
     staleTime: 2 * 60 * 1000,
+  });
+}
+
+export function useSearchPersonal() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (params) => personalService.search(params),
+    onSuccess: (data) => {
+      // API trả về { items, totalCount, page, pageSize, ... }
+      queryClient.setQueryData(QUERY_KEY, data.items || data);
+    },
+    onError: (error) => message.error(error.message || 'Search failed'),
   });
 }
 
